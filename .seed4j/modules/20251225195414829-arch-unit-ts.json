@@ -1,0 +1,11 @@
+{
+  "module" : "arch-unit-ts",
+  "date" : "2025-12-25T19:54:14.829156Z",
+  "properties" : {
+    "projectName" : "NeonAdressingTool",
+    "baseName" : "neonadressingtool",
+    "nodePackageManager" : "pnpm",
+    "endOfLine" : "lf",
+    "indentSize" : 2
+  }
+}

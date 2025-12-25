@@ -26,9 +26,14 @@ La logique métier doit être encapsulée dans le domaine et isolée du framewor
 
 Il est interdit de déplacer du code dans un dossier **shared** ou **common** tant qu'il n'est pas effectivement utilisé par au moins deux contextes différents. On privilégie la duplication ou la localisation dans le contexte initial jusqu'à ce qu'un besoin de partage réel émerge.
 
+## UX / Design
+
+Pour l'UX et les composants UI, on utilise le serveur MCP de Vuetify : https://mcp.vuetifyjs.com/
+
 ## Development Workflow
 
 1. **End-to-End (E2E) Test**: Start with a Playwright test to define the expected behavior from the user's perspective.
 2. **Unit Tests**: Drill down to the unit level (whenever possible and relevant) to implement business logic and components.
 3. **Implementation**: Write the minimum amount of code to make the tests pass.
 4. **Refactoring**: Improve code quality while keeping tests green.
+5. **Commit**: Commit the changes at the end of each task.

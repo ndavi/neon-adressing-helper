@@ -4,18 +4,28 @@
     <h1 class="page-title">Neon Addressing Tool</h1>
 
     <div class="actions">
+      <div class="field">
+        <label for="controllers-count" class="field-label"> Nombre de contrôleurs </label>
+        <input id="controllers-count" v-model="controllersCount" type="number" class="field-input" />
+      </div>
       <button class="button" @click="downloadExampleCsv">Télécharger un exemple CSV</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { downloadFile } from './FileDownloader';
+
 export default {
   name: 'HomepageVue',
+  data() {
+    return {
+      controllersCount: 0,
+    };
+  },
   methods: {
     downloadExampleCsv() {
-      const csvContent = this.getExampleCsvContent();
-      this.downloadFile(csvContent, 'example.csv', 'text/csv;charset=utf-8;');
+      downloadFile(this.getExampleCsvContent(), 'example.csv', 'text/csv;charset=utf-8;');
     },
 
     getExampleCsvContent() {
@@ -68,19 +78,6 @@ BARRE NEON - 2M;82;405;1850;0;1850;200;15;CONTROLLEUR-4/C4-OUT-3/LED-44
 BARRE NEON - 2M;83;250;1850;200;1850;400;15;CONTROLLEUR-4/C4-OUT-3/LED-45
 BARRE NEON - 2M;84;95;1890;0;1890;200;15;CONTROLLEUR-4/C4-OUT-4/LED-46
 BARRE NEON - 2M;84;452;1890;200;1890;400;15;CONTROLLEUR-4/C4-OUT-4/LED-47`;
-    },
-
-    downloadFile(content: string, fileName: string, type: string) {
-      const blob = new Blob([content], { type });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.setAttribute('href', url);
-      link.setAttribute('download', fileName);
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
     },
   },
 };

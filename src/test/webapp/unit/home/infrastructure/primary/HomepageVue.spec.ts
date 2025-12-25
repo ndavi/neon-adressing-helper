@@ -15,6 +15,14 @@ describe('When visiting the homepage', () => {
     await thenCsvContentIsCorrect(createObjectURLMock);
     thenFileIsDownloaded(linkMock, clickMock);
   });
+
+  it('Should allow the user to set the number of LED controllers', async () => {
+    const wrapper = givenHomepage();
+
+    await whenEnteringNumberOfControllers(wrapper, 5);
+
+    thenNumberOfControllersIs(wrapper, 5);
+  });
 });
 
 const givenHomepage = (): VueWrapper => {
@@ -50,6 +58,11 @@ const whenClickingOnDownload = async (wrapper: VueWrapper) => {
   await wrapper.find('.button').trigger('click');
 };
 
+const whenEnteringNumberOfControllers = async (wrapper: VueWrapper, count: number) => {
+  const input = wrapper.find('input#controllers-count');
+  await input.setValue(count);
+};
+
 const thenCsvContentIsCorrect = async (createObjectURLMock: any) => {
   const fixturePath = path.join(__dirname, 'fixtures', 'example.csv');
   const expectedCsv = fs.readFileSync(fixturePath, 'utf-8').replace(/^\uFEFF/, '');
@@ -65,6 +78,11 @@ const thenCsvContentIsCorrect = async (createObjectURLMock: any) => {
 const thenFileIsDownloaded = (linkMock: any, clickMock: any) => {
   expect(linkMock.setAttribute).toHaveBeenCalledWith('download', 'example.csv');
   expect(clickMock).toHaveBeenCalled();
+};
+
+const thenNumberOfControllersIs = (wrapper: VueWrapper, expectedCount: number) => {
+  const input = wrapper.find('input#controllers-count').element as HTMLInputElement;
+  expect(Number(input.value)).toBe(expectedCount);
 };
 
 const readBlobContent = (blob: Blob): Promise<string> => {

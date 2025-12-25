@@ -24,6 +24,8 @@ Le projet suit une architecture hexagonale et applique les principes du **Domain
 
 La logique métier doit être encapsulée dans le domaine et isolée du framework (Vue.js).
 
+Il est interdit de déplacer du code dans un dossier **shared** ou **common** tant qu'il n'est pas effectivement utilisé par au moins deux contextes différents. On privilégie la duplication ou la localisation dans le contexte initial jusqu'à ce qu'un besoin de partage réel émerge.
+
 ## Development Workflow
 
 1. **End-to-End (E2E) Test**: Start with a Playwright test to define the expected behavior from the user's perspective.

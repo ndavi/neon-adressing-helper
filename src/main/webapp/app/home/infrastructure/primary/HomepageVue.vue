@@ -51,6 +51,7 @@
 
 <script lang="ts">
 import type { ControllerConfig } from '@/home/domain/ControllerConfig';
+import { Controllers } from '@/home/domain/Controllers';
 import VueLogo from '../../../../content/images/VueLogo.png';
 import { downloadFile } from './FileDownloader';
 
@@ -65,14 +66,7 @@ export default {
   },
   watch: {
     controllersCount(newCount: number) {
-      if (newCount > this.controllers.length) {
-        const toAdd = newCount - this.controllers.length;
-        for (let i = 0; i < toAdd; i++) {
-          this.controllers.push({ universe: 1, outputs: 16 });
-        }
-      } else if (newCount < this.controllers.length) {
-        this.controllers.splice(newCount);
-      }
+      new Controllers(this.controllers).resize(newCount);
     },
   },
   methods: {

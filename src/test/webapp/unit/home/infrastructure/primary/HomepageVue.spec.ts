@@ -4,20 +4,7 @@ import { mount } from '@vue/test-utils';
 import fs from 'fs';
 import path from 'path';
 import { describe, expect, it, vi } from 'vitest';
-import { createVuetify } from 'vuetify';
-import * as components from 'vuetify/components';
-import * as directives from 'vuetify/directives';
-
-const vuetify = createVuetify({
-  components,
-  directives,
-});
-
-global.ResizeObserver = class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-};
+import { vuetify } from '../../../test-utils';
 
 describe('When visiting the homepage', () => {
   it('Should provide an example CSV template when the user wants to download it', async () => {

@@ -12,6 +12,8 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   /* Maximum time one test can run for. */
   timeout: 5 * 1000,
+  /* Fail fast */
+  maxFailures: 1,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.

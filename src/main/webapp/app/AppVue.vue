@@ -1,9 +1,11 @@
 <script lang="ts">
-  export default {
-    name: 'AppVue',
-  };
+export default {
+  name: 'AppVue',
+};
 </script>
 
 <template>
-  <router-view />
+  <v-app>
+    <router-view />
+  </v-app>
 </template>

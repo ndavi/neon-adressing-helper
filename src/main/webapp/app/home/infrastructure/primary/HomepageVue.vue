@@ -1,16 +1,25 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="../../../../content/images/VueLogo.png" />
-    <h1 class="page-title">Neon Addressing Tool</h1>
+  <v-container class="text-center fill-height justify-center">
+    <v-row justify="center" align="center">
+      <v-col cols="12">
+        <v-img alt="Vue logo" src="../../../../content/images/VueLogo.png" class="mx-auto mb-5" height="200" width="200" />
+        <h1 class="text-h3 font-weight-bold mb-5">Neon Addressing Tool</h1>
 
-    <div class="actions">
-      <div class="field">
-        <label for="controllers-count" class="field-label"> Nombre de contrôleurs </label>
-        <input id="controllers-count" v-model="controllersCount" type="number" class="field-input" />
-      </div>
-      <button class="button" @click="downloadExampleCsv">Télécharger un exemple CSV</button>
-    </div>
-  </div>
+        <v-responsive class="mx-auto" max-width="400">
+          <v-text-field
+            id="controllers-count"
+            v-model.number="controllersCount"
+            label="Nombre de contrôleurs"
+            type="number"
+            variant="outlined"
+            class="mb-4"
+          ></v-text-field>
+
+          <v-btn color="primary" size="large" class="button" @click="downloadExampleCsv"> Télécharger un exemple CSV </v-btn>
+        </v-responsive>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -82,18 +91,3 @@ BARRE NEON - 2M;84;452;1890;200;1890;400;15;CONTROLLEUR-4/C4-OUT-4/LED-47`;
   },
 };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: var(--color-text);
-  margin-top: 60px;
-}
-
-.actions {
-  margin-top: 2rem;
-}
-</style>

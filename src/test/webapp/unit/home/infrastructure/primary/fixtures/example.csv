@@ -1,25 +1,4 @@
-<template>
-  <div id="app">
-    <img alt="Vue logo" src="../../../../content/images/VueLogo.png" />
-    <h1 class="page-title">Neon Addressing Tool</h1>
-
-    <div class="actions">
-      <button class="button" @click="downloadExampleCsv">Télécharger un exemple CSV</button>
-    </div>
-  </div>
-</template>
-
-<script lang="ts">
-export default {
-  name: 'HomepageVue',
-  methods: {
-    downloadExampleCsv() {
-      const csvContent = this.getExampleCsvContent();
-      this.downloadFile(csvContent, 'example.csv', 'text/csv;charset=utf-8;');
-    },
-
-    getExampleCsvContent() {
-      return `Fixture Definition Name;Start Universe;Start Channel;StartX;StartY;EndX;EndY;Width;Fixture Name
+﻿Fixture Definition Name;Start Universe;Start Channel;StartX;StartY;EndX;EndY;Width;Fixture Name
 BARRE NEON - 2M;0;1;10;0;10;200;15;CONTROLLEUR-0/C0-OUT-1/LED-0
 BARRE NEON - 2M;0;358;10;200;10;400;15;CONTROLLEUR-0/C0-OUT-1/LED-1
 BARRE NEON - 2M;1;203;50;0;50;200;15;CONTROLLEUR-0/C0-OUT-2/LED-2
@@ -67,36 +46,4 @@ BARRE NEON - 2M;82;48;1810;200;1810;400;15;CONTROLLEUR-4/C4-OUT-2/LED-43
 BARRE NEON - 2M;82;405;1850;0;1850;200;15;CONTROLLEUR-4/C4-OUT-3/LED-44
 BARRE NEON - 2M;83;250;1850;200;1850;400;15;CONTROLLEUR-4/C4-OUT-3/LED-45
 BARRE NEON - 2M;84;95;1890;0;1890;200;15;CONTROLLEUR-4/C4-OUT-4/LED-46
-BARRE NEON - 2M;84;452;1890;200;1890;400;15;CONTROLLEUR-4/C4-OUT-4/LED-47`;
-    },
-
-    downloadFile(content: string, fileName: string, type: string) {
-      const blob = new Blob([content], { type });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.setAttribute('href', url);
-      link.setAttribute('download', fileName);
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    },
-  },
-};
-</script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: var(--color-text);
-  margin-top: 60px;
-}
-
-.actions {
-  margin-top: 2rem;
-}
-</style>
+BARRE NEON - 2M;84;452;1890;200;1890;400;15;CONTROLLEUR-4/C4-OUT-4/LED-47

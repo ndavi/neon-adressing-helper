@@ -12,7 +12,9 @@ Il est **impératif** de respecter le cycle TDD pour tout nouveau développement
 
 ## Architecture
 
-Le projet suit une architecture hexagonale.
+Le projet suit une architecture hexagonale et applique les principes du **Domain-Driven Design (DDD)**, même dans le frontend.
+
+La logique métier doit être encapsulée dans le domaine et isolée du framework (Vue.js).
 
 ## Development Workflow
 

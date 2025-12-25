@@ -22,7 +22,7 @@ Les tests doivent **écrire une histoire**. Les noms des tests (le contenu du `i
 
 Le projet suit une architecture hexagonale et applique les principes du **Domain-Driven Design (DDD)**, même dans le frontend.
 
-La logique métier doit être encapsulée dans le domaine et isolée du framework (Vue.js).
+La logique métier doit être encapsulée dans le domaine et isolée du framework (Vue.js). Les objets du domaine doivent être placés dans un dossier `domain` à la racine de chaque module (ex: `src/main/webapp/app/home/domain`).
 
 Il est interdit de déplacer du code dans un dossier **shared** ou **common** tant qu'il n'est pas effectivement utilisé par au moins deux contextes différents. On privilégie la duplication ou la localisation dans le contexte initial jusqu'à ce qu'un besoin de partage réel émerge.
 

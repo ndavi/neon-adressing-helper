@@ -50,13 +50,9 @@
 </template>
 
 <script lang="ts">
+import type { ControllerConfig } from '@/home/domain/ControllerConfig';
 import VueLogo from '../../../../content/images/VueLogo.png';
 import { downloadFile } from './FileDownloader';
-
-interface ControllerConfig {
-  universe: number;
-  outputs: number;
-}
 
 export default {
   name: 'HomepageVue',

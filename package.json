@@ -58,6 +58,7 @@
   },
   "type": "module",
   "dependencies": {
+    "arch-unit-ts": "1.0.9",
     "vue": "3.5.26",
     "axios": "1.13.2",
     "piqure": "2.1.2"

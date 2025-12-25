@@ -32,7 +32,7 @@ Pour l'UX et les composants UI, on utilise le serveur MCP de Vuetify : https://m
 
 ## Development Workflow
 
-1. **End-to-End (E2E) Test**: Ensure there is exactly one Playwright test per URL of the application to verify overall functionality and design system display. There is no need for a Playwright test per feature.
+1. **End-to-End (E2E) Test**: Write Playwright tests only when necessary, adhering to TDD principles. Focus on verifying critical user journeys and global application stability, rather than granular feature testing.
 2. **Unit Tests**: Drill down to the unit level (whenever possible and relevant) to implement business logic and components.
 3. **Implementation**: Write the minimum amount of code to make the tests pass.
 4. **Refactoring**: Improve code quality while keeping tests green.

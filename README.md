@@ -28,5 +28,6 @@ pnpm install
 
 ## Documentation
 
+- [Vue](documentation/vue.md)
 
 <!-- seed4j-needle-documentation -->

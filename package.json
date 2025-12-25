@@ -9,6 +9,8 @@
     "node": ">=24"
   },
   "scripts": {
+    "e2e": "playwright test --ui --config src/test/webapp/e2e/playwright.config.ts",
+    "e2e:headless": "playwright test --config src/test/webapp/e2e/playwright.config.ts",
     "build": "npm-run-all build:*",
     "build:tsc": "vue-tsc -p tsconfig.build.json --noEmit",
     "build:vite": "vite build --emptyOutDir",
@@ -27,6 +29,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@playwright/test": "1.57.0",
     "@vitejs/plugin-vue": "6.0.3",
     "@vue/test-utils": "2.4.6",
     "@vue/tsconfig": "0.8.1",

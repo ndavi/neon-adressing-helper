@@ -1,0 +1,11 @@
+{
+  "module" : "playwright-e2e",
+  "date" : "2025-12-25T19:51:59.888778Z",
+  "properties" : {
+    "projectName" : "NeonLedMapper",
+    "baseName" : "neonledmapper",
+    "nodePackageManager" : "pnpm",
+    "endOfLine" : "lf",
+    "indentSize" : 2
+  }
+}

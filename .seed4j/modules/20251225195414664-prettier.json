@@ -1,0 +1,11 @@
+{
+  "module" : "prettier",
+  "date" : "2025-12-25T19:54:14.664021Z",
+  "properties" : {
+    "projectName" : "NeonAdressingTool",
+    "baseName" : "neonadressingtool",
+    "nodePackageManager" : "pnpm",
+    "endOfLine" : "lf",
+    "indentSize" : 2
+  }
+}

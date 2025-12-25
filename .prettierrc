@@ -8,7 +8,6 @@ endOfLine: 'lf'
 experimentalOperatorPosition: start
 
 plugins:
-  - '@prettier/plugin-pug'
   - '@prettier/plugin-xml'
   - prettier-plugin-gherkin
   - prettier-plugin-java

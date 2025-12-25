@@ -23,6 +23,14 @@ describe('When visiting the homepage', () => {
 
     thenNumberOfControllersIs(wrapper, 5);
   });
+
+  it('Should display configuration cards for each controller', async () => {
+    const wrapper = givenHomepage();
+
+    await whenEnteringNumberOfControllers(wrapper, 2);
+
+    thenControllerCardsAreDisplayed(wrapper, 2);
+  });
 });
 
 const givenHomepage = (): VueWrapper => {
@@ -83,6 +91,11 @@ const thenFileIsDownloaded = (linkMock: any, clickMock: any) => {
 const thenNumberOfControllersIs = (wrapper: VueWrapper, expectedCount: number) => {
   const input = wrapper.find('input#controllers-count').element as HTMLInputElement;
   expect(Number(input.value)).toBe(expectedCount);
+};
+
+const thenControllerCardsAreDisplayed = (wrapper: VueWrapper, expectedCount: number) => {
+  const cards = wrapper.findAll('.controller-card');
+  expect(cards.length).toBe(expectedCount);
 };
 
 const readBlobContent = (blob: Blob): Promise<string> => {

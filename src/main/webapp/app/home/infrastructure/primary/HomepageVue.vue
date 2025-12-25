@@ -19,6 +19,31 @@
             Télécharger un exemple CSV
           </v-btn>
         </div>
+
+        <v-row class="mt-5">
+          <v-col v-for="(controller, index) in controllers" :key="index" cols="12" md="6" lg="4">
+            <v-card class="controller-card" variant="outlined">
+              <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
+              <v-card-text>
+                <v-text-field
+                  v-model.number="controller.universe"
+                  label="Univers de départ"
+                  type="number"
+                  variant="outlined"
+                  hide-details="auto"
+                  class="mb-3"
+                ></v-text-field>
+                <v-text-field
+                  v-model.number="controller.outputs"
+                  label="Nombre de sorties"
+                  type="number"
+                  variant="outlined"
+                  hide-details="auto"
+                ></v-text-field>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -28,13 +53,31 @@
 import VueLogo from '../../../../content/images/VueLogo.png';
 import { downloadFile } from './FileDownloader';
 
+interface ControllerConfig {
+  universe: number;
+  outputs: number;
+}
+
 export default {
   name: 'HomepageVue',
   data() {
     return {
       controllersCount: 0,
+      controllers: [] as ControllerConfig[],
       VueLogo,
     };
+  },
+  watch: {
+    controllersCount(newCount: number) {
+      if (newCount > this.controllers.length) {
+        const toAdd = newCount - this.controllers.length;
+        for (let i = 0; i < toAdd; i++) {
+          this.controllers.push({ universe: 1, outputs: 16 });
+        }
+      } else if (newCount < this.controllers.length) {
+        this.controllers.splice(newCount);
+      }
+    },
   },
   methods: {
     downloadExampleCsv() {

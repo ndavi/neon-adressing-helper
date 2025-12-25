@@ -27,7 +27,7 @@ describe('Router', () => {
 
       const wrapper = wrap();
 
-      expect(wrapper.html()).toContain('Vue + TypeScript + Vite');
+      expect(wrapper.html()).toContain('Neon Addressing Tool');
     });
   });
 });

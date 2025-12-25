@@ -5,7 +5,7 @@
         <v-img alt="Vue logo" :src="VueLogo" class="mx-auto mb-5" height="200" width="200" />
         <h1 class="text-h3 font-weight-bold mb-5">Neon Addressing Tool</h1>
 
-        <v-responsive class="mx-auto" max-width="400">
+        <div class="mx-auto" style="max-width: 400px">
           <v-text-field
             id="controllers-count"
             v-model.number="controllersCount"
@@ -18,7 +18,7 @@
           <v-btn color="primary" size="large" class="button" prepend-icon="mdi-download" @click="downloadExampleCsv">
             Télécharger un exemple CSV
           </v-btn>
-        </v-responsive>
+        </div>
       </v-col>
     </v-row>
   </v-container>

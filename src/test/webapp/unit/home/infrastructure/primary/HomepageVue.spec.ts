@@ -42,11 +42,9 @@ const givenMockedDomForDownload = () => {
   global.URL.createObjectURL = createObjectURLMock;
 
   const clickMock = vi.fn();
-  const linkMock = {
-    setAttribute: vi.fn(),
-    style: {},
-    click: clickMock,
-  } as unknown as HTMLAnchorElement;
+  const linkMock = document.createElement('a');
+  vi.spyOn(linkMock, 'setAttribute');
+  vi.spyOn(linkMock, 'click').mockImplementation(clickMock);
 
   const originalCreateElement = document.createElement.bind(document);
   vi.spyOn(document, 'createElement').mockImplementation((tagName: string, options?: ElementCreationOptions) => {
@@ -77,20 +75,25 @@ const thenCsvContentIsCorrect = async (createObjectURLMock: any) => {
 
   expect(createObjectURLMock).toHaveBeenCalledTimes(1);
   const blob = createObjectURLMock.mock.calls[0][0];
-  expect(blob).toBeInstanceOf(Blob);
+  if (!(blob instanceof Blob)) {
+    throw new Error('Expected a Blob');
+  }
 
   const text = await readBlobContent(blob);
   expect(text.trim()).toBe(expectedCsv.trim());
 };
 
-const thenFileIsDownloaded = (linkMock: any, clickMock: any) => {
+const thenFileIsDownloaded = (linkMock: HTMLAnchorElement, clickMock: any) => {
   expect(linkMock.setAttribute).toHaveBeenCalledWith('download', 'example.csv');
   expect(clickMock).toHaveBeenCalled();
 };
 
 const thenNumberOfControllersIs = (wrapper: VueWrapper, expectedCount: number) => {
-  const input = wrapper.find('input#controllers-count').element as HTMLInputElement;
-  expect(Number(input.value)).toBe(expectedCount);
+  const element = wrapper.find('input#controllers-count').element;
+  if (!(element instanceof HTMLInputElement)) {
+    throw new Error('Element is not an HTMLInputElement');
+  }
+  expect(Number(element.value)).toBe(expectedCount);
 };
 
 const thenControllerCardsAreDisplayed = (wrapper: VueWrapper, expectedCount: number) => {
@@ -101,7 +104,12 @@ const thenControllerCardsAreDisplayed = (wrapper: VueWrapper, expectedCount: num
 const readBlobContent = (blob: Blob): Promise<string> => {
   const reader = new FileReader();
   return new Promise<string>(resolve => {
-    reader.onload = () => resolve(reader.result as string);
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result === 'string') {
+        resolve(result);
+      }
+    };
     reader.readAsText(blob);
   });
 };

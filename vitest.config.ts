@@ -31,7 +31,7 @@ export default defineConfig({
       },
       include: ['src/main/webapp/**/*.ts?(x)'],
       exclude: [
-        ...(configDefaults.coverage.exclude as string[]),
+        ...(configDefaults.coverage.exclude ?? []),
         'src/main/webapp/app/router.ts',
         'src/main/webapp/app/main.ts',
         'src/main/webapp/app/injections.ts',

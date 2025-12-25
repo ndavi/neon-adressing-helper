@@ -32,6 +32,7 @@ export default typescript.config(
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       'vue/html-self-closing': 'off',

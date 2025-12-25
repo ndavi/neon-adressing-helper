@@ -2,6 +2,14 @@
 
 ## Développement
 
+### TypeScript
+
+L'utilisation du mot-clé `as` pour l'assertion de type est **interdite**. C'est une mauvaise pratique qui contourne la sécurité du typage.
+
+- **Alternative** : Utiliser `satisfies` pour vérifier qu'une valeur correspond à un type sans perdre la précision du type, ou utiliser des **type guards** pour valider les types à l'exécution.
+- **Portée** : Tous les fichiers TypeScript du projet.
+- **Raison** : Garantir une sécurité de typage maximale et éviter les erreurs à l'exécution.
+
 ### Test Driven Development (TDD)
 
 Il est **impératif** de respecter le cycle TDD pour tout nouveau développement de fonctionnalité :

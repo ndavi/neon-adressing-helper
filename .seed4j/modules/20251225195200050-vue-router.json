@@ -1,0 +1,11 @@
+{
+  "module" : "vue-router",
+  "date" : "2025-12-25T19:52:00.050867Z",
+  "properties" : {
+    "projectName" : "NeonLedMapper",
+    "baseName" : "neonledmapper",
+    "nodePackageManager" : "pnpm",
+    "endOfLine" : "lf",
+    "indentSize" : 2
+  }
+}

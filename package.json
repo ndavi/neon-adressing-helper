@@ -70,6 +70,7 @@
   },
   "type": "module",
   "dependencies": {
+    "vue-router": "4.6.4",
     "@tikui/core": "7.0.0",
     "arch-unit-ts": "1.0.9",
     "vue": "3.5.26",

@@ -1,7 +1,9 @@
-<script setup lang="ts">
-import HomepageVue from './home/infrastructure/primary/HomepageVue.vue'
+<script lang="ts">
+  export default {
+    name: 'AppVue',
+  };
 </script>
 
 <template>
-  <HomepageVue />
+  <router-view />
 </template>

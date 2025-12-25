@@ -66,7 +66,7 @@ export default {
   },
   watch: {
     controllersCount(newCount: number) {
-      this.controllers = new Controllers(this.controllers).resize(newCount).values;
+      this.controllers = Controllers.of(this.controllers).resize(newCount).values;
     },
   },
   methods: {

@@ -1,7 +1,15 @@
 import type { ControllerConfig } from './ControllerConfig';
 
 export class Controllers {
-  constructor(private readonly _values: readonly ControllerConfig[] = []) {}
+  private constructor(private readonly _values: readonly ControllerConfig[] = []) {}
+
+  static empty(): Controllers {
+    return new Controllers();
+  }
+
+  static of(values: readonly ControllerConfig[]): Controllers {
+    return new Controllers(values);
+  }
 
   get values(): readonly ControllerConfig[] {
     return this._values;

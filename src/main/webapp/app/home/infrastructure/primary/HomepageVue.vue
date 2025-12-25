@@ -50,7 +50,6 @@
 </template>
 
 <script lang="ts">
-import type { ControllerConfig } from '@/home/domain/ControllerConfig';
 import { Controllers } from '@/home/domain/Controllers';
 import VueLogo from '../../../../content/images/VueLogo.png';
 import { downloadFile } from './FileDownloader';
@@ -60,7 +59,7 @@ export default {
   data() {
     return {
       controllersCount: 0,
-      controllers: [] as readonly ControllerConfig[],
+      controllers: Controllers.empty().values,
       VueLogo,
     };
   },

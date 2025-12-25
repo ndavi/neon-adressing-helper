@@ -2,7 +2,7 @@
   <v-container class="text-center fill-height justify-center">
     <v-row justify="center" align="center">
       <v-col cols="12">
-        <v-img alt="Vue logo" src="../../../../content/images/VueLogo.png" class="mx-auto mb-5" height="200" width="200" />
+        <v-img alt="Vue logo" :src="VueLogo" class="mx-auto mb-5" height="200" width="200" />
         <h1 class="text-h3 font-weight-bold mb-5">Neon Addressing Tool</h1>
 
         <v-responsive class="mx-auto" max-width="400">
@@ -15,7 +15,9 @@
             class="mb-4"
           ></v-text-field>
 
-          <v-btn color="primary" size="large" class="button" @click="downloadExampleCsv"> Télécharger un exemple CSV </v-btn>
+          <v-btn color="primary" size="large" class="button" prepend-icon="mdi-download" @click="downloadExampleCsv">
+            Télécharger un exemple CSV
+          </v-btn>
         </v-responsive>
       </v-col>
     </v-row>
@@ -23,6 +25,7 @@
 </template>
 
 <script lang="ts">
+import VueLogo from '../../../../content/images/VueLogo.png';
 import { downloadFile } from './FileDownloader';
 
 export default {
@@ -30,6 +33,7 @@ export default {
   data() {
     return {
       controllersCount: 0,
+      VueLogo,
     };
   },
   methods: {

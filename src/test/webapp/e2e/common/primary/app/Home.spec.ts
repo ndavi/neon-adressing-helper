@@ -6,6 +6,6 @@ test.describe('Home', () => {
   test('display home page', async ({ page }) => {
     const homePage = new HomePage(page);
     await homePage.goto();
-    await expect(page).toHaveTitle('NeonLedMapper');
+    await expect(page).toHaveTitle('NeonAdressingTool');
   });
 });

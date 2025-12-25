@@ -1,4 +1,4 @@
 export interface ControllerConfig {
-  universe: number;
-  outputs: number;
+  readonly universe: number;
+  readonly outputs: number;
 }

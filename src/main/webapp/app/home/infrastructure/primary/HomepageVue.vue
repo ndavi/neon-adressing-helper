@@ -60,13 +60,13 @@ export default {
   data() {
     return {
       controllersCount: 0,
-      controllers: [] as ControllerConfig[],
+      controllers: [] as readonly ControllerConfig[],
       VueLogo,
     };
   },
   watch: {
     controllersCount(newCount: number) {
-      new Controllers(this.controllers).resize(newCount);
+      this.controllers = new Controllers(this.controllers).resize(newCount).values;
     },
   },
   methods: {

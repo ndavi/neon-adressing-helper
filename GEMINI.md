@@ -24,6 +24,8 @@ Le projet suit une architecture hexagonale et applique les principes du **Domain
 
 La logique métier doit être encapsulée dans le domaine et isolée du framework (Vue.js). Les objets du domaine doivent être placés dans un dossier `domain` à la racine de chaque module (ex: `src/main/webapp/app/home/domain`).
 
+Le domaine doit être le plus **immuable** possible. On privilégie les types primitifs et les structures de données immuables, en minimisant les effets de bord. Les entités et value objects doivent être conçus pour ne pas être modifiés après leur création. Toute opération de transformation (ex: `resize`) doit renvoyer une nouvelle instance de l'objet plutôt que de modifier l'instance existante.
+
 Il est interdit de déplacer du code dans un dossier **shared** ou **common** tant qu'il n'est pas effectivement utilisé par au moins deux contextes différents. On privilégie la duplication ou la localisation dans le contexte initial jusqu'à ce qu'un besoin de partage réel émerge.
 
 ## UX / Design

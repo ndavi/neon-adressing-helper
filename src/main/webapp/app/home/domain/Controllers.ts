@@ -1,20 +1,18 @@
 import type { ControllerConfig } from './ControllerConfig';
 
 export class Controllers {
-  constructor(private readonly _values: ControllerConfig[] = []) {}
+  constructor(private readonly _values: readonly ControllerConfig[] = []) {}
 
-  get values(): ControllerConfig[] {
+  get values(): readonly ControllerConfig[] {
     return this._values;
   }
 
-  resize(newCount: number): void {
+  resize(newCount: number): Controllers {
     if (newCount > this._values.length) {
-      const toAdd = newCount - this._values.length;
-      for (let i = 0; i < toAdd; i++) {
-        this._values.push({ universe: 1, outputs: 16 });
-      }
-    } else if (newCount < this._values.length) {
-      this._values.splice(newCount);
+      const toAddCount = newCount - this._values.length;
+      const toAdd = Array.from({ length: toAddCount }, () => ({ universe: 1, outputs: 16 }));
+      return new Controllers([...this._values, ...toAdd]);
     }
+    return new Controllers(this._values.slice(0, newCount));
   }
 }

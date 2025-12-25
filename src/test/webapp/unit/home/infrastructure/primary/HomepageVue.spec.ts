@@ -4,7 +4,6 @@ import { mount } from '@vue/test-utils';
 import fs from 'fs';
 import path from 'path';
 import { describe, expect, it, vi } from 'vitest';
-import { vuetify } from '../../../test-utils';
 
 describe('When visiting the homepage', () => {
   it('Should provide an example CSV template when the user wants to download it', async () => {
@@ -27,11 +26,7 @@ describe('When visiting the homepage', () => {
 });
 
 const givenHomepage = (): VueWrapper => {
-  return mount(HomepageVue, {
-    global: {
-      plugins: [vuetify],
-    },
-  });
+  return mount(HomepageVue);
 };
 
 const givenMockedDomForDownload = () => {

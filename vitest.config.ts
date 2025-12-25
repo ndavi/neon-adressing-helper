@@ -16,6 +16,7 @@ export default defineConfig({
     maxWorkers: 2,
     environment: 'jsdom',
     cache: false,
+    setupFiles: ['src/test/webapp/unit/vitest.setup.ts'],
     server: {
       deps: {
         inline: ['vuetify'],

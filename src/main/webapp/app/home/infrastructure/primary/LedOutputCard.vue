@@ -1,5 +1,5 @@
 <template>
-  <v-card variant="flat" border class="mb-2">
+  <v-card variant="flat" border class="mb-2" data-selector="led-output-card">
     <v-card-text class="d-flex align-center py-2">
       <span class="text-subtitle-2">Sortie {{ index + 1 }}</span>
       <v-spacer></v-spacer>

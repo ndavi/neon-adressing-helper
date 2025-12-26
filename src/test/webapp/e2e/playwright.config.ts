@@ -94,4 +94,10 @@ export default defineConfig({
 
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
   outputDir: '../../../../target/playwright-results/e2e-tests',
+
+  webServer: {
+    command: 'npm run start -- --port 9000',
+    port: 9000,
+    reuseExistingServer: !process.env.CI,
+  },
 });

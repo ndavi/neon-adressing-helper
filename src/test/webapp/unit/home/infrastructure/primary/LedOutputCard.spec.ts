@@ -94,8 +94,7 @@ const whenClickingRemoveBar = async (wrapper: VueWrapper) => {
 };
 
 const whenClickingBarAtIndex = async (wrapper: VueWrapper, index: number) => {
-  // Assuming bars are rendered in order
-  const bars = wrapper.findAll('.rounded'); // Using class from template
+  const bars = wrapper.findAll('.rounded');
   await barAt(bars, index).trigger('click');
 };
 

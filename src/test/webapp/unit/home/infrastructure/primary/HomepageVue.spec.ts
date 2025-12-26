@@ -45,15 +45,14 @@ describe('When visiting the homepage', () => {
 
     await whenEnteringNumberOfControllers(wrapper, -1);
 
-    thenNumberOfControllersIs(wrapper, -1); // Input value changes
-    thenControllerCardsAreDisplayed(wrapper, 5); // But cards remain at 5
+    thenNumberOfControllersIs(wrapper, -1);
+    thenControllerCardsAreDisplayed(wrapper, 5);
   });
 
   it('Should have a maximum value of 8 for the outputs input', async () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    // The outputs input is the second text field in the card
     const card = wrapper.find('.controller-card');
     const outputInput = card.findAll('input')[1];
     if (!outputInput) throw new Error('Output input not found');
@@ -64,18 +63,10 @@ describe('When visiting the homepage', () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    // Default is usually 1 output (from Controller.new())
-    // Let's try to set to 9
     const card = wrapper.find('.controller-card');
     const outputInput = card.findAll('input')[1];
     if (!outputInput) throw new Error('Output input not found');
     await outputInput.setValue(9);
-
-    // Should remain at previous value (default 1)
-    // We need to check if the DOM updated or if the model updated.
-    // Since we blocked it in updateOutputsCount, the model shouldn't change.
-    // However, v-model works two-way. If we block the update, the value in the store doesn't change.
-    // Let's verify via the DOM element value or by checking effects (like number of output cards)
 
     const outputCards = card.findAllComponents({ name: 'LedOutputCard' });
     expect(outputCards.length).toBe(1);
@@ -85,7 +76,6 @@ describe('When visiting the homepage', () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    // First input in the card is universe
     const card = wrapper.find('.controller-card');
     const universeInput = card.findAll('input')[0];
     if (!universeInput) throw new Error('Universe input not found');
@@ -96,35 +86,13 @@ describe('When visiting the homepage', () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    // First input in the card is universe
     const card = wrapper.find('.controller-card');
     const universeInput = card.findAll('input')[0];
     if (!universeInput) throw new Error('Universe input not found');
     await universeInput.setValue(-5);
 
-    // Should remain at default (0)
-    // We can verify by checking if the value in DOM follows (v-model) but store update is blocked
-    // Ideally we check if the prop passed to visualizer or similar is unchanged, but let's check the effect or re-read DOM (which might have updated if v-model isn't manually reset, but in our logic we block the store update).
-    // Let's assume the store is the source of truth for the app state.
-
-    // Since we handle state via `controllers.value`, and the template binds to `controller.universe`, if we block update, the visualizer should show 0.
-    // But testing visualizer props is hard from here without digging deep.
-    // Let's check that the input value (if reflected back from store) or simplier, verify no error thrown and state valid.
-
-    // Accessing internal state for verification
-    // We check the input value remaining at 0 because :model-value binds to the state,
-    // and since the state update is blocked, it should remain 0.
-    // Note: In some test environments, the input value might temporarily reflect the user input
-    // before Vue updates it back. But since we use :model-value, the source of truth is the prop.
-
-    // Let's rely on the fact that if we didn't crash and the state didn't change,
-    // retrieving the bound value or just assuming safety is enough?
-    // No, let's try to verify the input value.
-
-    // Verify that the state passed to the visualizer remains consistent (universe 0)
     const visualizer = wrapper.findComponent({ name: 'Controller2DVisualizer' });
-    const controllersProp = visualizer.props('controllers'); // Rely on implicit any/unknown or runtime check if needed
-    // Safety check to satisfy TS if needed, or just access if allowed
+    const controllersProp = visualizer.props('controllers');
     if (!Array.isArray(controllersProp)) throw new Error('Controllers prop is not an array');
     expect(controllersProp[0].universe).toBe(0);
   });
@@ -181,26 +149,21 @@ const whenEnteringNumberOfControllers = async (wrapper: VueWrapper, count: numbe
 };
 
 const whenConfiguringExampleState = async (wrapper: VueWrapper) => {
-  // Configure controller counts
   const cards = wrapper.findAll('.controller-card');
   for (let i = 0; i < 5; i++) {
     const targetCount = i < 4 ? 8 : 4;
     const card = cards[i];
     if (!card) throw new Error(`Controller card ${i} not found`);
     const inputs = card.findAll('input');
-    // Index 1: outputs count
     const input = inputs[1];
     if (!input) throw new Error('Output input not found');
     await input.setValue(targetCount);
   }
 
-  // Add bars
-  // Iterating by index to re-fetch wrapper at each step prevents stale element issues
   for (let i = 0; i < 5; i++) {
     const outputCount = i < 4 ? 8 : 4;
 
     for (let k = 0; k < outputCount; k++) {
-      // Re-find the card and buttons at this exact moment
       const currentCard = wrapper.findAll('.controller-card')[i];
       if (!currentCard) throw new Error(`Card ${i} not found`);
 
@@ -208,13 +171,9 @@ const whenConfiguringExampleState = async (wrapper: VueWrapper) => {
       const outputCard = outputCards[k];
       if (!outputCard) throw new Error(`Output card ${k} not found for C${i}`);
 
-      // Emit 'add-bar' once
       outputCard.vm.$emit('add-bar');
-      await wrapper.vm.$nextTick(); // Wait for parent to react
+      await wrapper.vm.$nextTick();
 
-      // Check if we need a second bar
-      // C0-C3: outputs 0-1 get 2 bars.
-      // C4: all outputs get 2 bars.
       const needsSecondBar = (i < 4 && k < 2) || i === 4;
       if (needsSecondBar) {
         outputCard.vm.$emit('add-bar');

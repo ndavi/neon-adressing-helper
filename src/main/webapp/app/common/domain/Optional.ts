@@ -80,9 +80,7 @@ class EmptyOptional<Value> extends Optional<Value> {
     return false;
   }
 
-  ifPresent(): void {
-    // Nothing to do
-  }
+  ifPresent(): void {}
 
   toArray(): Value[] {
     return [];

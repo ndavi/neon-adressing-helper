@@ -51,13 +51,14 @@ defineProps<{
 }
 
 .controller-box {
-  width: 200px;
+  width: auto;
+  min-width: 200px;
   min-height: 100px;
   background-color: #e0e0e0;
   border: 2px solid black;
   border-radius: 8px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row; /* Outputs side-by-side */
   padding: 10px;
   gap: 5px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
@@ -72,6 +73,7 @@ defineProps<{
 
 .output-node {
   display: flex;
+  flex-direction: column; /* Bars stacked vertically */
   gap: 2px;
   background-color: rgba(255, 255, 255, 0.5);
   padding: 2px;
@@ -79,16 +81,16 @@ defineProps<{
 }
 
 .bar-node {
-  height: 10px;
+  width: 10px; /* Fixed width for vertical bars */
   background-color: #4caf50;
   border-radius: 2px;
 }
 
 .bar-2m {
-  width: 20px;
+  height: 20px;
 }
 
 .bar-1m {
-  width: 10px;
+  height: 10px;
 }
 </style>

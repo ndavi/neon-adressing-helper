@@ -10,31 +10,16 @@
         class="main-content"
       >
         <template #left>
-          <div class="pa-4 full-height d-flex flex-column bg-surface">
-            <v-text-field
-              id="controllers-count"
-              v-model.number="controllersCount"
-              label="Nombre de contrôleurs"
-              type="number"
-              min="0"
-              variant="outlined"
-              class="mb-4 flex-grow-0"
-            ></v-text-field>
-
-            <div class="overflow-y-auto flex-grow-1 pr-2 controllers-grid">
-              <div v-for="(controller, index) in controllers.values" :key="index" class="controller-card-wrapper">
-                <ControllerCard
-                  :controller="controller"
-                  :index="index"
-                  @update:universe="updateUniverse(index, $event)"
-                  @update:outputs-count="updateOutputsCount(index, $event)"
-                  @add-bar="addBar(index, $event)"
-                  @remove-bar="removeBar(index, $event)"
-                  @toggle-bar="(outputIndex, barIndex) => toggleBar(index, outputIndex, barIndex)"
-                />
-              </div>
-            </div>
-          </div>
+          <ControllersGrid
+            :controllers-count="controllersCount"
+            :controllers="controllers.values"
+            @update:controllers-count="controllersCount = $event"
+            @update:universe="updateUniverse($event.controllerIndex, $event.universe)"
+            @update:outputs-count="updateOutputsCount($event.controllerIndex, $event.count)"
+            @add-bar="addBar($event.controllerIndex, $event.outputIndex)"
+            @remove-bar="removeBar($event.controllerIndex, $event.outputIndex)"
+            @toggle-bar="toggleBar($event.controllerIndex, $event.outputIndex, $event.barIndex)"
+          />
         </template>
         <template #right>
           <Controller2DVisualizer :controllers="controllers.values" class="fill-height bg-grey-lighten-4" />
@@ -97,6 +82,7 @@ import { ref, shallowRef, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 import Controller2DVisualizer from './Controller2DVisualizer.vue';
 import ControllerCard from './ControllerCard.vue';
+import ControllersGrid from './ControllersGrid.vue';
 import { downloadFile } from './FileDownloader';
 
 const { mdAndUp } = useDisplay();
@@ -175,35 +161,5 @@ const downloadExampleCsv = () => {
 
 .full-height {
   height: 100%;
-}
-
-.controllers-grid {
-  container-type: inline-size;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-content: flex-start;
-}
-
-.controller-card-wrapper {
-  width: 100%;
-}
-
-@container (min-width: 600px) {
-  .controller-card-wrapper {
-    width: calc(50% - 8px);
-  }
-}
-
-@container (min-width: 900px) {
-  .controller-card-wrapper {
-    width: calc(33.333% - 11px);
-  }
-}
-
-@container (min-width: 1200px) {
-  .controller-card-wrapper {
-    width: calc(25% - 12px);
-  }
 }
 </style>

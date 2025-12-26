@@ -94,4 +94,5 @@ export class Controller {
 2. **Unit Tests**: Drill down to the unit level (whenever possible and relevant) to implement business logic and components.
 3. **Implementation**: Write the minimum amount of code to make the tests pass.
 4. **Refactoring**: Improve code quality while keeping tests green.
-5. **Commit**: Commit the changes at the end of each task.
+5. **Compilation Check**: Verify that the entire project compiles correctly (e.g. run `npm run build:tsc`).
+6. **Commit**: Commit the changes at the end of each task.

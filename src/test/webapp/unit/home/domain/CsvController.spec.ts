@@ -18,6 +18,9 @@ describe('CsvController', () => {
     // Then
     expect(csvLines).toHaveLength(1);
     const line = csvLines[0];
+    if (!line) {
+      throw new Error('Line should be defined');
+    }
     expect(line.fixtureDefinitionName).toBe('BARRE NEON - 2M');
     expect(line.startUniverse).toBe(0);
     expect(line.startChannel).toBe(1);

@@ -1,7 +1,8 @@
 import { LedOutput } from './LedOutput';
+import { Universe } from './Universe';
 
 export interface ControllerProps {
-  universe: number;
+  universe: Universe;
   outputs: readonly LedOutput[];
   index: number;
 }
@@ -10,7 +11,7 @@ export class Controller {
   private constructor(private readonly props: ControllerProps) {}
 
   static new(): Controller {
-    return new Controller({ universe: 0, outputs: [LedOutput.new()], index: 0 });
+    return new Controller({ universe: Universe.of(0), outputs: [LedOutput.new()], index: 0 });
   }
 
   static of(props: ControllerProps): Controller {
@@ -18,7 +19,7 @@ export class Controller {
   }
 
   get universe(): number {
-    return this.props.universe;
+    return this.props.universe.get();
   }
 
   get outputs(): readonly LedOutput[] {
@@ -34,10 +35,7 @@ export class Controller {
   }
 
   withUniverse(newUniverse: number): Controller {
-    if (newUniverse < 0) {
-      throw new Error('Universe cannot be negative');
-    }
-    return new Controller({ ...this.props, universe: newUniverse });
+    return new Controller({ ...this.props, universe: Universe.of(newUniverse) });
   }
 
   resizeOutputs(newCount: number): Controller {

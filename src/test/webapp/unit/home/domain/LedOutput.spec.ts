@@ -28,6 +28,20 @@ describe('LedOutput Domain', () => {
     thenBarIsType(barAt(updatedOutput, 0), '2M');
   });
 
+  it('Should have correct properties for 2M bar', () => {
+    const output = givenAnOutputWithOne2MBar();
+    const bar = barAt(output, 0);
+    expect(bar.length).toBe(200);
+    expect(bar.channelCount).toBe(357);
+  });
+
+  it('Should have correct properties for 1M bar', () => {
+    const output = givenAnOutputWithOne1MBar();
+    const bar = barAt(output, 0);
+    expect(bar.length).toBe(100);
+    expect(bar.channelCount).toBe(177);
+  });
+
   it('Should remove the last bar', () => {
     const output = givenAnOutputWithOne2MBar();
     const updatedOutput = output.removeBar();

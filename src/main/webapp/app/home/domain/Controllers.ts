@@ -1,4 +1,5 @@
 import { Controller } from './Controller';
+import { Universe } from './Universe';
 
 interface ControllersProps {
   values: readonly Controller[];
@@ -32,7 +33,7 @@ export class Controllers {
       const toAdd = Array.from({ length: toAddCount }, (_, i) => {
         const index = this.props.values.length + i;
         return Controller.of({
-          universe: index * 20,
+          universe: Universe.of(index * 20),
           outputs: Controller.new().outputs,
           index,
         });

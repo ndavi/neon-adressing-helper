@@ -29,9 +29,6 @@ export class CsvController {
       const currentX = startX + outputIndex * 40;
 
       output.bars.forEach(bar => {
-        const is2M = bar.type === '2M';
-        const length = is2M ? 200 : 100;
-        const channels = is2M ? 357 : 177;
         const width = 15;
 
         const startUniverse = Math.floor(currentGlobalChannel / 512);
@@ -44,13 +41,13 @@ export class CsvController {
           startX: currentX,
           startY: currentY,
           endX: currentX,
-          endY: currentY + length,
+          endY: currentY + bar.length,
           width,
           fixtureName: `${this.controller.name}/C${this.controller.index}-OUT-${outputIndex + 1}/LED-${startLineIndex + lines.length}`,
         });
 
-        currentGlobalChannel += channels;
-        currentY += length;
+        currentGlobalChannel += bar.channelCount;
+        currentY += bar.length;
       });
     });
 

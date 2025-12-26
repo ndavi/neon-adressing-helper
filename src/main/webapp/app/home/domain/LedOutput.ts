@@ -17,6 +17,14 @@ export class Bar {
     return this.props.type;
   }
 
+  get length(): number {
+    return this.is2M() ? 200 : 100;
+  }
+
+  get channelCount(): number {
+    return this.is2M() ? 357 : 177;
+  }
+
   toggle(): Bar {
     return Bar.new(this.is2M() ? '1M' : '2M');
   }

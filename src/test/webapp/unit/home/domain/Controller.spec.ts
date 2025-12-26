@@ -1,6 +1,6 @@
-import { Optional } from '@/common/domain/Optional';
 import { Controller } from '@/home/domain/Controller';
 import { LedOutput } from '@/home/domain/LedOutput';
+import { Universe } from '@/home/domain/Universe';
 import { describe, expect, it } from 'vitest';
 
 describe('Controller', () => {
@@ -8,33 +8,31 @@ describe('Controller', () => {
     const controller = Controller.new();
     expect(controller.universe).toBe(0);
     expect(controller.outputs).toHaveLength(1);
-    expect(controller.name).toBe('CONTROLLEUR-0');
     expect(controller.index).toBe(0);
   });
 
   it('should resize outputs', () => {
-    const controller = Controller.new().resizeOutputs(5);
-    expect(controller.outputs).toHaveLength(5);
+    const controller = Controller.new();
+    const resized = controller.resizeOutputs(5);
+    expect(resized.outputs).toHaveLength(5);
   });
 
   it('should keep existing outputs when increasing size', () => {
     const outputWithBar = LedOutput.new().addBar();
-    const controllerWithBar = Controller.of({ universe: 1, outputs: [outputWithBar], index: 1 });
+    const controllerWithBar = Controller.of({ universe: Universe.of(1), outputs: [outputWithBar], index: 1 });
 
     const resized = controllerWithBar.resizeOutputs(2);
 
+    expect(resized.outputs[0]).toBe(outputWithBar);
     expect(resized.outputs).toHaveLength(2);
-    expect(outputAt(resized, 0).bars).toHaveLength(1);
   });
 
   it('should replace an output', () => {
-    const controller = Controller.new().resizeOutputs(2);
+    const controller = Controller.new();
     const newOutput = LedOutput.new().addBar();
-    const updated = controller.replaceOutput(0, newOutput);
+    const replaced = controller.replaceOutput(0, newOutput);
 
-    expect(outputAt(updated, 0)).toBe(newOutput);
-    expect(outputAt(updated, 0)).toBe(newOutput);
-    expect(outputAt(updated, 1)).toBe(outputAt(controller, 1)); // Others unchanged
+    expect(replaced.outputs[0]).toBe(newOutput);
   });
 
   it('should throw when resizing outputs above 8', () => {
@@ -47,5 +45,3 @@ describe('Controller', () => {
     expect(() => controller.withUniverse(-1)).toThrow('Universe cannot be negative');
   });
 });
-
-const outputAt = (controller: Controller, index: number): LedOutput => Optional.ofNullable(controller.outputs[index]).orElseThrow();

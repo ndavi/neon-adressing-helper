@@ -1,6 +1,7 @@
 import { Controller } from '@/home/domain/Controller';
 import { CsvExporter } from '@/home/domain/CsvExporter';
 import { LedOutput } from '@/home/domain/LedOutput';
+import { Universe } from '@/home/domain/Universe';
 import { describe, expect, it } from 'vitest';
 
 describe('CsvExporter', () => {
@@ -22,7 +23,7 @@ describe('CsvExporter', () => {
 
   function givenControllerWithOneOutputAndOneBar(): Controller {
     return Controller.of({
-      universe: 0,
+      universe: Universe.of(0),
       outputs: [LedOutput.new().addBar()],
       index: 0,
     });

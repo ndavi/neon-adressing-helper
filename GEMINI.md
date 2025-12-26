@@ -48,6 +48,8 @@ Les tests doivent **écrire une histoire**. Les noms des tests (le contenu du `i
 
 Il ne faut **jamais** écrire du code de production (méthodes, attributs publics) uniquement pour faciliter les tests. Le code de production doit refléter les besoins du domaine.
 
+On ne veut pas de commentaire dans le code sauf si ils sont indispensables. Si on ressent le besoin d'écrire un commentaire pour expliquer une logique, cela signifie généralement que le code n'est pas assez clair ; il faut alors extraire cette logique dans une méthode nommée qui exprime explicitement l'intention.
+
 **Tests CSS** : On ne cherche pas à tester le CSS. On teste le CSS uniquement si cela a une vraie valeur métier, sinon on l'évite car c'est fragile et coûteux à maintenir.
 
 ## Architecture

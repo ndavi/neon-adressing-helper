@@ -69,6 +69,10 @@ export class LedOutput {
     return new LedOutput({ bars: newBars });
   }
 
+  duplicate(): LedOutput {
+    return new LedOutput({ bars: [...this.props.bars] });
+  }
+
   private hasBarAtIndex(index: number): boolean {
     return index >= 0 && index < this.props.bars.length;
   }

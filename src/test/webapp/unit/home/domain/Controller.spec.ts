@@ -63,4 +63,26 @@ describe('Controller', () => {
     expect(output.bars).toHaveLength(1);
     expect(duplicated.index).toBe(5);
   });
+
+  it('should duplicate an output', () => {
+    const controller = Controller.new();
+    const outputWithBar = LedOutput.new().addBar();
+    const controllerWithBar = controller.replaceOutput(0, outputWithBar);
+
+    const updated = controllerWithBar.duplicateOutput(0);
+
+    expect(updated.outputs).toHaveLength(2);
+    const duplicatedOutput = updated.outputs[1];
+    if (!duplicatedOutput) {
+      throw new Error('Duplicated output should be defined');
+    }
+    expect(duplicatedOutput.bars).toHaveLength(1);
+  });
+
+  it('should not duplicate output if limit of 8 is reached', () => {
+    const controller = Controller.new().resizeOutputs(8);
+    const updated = controller.duplicateOutput(0);
+
+    expect(updated.outputs).toHaveLength(8);
+  });
 });

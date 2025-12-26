@@ -4,6 +4,7 @@
       <span class="text-subtitle-2">Sortie {{ index + 1 }}</span>
       <v-spacer></v-spacer>
       <span class="text-caption mr-2">{{ output.bars.length }} barres</span>
+      <v-btn icon="mdi-content-copy" size="x-small" variant="text" data-selector="duplicate-output" @click="emit('duplicate')"></v-btn>
       <v-btn icon="mdi-minus" size="x-small" variant="text" data-selector="remove-bar-button" @click="emit('remove-bar')"></v-btn>
       <v-btn icon="mdi-plus" size="x-small" variant="text" data-selector="add-bar-button" @click="emit('add-bar')"></v-btn>
     </v-card-text>
@@ -36,6 +37,7 @@ const emit = defineEmits<{
   'add-bar': [];
   'remove-bar': [];
   'toggle-bar': [index: number];
+  duplicate: [];
 }>();
 
 const getBarStyle = (bar: Bar): CSSProperties => {

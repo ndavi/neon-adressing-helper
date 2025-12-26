@@ -108,6 +108,53 @@ describe('When visiting the homepage', () => {
     if (!(secondUniverseInput instanceof HTMLInputElement)) throw new Error('Not an input');
     expect(secondUniverseInput.value).toBe('100');
   });
+
+  it('Should duplicate an output when clicking the duplicate button', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 1);
+
+    const card = wrapper.find(selector('controller-card'));
+    // Set 1 output initially
+    const outputInput = card.findAll('input')[1];
+    if (!outputInput) throw new Error('Output input not found');
+    await outputInput.setValue(1);
+
+    const outputCards = card.findAllComponents({ name: 'LedOutputCard' });
+    expect(outputCards.length).toBe(1);
+    const outputCard = outputCards[0];
+
+    // Add a bar to make it unique
+    outputCard.vm.$emit('add-bar');
+    await wrapper.vm.$nextTick();
+
+    // Duplicate it
+    const duplicateBtn = outputCard.find(selector('duplicate-output'));
+    await duplicateBtn.trigger('click');
+
+    const updatedOutputCards = card.findAllComponents({ name: 'LedOutputCard' });
+    expect(updatedOutputCards.length).toBe(2);
+
+    // Check that the duplicated output also has 2 bars (initial + added)
+    // Actually the test above adds a bar, so it should have 2 bars. Default is 1 bar?
+    // Let's check LedOutput.ts: new() -> empty bars? No, check Controller.new().outputs -> [LedOutput.new()]. LedOutput.new() -> bars: []?
+    // Let's check LedOutput.spec.ts: givenAnEmptyLedOutput -> no bars.
+    // But Controller.new() -> outputs: [LedOutput.new()].
+    // Wait, Controller.new() -> outputs: [LedOutput.new()].
+    // LedOutput.new() -> bars: [].
+    // So initially 0 bars?
+    // Let's check LedOutputCard.vue to see if it adds a bar on mount or something?
+    // Or maybe I should just check the count.
+
+    // Let's look at LedOutput.spec.ts again. "Should have no bars initially".
+    // So if I add a bar, it has 1 bar.
+
+    const firstOutput = updatedOutputCards[0];
+    const secondOutput = updatedOutputCards[1];
+
+    // I can't easily check internal state of functional components or their props without inspecting props
+    expect(firstOutput.props('output').bars).toHaveLength(1);
+    expect(secondOutput.props('output').bars).toHaveLength(1);
+  });
 });
 
 const givenHomepage = (): VueWrapper => {

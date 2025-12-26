@@ -47,6 +47,16 @@ describe('LedOutput Domain', () => {
     const updatedOutput = output.removeBar();
     thenOutputHasNoBars(updatedOutput);
   });
+
+  it('Should duplicate itself with all bars', () => {
+    const output = givenAnOutputWithOne1MBar().addBar(); // 1M + 2M
+    const duplicated = output.duplicate();
+
+    expect(duplicated).not.toBe(output);
+    expect(duplicated.bars).toHaveLength(2);
+    expect(barAt(duplicated, 0).type).toBe('1M');
+    expect(barAt(duplicated, 1).type).toBe('2M');
+  });
 });
 
 const barAt = (output: LedOutput, index: number): Bar => Optional.ofNullable(output.bars[index]).orElseThrow();

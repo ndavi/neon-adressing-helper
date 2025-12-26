@@ -45,19 +45,26 @@ export class Controllers {
 
   replace(index: number, controller: Controller): Controllers {
     const newValues = [...this.props.values];
-    if (index >= 0 && index < newValues.length) {
+    if (this.isValidIndex(index)) {
       newValues[index] = controller;
     }
     return new Controllers({ values: newValues });
   }
 
   duplicate(index: number): Controllers {
+    if (!this.isValidIndex(index)) {
+      return this;
+    }
     const controllerToDuplicate = this.props.values[index];
     if (!controllerToDuplicate) {
       return this;
     }
     const duplicated = controllerToDuplicate.duplicate(this.props.values.length);
     return new Controllers({ values: [...this.props.values, duplicated] });
+  }
+
+  private isValidIndex(index: number): boolean {
+    return index >= 0 && index < this.props.values.length;
   }
 
   private shouldAddControllers(newCount: number): boolean {

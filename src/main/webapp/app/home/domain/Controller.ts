@@ -65,4 +65,20 @@ export class Controller {
       index: newIndex,
     });
   }
+
+  duplicateOutput(outputIndex: number): Controller {
+    if (this.hasMaxOutputs()) {
+      return this;
+    }
+    const outputToDuplicate = this.props.outputs[outputIndex];
+    if (!outputToDuplicate) {
+      return this;
+    }
+    const newOutput = outputToDuplicate.duplicate();
+    return new Controller({ ...this.props, outputs: [...this.props.outputs, newOutput] });
+  }
+
+  private hasMaxOutputs(): boolean {
+    return this.props.outputs.length >= 8;
+  }
 }

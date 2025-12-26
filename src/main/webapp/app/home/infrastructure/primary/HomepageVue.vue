@@ -9,6 +9,7 @@
             v-model.number="controllersCount"
             label="Nombre de contrôleurs"
             type="number"
+            min="0"
             variant="outlined"
             class="mb-4"
           ></v-text-field>
@@ -81,7 +82,9 @@ const controllersCount = ref(0);
 const controllers = shallowRef<Controllers>(Controllers.empty());
 
 watch(controllersCount, newCount => {
-  controllers.value = controllers.value.resize(newCount);
+  if (newCount >= 0) {
+    controllers.value = controllers.value.resize(newCount);
+  }
 });
 
 const updateUniverse = (index: number, newUniverse: number) => {

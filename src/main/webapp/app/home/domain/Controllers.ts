@@ -20,6 +20,9 @@ export class Controllers {
   }
 
   resize(newCount: number): Controllers {
+    if (newCount < 0) {
+      throw new Error('Controllers count cannot be negative');
+    }
     if (this.shouldAddControllers(newCount)) {
       const toAddCount = newCount - this.props.values.length;
       const toAdd = Array.from({ length: toAddCount }, (_, i) => {

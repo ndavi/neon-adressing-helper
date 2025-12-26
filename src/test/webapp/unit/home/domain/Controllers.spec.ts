@@ -41,6 +41,11 @@ describe('Controllers Domain', () => {
     expect(controllerAt(updated, 0).universe).toBe(999);
     expect(controllerAt(updated, 1)).toBe(controllerAt(controllers, 1));
   });
+
+  it('Should throw when resizing to a negative number', () => {
+    const controllers = Controllers.empty();
+    expect(() => controllers.resize(-1)).toThrow('Controllers count cannot be negative');
+  });
 });
 
 const controllerAt = (controllers: Controllers, index: number): Controller => Optional.ofNullable(controllers.values[index]).orElseThrow();

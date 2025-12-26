@@ -32,6 +32,22 @@ describe('When visiting the homepage', () => {
 
     thenControllerCardsAreDisplayed(wrapper, 2);
   });
+
+  it('Should have a minimum value of 0 for the controllers input', () => {
+    const wrapper = givenHomepage();
+    const input = wrapper.find('input#controllers-count');
+    expect(input.attributes('min')).toBe('0');
+  });
+
+  it('Should not update controllers when entering a negative number', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 5);
+
+    await whenEnteringNumberOfControllers(wrapper, -1);
+
+    thenNumberOfControllersIs(wrapper, -1); // Input value changes
+    thenControllerCardsAreDisplayed(wrapper, 5); // But cards remain at 5
+  });
 });
 
 const givenHomepage = (): VueWrapper => {

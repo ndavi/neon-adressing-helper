@@ -138,9 +138,7 @@ const downloadExampleCsv = () => {
 </script>
 
 <style scoped>
-@media (min-width: 960px) {
-  .full-height {
-    height: 100%;
-  }
+.full-height {
+  height: 100dvh;
 }
 </style>

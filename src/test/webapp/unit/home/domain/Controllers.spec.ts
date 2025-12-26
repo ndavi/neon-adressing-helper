@@ -60,6 +60,24 @@ describe('Controllers Domain', () => {
     expect(duplicated.outputs).toHaveLength(3);
     expect(duplicated.index).toBe(2);
   });
+
+  it('Should remove a controller and reindex subsequent controllers', () => {
+    // [0, 1, 2]
+    const controllers = Controllers.init().resize(3);
+
+    // Remove index 1
+    const updated = controllers.remove(1);
+
+    expect(updated.values).toHaveLength(2);
+
+    // Check first one (was 0)
+    expect(controllerAt(updated, 0).index).toBe(0);
+    expect(controllerAt(updated, 0).universe).toBe(0);
+
+    // Check second one (was 2, now 1)
+    expect(controllerAt(updated, 1).index).toBe(1);
+    expect(controllerAt(updated, 1).universe).toBe(40); // 2 * 20 = 40
+  });
 });
 
 const controllerAt = (controllers: Controllers, index: number): Controller => Optional.ofNullable(controllers.values[index]).orElseThrow();

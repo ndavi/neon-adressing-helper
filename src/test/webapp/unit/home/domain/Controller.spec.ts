@@ -85,4 +85,10 @@ describe('Controller', () => {
 
     expect(updated.outputs).toHaveLength(8);
   });
+
+  it('should update index', () => {
+    const controller = Controller.new();
+    const updated = controller.withIndex(5);
+    expect(updated.index).toBe(5);
+  });
 });

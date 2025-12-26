@@ -39,6 +39,10 @@ export class Controller {
     return new Controller({ ...this.props, universe: Universe.of(newUniverse) });
   }
 
+  withIndex(newIndex: number): Controller {
+    return new Controller({ ...this.props, index: newIndex });
+  }
+
   resizeOutputs(newCount: number): Controller {
     const targetCount = OutputsCount.of(newCount).get();
     if (this.shouldAddOutputs(targetCount)) {

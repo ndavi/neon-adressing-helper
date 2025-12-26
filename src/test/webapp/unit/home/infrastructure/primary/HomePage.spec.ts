@@ -155,6 +155,25 @@ describe('When visiting the homepage', () => {
     expect(firstOutput.props('output').bars).toHaveLength(1);
     expect(secondOutput.props('output').bars).toHaveLength(1);
   });
+
+  it('Should remove a controller when clicking the delete button', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 2); // Start with 2 controllers
+
+    thenControllerCardsAreDisplayed(wrapper, 2);
+
+    const firstCard = wrapper.find(selector('controller-card'));
+    const deleteBtn = firstCard.find(selector('delete-controller'));
+
+    await deleteBtn.trigger('click');
+
+    thenControllerCardsAreDisplayed(wrapper, 1);
+
+    // Verify the remaining controller is the one that was previously second (now index 0)
+    // We can check its title "Contrôleur 1" (which is index + 1)
+    const remainingCard = wrapper.find(selector('controller-card'));
+    expect(remainingCard.text()).toContain('Contrôleur 1');
+  });
 });
 
 const givenHomepage = (): VueWrapper => {

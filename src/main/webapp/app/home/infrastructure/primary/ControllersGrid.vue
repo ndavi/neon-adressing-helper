@@ -17,6 +17,7 @@
           :index="index"
           @update:controller="emit('update:controllers', props.controllers.replace(index, $event))"
           @duplicate="duplicateController(index)"
+          @delete="deleteController(index)"
         />
       </div>
     </div>
@@ -45,6 +46,10 @@ const controllersCount = computed({
 
 const duplicateController = (index: number) => {
   emit('update:controllers', props.controllers.duplicate(index));
+};
+
+const deleteController = (index: number) => {
+  emit('update:controllers', props.controllers.remove(index));
 };
 </script>
 

@@ -63,6 +63,15 @@ export class Controllers {
     return new Controllers({ values: [...this.props.values, duplicated] });
   }
 
+  remove(index: number): Controllers {
+    if (!this.isValidIndex(index)) {
+      return this;
+    }
+    const newValues = this.props.values.filter((_, i) => i !== index).map((controller, i) => controller.withIndex(i));
+
+    return new Controllers({ values: newValues });
+  }
+
   private isValidIndex(index: number): boolean {
     return index >= 0 && index < this.props.values.length;
   }

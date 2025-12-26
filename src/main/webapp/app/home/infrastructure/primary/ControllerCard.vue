@@ -10,6 +10,14 @@
         data-selector="duplicate-controller"
         @click="emit('duplicate')"
       ></v-btn>
+      <v-btn
+        icon="mdi-delete"
+        variant="text"
+        density="comfortable"
+        color="error"
+        data-selector="delete-controller"
+        @click="emit('delete')"
+      ></v-btn>
     </v-card-title>
     <v-card-text>
       <v-text-field
@@ -62,6 +70,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:controller': [controller: Controller];
   duplicate: [];
+  delete: [];
 }>();
 
 const updateUniverse = (newUniverse: number) => {

@@ -1,7 +1,7 @@
 <template>
   <div class="visualizer-viewport">
     <div class="visualizer-content">
-      <div v-for="(controller, index) in controllers" :key="index" class="controller-node">
+      <div v-for="(controller, index) in controllers" :key="index" class="controller-node" data-selector="controller-node">
         <div class="controller-box">
           <div v-for="(output, oIndex) in controller.outputs" :key="oIndex" class="output-node">
             <div

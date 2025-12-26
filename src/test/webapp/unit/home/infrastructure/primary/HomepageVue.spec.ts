@@ -1,4 +1,5 @@
 import HomepageVue from '@/home/infrastructure/primary/HomepageVue.vue';
+import { selector } from '@test/DataSelectorHelper';
 import type { VueWrapper } from '@vue/test-utils';
 import { mount } from '@vue/test-utils';
 import type { Mock } from 'vitest';
@@ -53,7 +54,7 @@ describe('When visiting the homepage', () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    const card = wrapper.find('.controller-card');
+    const card = wrapper.find(selector('controller-card'));
     const outputInput = card.findAll('input')[1];
     if (!outputInput) throw new Error('Output input not found');
     expect(outputInput.attributes('max')).toBe('8');
@@ -63,7 +64,7 @@ describe('When visiting the homepage', () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    const card = wrapper.find('.controller-card');
+    const card = wrapper.find(selector('controller-card'));
     const outputInput = card.findAll('input')[1];
     if (!outputInput) throw new Error('Output input not found');
     await outputInput.setValue(9);
@@ -76,7 +77,7 @@ describe('When visiting the homepage', () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    const card = wrapper.find('.controller-card');
+    const card = wrapper.find(selector('controller-card'));
     const universeInput = card.findAll('input')[0];
     if (!universeInput) throw new Error('Universe input not found');
     expect(universeInput.attributes('min')).toBe('0');
@@ -86,7 +87,7 @@ describe('When visiting the homepage', () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    const card = wrapper.find('.controller-card');
+    const card = wrapper.find(selector('controller-card'));
     const universeInput = card.findAll('input')[0];
     if (!universeInput) throw new Error('Universe input not found');
     await universeInput.setValue(-5);
@@ -140,7 +141,7 @@ const givenMockedDomForDownload = () => {
 };
 
 const whenClickingOnDownload = async (wrapper: VueWrapper) => {
-  await wrapper.find('.button').trigger('click');
+  await wrapper.find(selector('download-button')).trigger('click');
 };
 
 const whenEnteringNumberOfControllers = async (wrapper: VueWrapper, count: number) => {
@@ -149,7 +150,7 @@ const whenEnteringNumberOfControllers = async (wrapper: VueWrapper, count: numbe
 };
 
 const whenConfiguringExampleState = async (wrapper: VueWrapper) => {
-  const cards = wrapper.findAll('.controller-card');
+  const cards = wrapper.findAll(selector('controller-card'));
   for (let i = 0; i < 5; i++) {
     const targetCount = i < 4 ? 8 : 4;
     const card = cards[i];
@@ -164,7 +165,7 @@ const whenConfiguringExampleState = async (wrapper: VueWrapper) => {
     const outputCount = i < 4 ? 8 : 4;
 
     for (let k = 0; k < outputCount; k++) {
-      const currentCard = wrapper.findAll('.controller-card')[i];
+      const currentCard = wrapper.findAll(selector('controller-card'))[i];
       if (!currentCard) throw new Error(`Card ${i} not found`);
 
       const outputCards = currentCard.findAllComponents({ name: 'LedOutputCard' });
@@ -263,7 +264,7 @@ const thenNumberOfControllersIs = (wrapper: VueWrapper, expectedCount: number) =
 };
 
 const thenControllerCardsAreDisplayed = (wrapper: VueWrapper, expectedCount: number) => {
-  const cards = wrapper.findAll('.controller-card');
+  const cards = wrapper.findAll(selector('controller-card'));
   expect(cards.length).toBe(expectedCount);
 };
 

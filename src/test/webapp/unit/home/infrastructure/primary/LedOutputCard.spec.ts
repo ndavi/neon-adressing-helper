@@ -2,6 +2,7 @@ import { Optional } from '@/common/domain/Optional';
 import type { BarType } from '@/home/domain/LedOutput';
 import { LedOutput } from '@/home/domain/LedOutput';
 import LedOutputCard from '@/home/infrastructure/primary/LedOutputCard.vue';
+import { selector } from '@test/DataSelectorHelper';
 import { type VueWrapper, mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
@@ -86,15 +87,15 @@ const givenALedOutputCard = (output: LedOutput): VueWrapper => {
 };
 
 const whenClickingAddBar = async (wrapper: VueWrapper) => {
-  await wrapper.find('.mdi-plus').trigger('click');
+  await wrapper.find(selector('add-bar-button')).trigger('click');
 };
 
 const whenClickingRemoveBar = async (wrapper: VueWrapper) => {
-  await wrapper.find('.mdi-minus').trigger('click');
+  await wrapper.find(selector('remove-bar-button')).trigger('click');
 };
 
 const whenClickingBarAtIndex = async (wrapper: VueWrapper, index: number) => {
-  const bars = wrapper.findAll('.rounded');
+  const bars = wrapper.findAll(selector('led-bar'));
   await barAt(bars, index).trigger('click');
 };
 
@@ -120,13 +121,13 @@ const thenToggleBarEventIsEmittedWithIndex = (wrapper: VueWrapper, index: number
 };
 
 const thenBarAtIndexHasWidth = (wrapper: VueWrapper, index: number, width: string) => {
-  const bars = wrapper.findAll('.rounded');
+  const bars = wrapper.findAll(selector('led-bar'));
   const style = barAt(bars, index).attributes('style');
   expect(style).toContain(`width: ${width}`);
 };
 
 const thenBarAtIndexHasClass = (wrapper: VueWrapper, index: number, className: string) => {
-  const bars = wrapper.findAll('.rounded');
+  const bars = wrapper.findAll(selector('led-bar'));
   expect(barAt(bars, index).classes()).toContain(className);
 };
 

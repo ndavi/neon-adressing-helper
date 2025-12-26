@@ -1,4 +1,5 @@
 import { type Locator, type Page } from '@playwright/test';
+import { selector } from '../../../DataSelectorHelper';
 
 export class HomePage {
   readonly page: Page;
@@ -9,8 +10,8 @@ export class HomePage {
   constructor(page: Page) {
     this.page = page;
     this.controllersInput = page.locator('#controllers-count');
-    this.downloadButton = page.locator('.button');
-    this.visualizerNodes = page.locator('.controller-node');
+    this.downloadButton = page.locator(selector('download-button'));
+    this.visualizerNodes = page.locator(selector('controller-node'));
   }
 
   async goto() {

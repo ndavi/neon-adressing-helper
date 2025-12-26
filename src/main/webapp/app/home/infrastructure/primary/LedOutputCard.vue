@@ -4,8 +4,8 @@
       <span class="text-subtitle-2">Sortie {{ index + 1 }}</span>
       <v-spacer></v-spacer>
       <span class="text-caption mr-2">{{ output.bars.length }} barres</span>
-      <v-btn icon="mdi-minus" size="x-small" variant="text" @click="emit('remove-bar')"></v-btn>
-      <v-btn icon="mdi-plus" size="x-small" variant="text" @click="emit('add-bar')"></v-btn>
+      <v-btn icon="mdi-minus" size="x-small" variant="text" data-selector="remove-bar-button" @click="emit('remove-bar')"></v-btn>
+      <v-btn icon="mdi-plus" size="x-small" variant="text" data-selector="add-bar-button" @click="emit('add-bar')"></v-btn>
     </v-card-text>
 
     <div class="d-flex flex-wrap gap-1 px-2 pb-2">
@@ -13,6 +13,7 @@
         v-for="(bar, i) in output.bars"
         :key="i"
         class="mr-1 mb-1 rounded cursor-pointer"
+        data-selector="led-bar"
         :class="getBarClass(bar)"
         :style="getBarStyle(bar)"
         :title="`Barre ${i + 1} (${bar.type})`"

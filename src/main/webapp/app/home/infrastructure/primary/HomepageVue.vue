@@ -21,7 +21,7 @@
         <div class="overflow-y-auto flex-grow-1 pr-2">
           <v-row>
             <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12" sm="6" md="4" lg="3">
-              <v-card class="controller-card mb-4" variant="outlined">
+              <v-card class="controller-card mb-4" variant="outlined" data-selector="controller-card">
                 <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
                 <v-card-text>
                   <v-text-field
@@ -66,7 +66,16 @@
     </v-main>
 
     <v-footer app elevation="4" class="justify-center">
-      <v-btn color="primary" size="large" class="button" prepend-icon="mdi-download" @click="downloadExampleCsv"> Télécharger CSV </v-btn>
+      <v-btn
+        color="primary"
+        size="large"
+        class="button"
+        prepend-icon="mdi-download"
+        data-selector="download-button"
+        @click="downloadExampleCsv"
+      >
+        Télécharger CSV
+      </v-btn>
     </v-footer>
   </v-layout>
 </template>

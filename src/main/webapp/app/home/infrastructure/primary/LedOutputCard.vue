@@ -10,7 +10,8 @@
       <div
         v-for="(bar, i) in output.bars"
         :key="i"
-        class="bg-cyan-lighten-3 mr-1 mb-1 rounded cursor-pointer"
+        class="mr-1 mb-1 rounded cursor-pointer"
+        :class="getBarClass(bar)"
         :style="getBarStyle(bar)"
         :title="`Barre ${i + 1} (${bar.type})`"
         @click="emit('toggle-bar', i)"
@@ -38,5 +39,9 @@ const getBarStyle = (bar: Bar): CSSProperties => {
     width: bar.type === '2M' ? '20px' : '10px',
     height: '10px',
   };
+};
+
+const getBarClass = (bar: Bar): string => {
+  return bar.type === '2M' ? 'bg-cyan-lighten-3' : 'bg-purple-lighten-3';
 };
 </script>

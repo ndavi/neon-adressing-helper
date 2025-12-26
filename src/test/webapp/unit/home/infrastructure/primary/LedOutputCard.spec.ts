@@ -40,6 +40,16 @@ describe('LedOutputCard', () => {
     const wrapper1M = givenALedOutputCard(output1M);
     thenBarAtIndexHasWidth(wrapper1M, 0, '10px');
   });
+
+  it('Should display correct color for bar type', () => {
+    const output = givenAnOutputWithOneBarOfType('2M');
+    const wrapper = givenALedOutputCard(output);
+    thenBarAtIndexHasClass(wrapper, 0, 'bg-cyan-lighten-3');
+
+    const output1M = givenAnOutputWithOneBarOfType('1M');
+    const wrapper1M = givenALedOutputCard(output1M);
+    thenBarAtIndexHasClass(wrapper1M, 0, 'bg-purple-lighten-3');
+  });
 });
 
 const givenAnEmptyOutput = () => LedOutput.new();
@@ -96,4 +106,9 @@ const thenBarAtIndexHasWidth = (wrapper: VueWrapper, index: number, width: strin
   const bars = wrapper.findAll('.rounded');
   const style = bars[index].attributes('style');
   expect(style).toContain(`width: ${width}`);
+};
+
+const thenBarAtIndexHasClass = (wrapper: VueWrapper, index: number, className: string) => {
+  const bars = wrapper.findAll('.rounded');
+  expect(bars[index].classes()).toContain(className);
 };

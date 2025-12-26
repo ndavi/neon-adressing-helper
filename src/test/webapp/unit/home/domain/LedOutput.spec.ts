@@ -1,3 +1,4 @@
+import { Optional } from '@/common/domain/Optional';
 import type { Bar } from '@/home/domain/LedOutput';
 import { LedOutput } from '@/home/domain/LedOutput';
 import { describe, expect, it } from 'vitest';
@@ -12,21 +13,23 @@ describe('LedOutput Domain', () => {
     const output = givenAnEmptyLedOutput();
     const newOutput = whenAddingABar(output);
     thenOutputHasABar(newOutput);
-    thenBarIsType(newOutput.bars[0], '2M');
+    thenBarIsType(barAt(newOutput, 0), '2M');
   });
 
   it('Should switch from 2M to 1M on click', () => {
     const output = givenAnOutputWithOne2MBar();
     const updatedOutput = whenTogglingBarAtIndex(output, 0);
-    thenBarIsType(updatedOutput.bars[0], '1M');
+    thenBarIsType(barAt(updatedOutput, 0), '1M');
   });
 
   it('Should switch back from 1M to 2M on click', () => {
     const output = givenAnOutputWithOne1MBar();
     const updatedOutput = whenTogglingBarAtIndex(output, 0);
-    thenBarIsType(updatedOutput.bars[0], '2M');
+    thenBarIsType(barAt(updatedOutput, 0), '2M');
   });
 });
+
+const barAt = (output: LedOutput, index: number): Bar => Optional.ofNullable(output.bars[index]).orElseThrow();
 
 const givenAnEmptyLedOutput = () => LedOutput.new();
 

@@ -42,6 +42,8 @@ Le code de **test** doit être structuré selon le pattern **Given-When-Then**. 
 
 Les tests doivent **écrire une histoire**. Les noms des tests (le contenu du `it` ou `test`) doivent représenter un **cas d'usage** ou un **comportement** métier, et non une simple vérification technique (ex: `Should download the CSV template when the user requests it`).
 
+Il ne faut **jamais** écrire du code de production (méthodes, attributs publics) uniquement pour faciliter les tests. Le code de production doit refléter les besoins du domaine.
+
 ## Architecture
 
 Le projet suit une architecture hexagonale et applique les principes du **Domain-Driven Design (DDD)**, même dans le frontend.

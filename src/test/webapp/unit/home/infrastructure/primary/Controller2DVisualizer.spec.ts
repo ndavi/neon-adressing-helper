@@ -5,17 +5,17 @@ import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
 describe('Controller2DVisualizer', () => {
-  it('Should render nothing when no controllers are provided', () => {
+  it('Should render nothing visible when no controllers are provided', () => {
     const wrapper = mount(Controller2DVisualizer, {
       props: {
         controllers: [],
       },
     });
 
-    expect(wrapper.findAll('rect')).toHaveLength(0);
+    expect(wrapper.findAll('.controller-node')).toHaveLength(0);
   });
 
-  it('Should render a rect for each controller', () => {
+  it('Should render a node for each controller', () => {
     const controllers = Controllers.empty().resize(3).values;
     const wrapper = mount(Controller2DVisualizer, {
       props: {
@@ -23,8 +23,8 @@ describe('Controller2DVisualizer', () => {
       },
     });
 
-    const rects = wrapper.findAll('rect');
-    expect(rects).toHaveLength(3);
+    const nodes = wrapper.findAll('.controller-node');
+    expect(nodes).toHaveLength(3);
   });
 
   it('Should position controllers according to their startX', () => {
@@ -35,9 +35,10 @@ describe('Controller2DVisualizer', () => {
       },
     });
 
-    const rects = wrapper.findAll('rect');
-    expect(rects[0].attributes('x')).toBe('0');
-    expect(rects[1].attributes('x')).toBe('400');
+    const nodes = wrapper.findAll('.controller-node');
+    // We check the style attribute for 'left' property
+    expect(nodes[0].attributes('style')).toContain('left: 0px');
+    expect(nodes[1].attributes('style')).toContain('left: 400px');
   });
 
   it('Should display universe number', () => {
@@ -56,14 +57,16 @@ describe('Controller2DVisualizer', () => {
       props: { controllers: [] },
     });
 
-    const svg = wrapper.find('svg');
-    const initialViewBox = svg.attributes('viewBox');
+    const viewport = wrapper.find('.visualizer-viewport');
+    const content = wrapper.find('.visualizer-content');
+    const initialTransform = content.attributes('style');
 
     // Simulate zoom in
-    await svg.trigger('wheel', { deltaY: -100 });
+    await viewport.trigger('wheel', { deltaY: -100 });
 
-    const zoomedInViewBox = svg.attributes('viewBox');
-    expect(zoomedInViewBox).not.toBe(initialViewBox);
+    const zoomedTransform = content.attributes('style');
+    expect(zoomedTransform).not.toBe(initialTransform);
+    expect(zoomedTransform).toContain('scale(');
   });
 
   it('Should pan on mouse drag', async () => {
@@ -71,21 +74,20 @@ describe('Controller2DVisualizer', () => {
       props: { controllers: [] },
     });
 
-    const svg = wrapper.find('svg');
-    const initialViewBox = svg.attributes('viewBox');
+    const viewport = wrapper.find('.visualizer-viewport');
+    const content = wrapper.find('.visualizer-content');
+    const initialTransform = content.attributes('style');
 
     // Start drag
-    await svg.trigger('mousedown', { clientX: 0, clientY: 0 });
+    await viewport.trigger('mousedown', { clientX: 0, clientY: 0 });
     // Dragging
-    await svg.trigger('mousemove', { clientX: 100, clientY: 100 });
+    await viewport.trigger('mousemove', { clientX: 100, clientY: 100 });
 
-    // ViewBox should not change yet as we move the mouse, we need to ensure the logic updates the viewbox
-    // Actually, usually pan updates in real-time.
-
-    const pannedViewBox = svg.attributes('viewBox');
-    expect(pannedViewBox).not.toBe(initialViewBox);
+    const pannedTransform = content.attributes('style');
+    expect(pannedTransform).not.toBe(initialTransform);
+    expect(pannedTransform).toContain('translate(');
 
     // Stop drag
-    await svg.trigger('mouseup');
+    await viewport.trigger('mouseup');
   });
 });

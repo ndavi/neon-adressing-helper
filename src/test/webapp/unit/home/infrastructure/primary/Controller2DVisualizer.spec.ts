@@ -51,43 +51,4 @@ describe('Controller2DVisualizer', () => {
 
     expect(wrapper.text()).toContain('U: 10');
   });
-
-  it('Should zoom on wheel event', async () => {
-    const wrapper = mount(Controller2DVisualizer, {
-      props: { controllers: [] },
-    });
-
-    const viewport = wrapper.find('.visualizer-viewport');
-    const content = wrapper.find('.visualizer-content');
-    const initialTransform = content.attributes('style');
-
-    // Simulate zoom in
-    await viewport.trigger('wheel', { deltaY: -100 });
-
-    const zoomedTransform = content.attributes('style');
-    expect(zoomedTransform).not.toBe(initialTransform);
-    expect(zoomedTransform).toContain('scale(');
-  });
-
-  it('Should pan on mouse drag', async () => {
-    const wrapper = mount(Controller2DVisualizer, {
-      props: { controllers: [] },
-    });
-
-    const viewport = wrapper.find('.visualizer-viewport');
-    const content = wrapper.find('.visualizer-content');
-    const initialTransform = content.attributes('style');
-
-    // Start drag
-    await viewport.trigger('mousedown', { clientX: 0, clientY: 0 });
-    // Dragging
-    await viewport.trigger('mousemove', { clientX: 100, clientY: 100 });
-
-    const pannedTransform = content.attributes('style');
-    expect(pannedTransform).not.toBe(initialTransform);
-    expect(pannedTransform).toContain('translate(');
-
-    // Stop drag
-    await viewport.trigger('mouseup');
-  });
 });

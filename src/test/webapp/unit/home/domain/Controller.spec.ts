@@ -8,6 +8,8 @@ describe('Controller', () => {
     const controller = Controller.new();
     expect(controller.universe).toBe(0);
     expect(controller.outputs).toHaveLength(1);
+    expect(controller.name).toBe('CONTROLLEUR-0');
+    expect(controller.index).toBe(0);
   });
 
   it('should resize outputs', () => {
@@ -17,7 +19,7 @@ describe('Controller', () => {
 
   it('should keep existing outputs when increasing size', () => {
     const outputWithBar = LedOutput.new().addBar();
-    const controllerWithBar = Controller.of({ universe: 1, outputs: [outputWithBar] });
+    const controllerWithBar = Controller.of({ universe: 1, outputs: [outputWithBar], index: 1 });
 
     const resized = controllerWithBar.resizeOutputs(2);
 

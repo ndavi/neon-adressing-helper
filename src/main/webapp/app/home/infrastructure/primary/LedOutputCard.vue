@@ -10,16 +10,18 @@
       <div
         v-for="(bar, i) in output.bars"
         :key="i"
-        class="bg-cyan-lighten-3 mr-1 mb-1 rounded"
-        style="width: 20px; height: 10px"
-        :title="`Barre ${i + 1}`"
+        class="bg-cyan-lighten-3 mr-1 mb-1 rounded cursor-pointer"
+        :style="getBarStyle(bar)"
+        :title="`Barre ${i + 1} (${bar.type})`"
+        @click="emit('toggle-bar', i)"
       ></div>
     </div>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import type { LedOutput } from '@/home/domain/LedOutput';
+import type { Bar, LedOutput } from '@/home/domain/LedOutput';
+import type { CSSProperties } from 'vue';
 
 defineProps<{
   output: LedOutput;
@@ -28,5 +30,13 @@ defineProps<{
 
 const emit = defineEmits<{
   'add-bar': [];
+  'toggle-bar': [index: number];
 }>();
+
+const getBarStyle = (bar: Bar): CSSProperties => {
+  return {
+    width: bar.type === '2M' ? '20px' : '10px',
+    height: '10px',
+  };
+};
 </script>

@@ -35,8 +35,8 @@ test.describe('Led Visualisation', () => {
     await plusBtn.click();
 
     // Check for bar
-    // The bar has title 'Barre 1'
-    const bar = outputCard.locator('[title="Barre 1"]');
+    // The bar has title 'Barre 1 (2M)'
+    const bar = outputCard.locator('[title="Barre 1 (2M)"]');
     await expect(bar).toBeVisible();
   });
 });

@@ -44,6 +44,7 @@
                     :output="output"
                     :index="outputIndex"
                     @add-bar="addBar(index, outputIndex)"
+                    @toggle-bar="toggleBar(index, outputIndex, $event)"
                   />
                 </div>
               </v-card-text>
@@ -91,6 +92,14 @@ const addBar = (controllerIndex: number, outputIndex: number) => {
   const controller = controllers.value[controllerIndex];
   const output = controller.outputs[outputIndex];
   const newOutput = output.addBar();
+  const updatedController = controller.replaceOutput(outputIndex, newOutput);
+  replaceController(controllerIndex, updatedController);
+};
+
+const toggleBar = (controllerIndex: number, outputIndex: number, barIndex: number) => {
+  const controller = controllers.value[controllerIndex];
+  const output = controller.outputs[outputIndex];
+  const newOutput = output.toggleBar(barIndex);
   const updatedController = controller.replaceOutput(outputIndex, newOutput);
   replaceController(controllerIndex, updatedController);
 };

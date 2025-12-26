@@ -1,32 +1,99 @@
+import type { BarType } from '@/home/domain/LedOutput';
 import { LedOutput } from '@/home/domain/LedOutput';
 import LedOutputCard from '@/home/infrastructure/primary/LedOutputCard.vue';
-import { mount } from '@vue/test-utils';
+import { type VueWrapper, mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
 describe('LedOutputCard', () => {
-  it('should display output index and bar count', () => {
-    const output = LedOutput.new().addBar().addBar();
-    const wrapper = mount(LedOutputCard, {
-      props: {
-        output,
-        index: 2,
-      },
-    });
+  it('Should display output index and bar count', () => {
+    const output = givenAnOutputWithTwoBars();
+    const wrapper = givenALedOutputCard(output);
 
-    expect(wrapper.text()).toContain('Sortie 3'); // index + 1
-    expect(wrapper.text()).toContain('2 barres');
+    thenItDisplaysOutputIndex(wrapper, 3);
+    thenItDisplaysBarCount(wrapper, 2);
   });
 
-  it('should emit "add-bar" when clicking the plus button', async () => {
-    const output = LedOutput.new();
-    const wrapper = mount(LedOutputCard, {
-      props: {
-        output,
-        index: 0,
-      },
-    });
+  it('Should emit "add-bar" when clicking the plus button', async () => {
+    const output = givenAnEmptyOutput();
+    const wrapper = givenALedOutputCard(output);
 
-    await wrapper.find('button').trigger('click');
-    expect(wrapper.emitted('add-bar')).toBeTruthy();
+    await whenClickingAddBar(wrapper);
+
+    thenAddBarEventIsEmitted(wrapper);
+  });
+
+  it('Should emit "toggle-bar" when clicking a bar', async () => {
+    const output = givenAnOutputWithOneBar();
+    const wrapper = givenALedOutputCard(output);
+
+    await whenClickingBarAtIndex(wrapper, 0);
+
+    thenToggleBarEventIsEmittedWithIndex(wrapper, 0);
+  });
+
+  it('Should display correct width for bar type', () => {
+    const output = givenAnOutputWithOneBarOfType('2M');
+    const wrapper = givenALedOutputCard(output);
+    thenBarAtIndexHasWidth(wrapper, 0, '20px');
+
+    const output1M = givenAnOutputWithOneBarOfType('1M');
+    const wrapper1M = givenALedOutputCard(output1M);
+    thenBarAtIndexHasWidth(wrapper1M, 0, '10px');
   });
 });
+
+const givenAnEmptyOutput = () => LedOutput.new();
+
+const givenAnOutputWithOneBar = () => LedOutput.new().addBar();
+
+const givenAnOutputWithTwoBars = () => LedOutput.new().addBar().addBar();
+
+const givenAnOutputWithOneBarOfType = (type: BarType) => {
+  let output = LedOutput.new().addBar();
+  if (type === '1M') {
+    output = output.toggleBar(0);
+  }
+  return output;
+};
+
+const givenALedOutputCard = (output: LedOutput): VueWrapper => {
+  return mount(LedOutputCard, {
+    props: {
+      output,
+      index: 2,
+    },
+  });
+};
+
+const whenClickingAddBar = async (wrapper: VueWrapper) => {
+  await wrapper.find('button').trigger('click');
+};
+
+const whenClickingBarAtIndex = async (wrapper: VueWrapper, index: number) => {
+  // Assuming bars are rendered in order
+  const bars = wrapper.findAll('.rounded'); // Using class from template
+  await bars[index].trigger('click');
+};
+
+const thenItDisplaysOutputIndex = (wrapper: VueWrapper, index: number) => {
+  expect(wrapper.text()).toContain(`Sortie ${index}`);
+};
+
+const thenItDisplaysBarCount = (wrapper: VueWrapper, count: number) => {
+  expect(wrapper.text()).toContain(`${count} barres`);
+};
+
+const thenAddBarEventIsEmitted = (wrapper: VueWrapper) => {
+  expect(wrapper.emitted('add-bar')).toBeTruthy();
+};
+
+const thenToggleBarEventIsEmittedWithIndex = (wrapper: VueWrapper, index: number) => {
+  expect(wrapper.emitted('toggle-bar')).toBeTruthy();
+  expect(wrapper.emitted('toggle-bar')![0]).toEqual([index]);
+};
+
+const thenBarAtIndexHasWidth = (wrapper: VueWrapper, index: number, width: string) => {
+  const bars = wrapper.findAll('.rounded');
+  const style = bars[index].attributes('style');
+  expect(style).toContain(`width: ${width}`);
+};

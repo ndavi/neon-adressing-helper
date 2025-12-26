@@ -1,12 +1,7 @@
 <template>
   <div class="visualizer-viewport">
     <div class="visualizer-content">
-      <div
-        v-for="(controller, index) in controllers"
-        :key="index"
-        class="controller-node"
-        :style="{ left: index * 220 + 'px', top: '50px' }"
-      >
+      <div v-for="(controller, index) in controllers" :key="index" class="controller-node">
         <div class="controller-box"></div>
         <div class="controller-label">U: {{ controller.universe }}</div>
       </div>
@@ -26,25 +21,24 @@ defineProps<{
 .visualizer-viewport {
   width: 100%;
   height: 600px;
-  overflow: auto; /* Enable native scrolling */
+  overflow: auto;
   position: relative;
   background-color: #f5f5f5;
   border: 1px solid #ccc;
 }
 
 .visualizer-content {
-  /* Ensure content has enough space based on controllers, 
-     or just let absolute positioning expand the scroll area */
-  position: relative;
+  display: flex;
+  padding: 50px;
+  gap: 20px;
   min-width: 100%;
-  height: 100%;
 }
 
 .controller-node {
-  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .controller-box {
@@ -52,7 +46,7 @@ defineProps<{
   height: 100px;
   background-color: #e0e0e0;
   border: 2px solid black;
-  border-radius: 8px; /* Optional: make it look a bit nicer */
+  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -7,7 +7,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   plugins: [vue(), tsconfigPaths(), vuetify({ autoImport: true })],
   build: {
-    outDir: '../../../target/classes/static',
+    outDir: '../../../dist',
   },
   root: 'src/main/webapp',
   server: {

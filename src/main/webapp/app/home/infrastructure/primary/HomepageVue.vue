@@ -1,7 +1,8 @@
 <template>
-  <v-container class="text-center fill-height justify-center">
-    <v-row justify="center" align="center">
-      <v-col cols="12">
+  <v-container fluid class="fill-height align-start">
+    <v-row class="fill-height">
+      <!-- Left Column: Controls -->
+      <v-col cols="12" md="6" class="overflow-y-auto" style="max-height: 100vh">
         <div class="mx-auto" style="max-width: 400px">
           <v-text-field
             id="controllers-count"
@@ -14,7 +15,7 @@
         </div>
 
         <v-row class="mt-5">
-          <v-col v-for="(controller, index) in controllers" :key="index" cols="12" md="6" lg="4">
+          <v-col v-for="(controller, index) in controllers" :key="index" cols="12">
             <v-card class="controller-card" variant="outlined">
               <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
               <v-card-text>
@@ -52,6 +53,11 @@
           </v-col>
         </v-row>
       </v-col>
+
+      <!-- Right Column: Visualization -->
+      <v-col cols="12" md="6" class="fill-height bg-grey-lighten-4 pa-0">
+        <Controller2DVisualizer :controllers="controllers" />
+      </v-col>
     </v-row>
   </v-container>
 
@@ -66,6 +72,7 @@
 import type { Controller } from '@/home/domain/Controller';
 import { Controllers } from '@/home/domain/Controllers';
 import { ref, shallowRef, watch } from 'vue';
+import Controller2DVisualizer from './Controller2DVisualizer.vue';
 import { downloadFile } from './FileDownloader';
 import LedOutputCard from './LedOutputCard.vue';
 

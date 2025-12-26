@@ -1,5 +1,10 @@
 <template>
   <v-layout class="full-height">
+    <!-- Right Drawer: Visualization (20%) -->
+    <v-navigation-drawer location="right" width="400" permanent class="bg-grey-lighten-4">
+      <Controller2DVisualizer :controllers="controllers.values" class="fill-height" />
+    </v-navigation-drawer>
+
     <!-- Main Content: Controls (80%) -->
     <v-main class="bg-surface fill-height">
       <div class="pa-4 full-height d-flex flex-column">
@@ -59,11 +64,6 @@
         </div>
       </div>
     </v-main>
-
-    <!-- Right Drawer: Visualization (20%) -->
-    <v-navigation-drawer location="right" width="20%" permanent class="bg-grey-lighten-4">
-      <Controller2DVisualizer :controllers="controllers.values" class="fill-height" />
-    </v-navigation-drawer>
 
     <v-footer app elevation="4" class="justify-center">
       <v-btn color="primary" size="large" class="button" prepend-icon="mdi-download" @click="downloadExampleCsv"> Télécharger CSV </v-btn>

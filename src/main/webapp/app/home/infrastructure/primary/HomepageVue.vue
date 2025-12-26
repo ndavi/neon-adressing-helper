@@ -1,13 +1,81 @@
 <template>
-  <v-layout class="full-height">
-    <!-- Right Drawer: Visualization (20%) -->
-    <v-navigation-drawer v-if="mdAndUp" location="right" width="400" permanent class="bg-grey-lighten-4">
-      <Controller2DVisualizer :controllers="controllers.values" class="fill-height" />
-    </v-navigation-drawer>
+  <div class="app-container">
+    <!-- Desktop: Resizable split pane -->
+    <template v-if="mdAndUp">
+      <ResizableSplitPane
+        storage-key="neon-split-pane-width"
+        :default-left-width="800"
+        :min-left-width="400"
+        :min-right-width="300"
+        class="main-content"
+      >
+        <template #left>
+          <div class="pa-4 full-height d-flex flex-column bg-surface">
+            <v-text-field
+              id="controllers-count"
+              v-model.number="controllersCount"
+              label="Nombre de contrôleurs"
+              type="number"
+              min="0"
+              variant="outlined"
+              class="mb-4 flex-grow-0"
+            ></v-text-field>
 
-    <!-- Main Content: Controls (80%) -->
-    <v-main class="bg-surface fill-height">
-      <div class="pa-4 full-height d-flex flex-column">
+            <div class="overflow-y-auto flex-grow-1 pr-2">
+              <v-row>
+                <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12" sm="6" lg="4">
+                  <v-card class="controller-card mb-4" variant="outlined" data-selector="controller-card">
+                    <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
+                    <v-card-text>
+                      <v-text-field
+                        :model-value="controller.universe"
+                        label="Univers de départ"
+                        type="number"
+                        min="0"
+                        variant="outlined"
+                        hide-details="auto"
+                        class="mb-3"
+                        @update:model-value="updateUniverse(index, +$event)"
+                      ></v-text-field>
+                      <v-text-field
+                        :model-value="controller.outputs.length"
+                        label="Nombre de sorties"
+                        type="number"
+                        min="0"
+                        max="8"
+                        variant="outlined"
+                        hide-details="auto"
+                        class="mb-3"
+                        @update:model-value="updateOutputsCount(index, +$event)"
+                      ></v-text-field>
+
+                      <div class="outputs-list mt-4 text-left">
+                        <LedOutputCard
+                          v-for="(output, outputIndex) in controller.outputs"
+                          :key="outputIndex"
+                          :output="output"
+                          :index="outputIndex"
+                          @add-bar="addBar(index, outputIndex)"
+                          @remove-bar="removeBar(index, outputIndex)"
+                          @toggle-bar="toggleBar(index, outputIndex, $event)"
+                        />
+                      </div>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </div>
+          </div>
+        </template>
+        <template #right>
+          <Controller2DVisualizer :controllers="controllers.values" class="fill-height bg-grey-lighten-4" />
+        </template>
+      </ResizableSplitPane>
+    </template>
+
+    <!-- Mobile: Controllers only -->
+    <template v-else>
+      <div class="pa-4 full-height d-flex flex-column bg-surface main-content">
         <v-text-field
           id="controllers-count"
           v-model.number="controllersCount"
@@ -20,7 +88,7 @@
 
         <div class="overflow-y-auto flex-grow-1 pr-2">
           <v-row>
-            <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12" sm="6" md="4" lg="3">
+            <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12" sm="6">
               <v-card class="controller-card mb-4" variant="outlined" data-selector="controller-card">
                 <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
                 <v-card-text>
@@ -63,7 +131,7 @@
           </v-row>
         </div>
       </div>
-    </v-main>
+    </template>
 
     <v-footer app elevation="4" class="justify-center">
       <v-btn
@@ -77,10 +145,11 @@
         Télécharger CSV
       </v-btn>
     </v-footer>
-  </v-layout>
+  </div>
 </template>
 
 <script setup lang="ts">
+import ResizableSplitPane from '@/common/infrastructure/primary/ResizableSplitPane.vue';
 import { Controllers } from '@/home/domain/Controllers';
 import { CsvExporter } from '@/home/domain/CsvExporter';
 import { ref, shallowRef, watch } from 'vue';
@@ -150,7 +219,18 @@ const downloadExampleCsv = () => {
 </script>
 
 <style scoped>
-.full-height {
+.app-container {
+  display: flex;
+  flex-direction: column;
   height: 100dvh;
+}
+
+.main-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+.full-height {
+  height: 100%;
 }
 </style>

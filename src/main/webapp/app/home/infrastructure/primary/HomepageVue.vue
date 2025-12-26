@@ -158,14 +158,16 @@ import LedOutputCard from './LedOutputCard.vue';
 
 const { mdAndUp } = useDisplay();
 
-const controllersCount = ref(0);
+const controllersCount = ref(1);
 const controllers = shallowRef<Controllers>(Controllers.empty());
 
-watch(controllersCount, newCount => {
-  if (newCount >= 0) {
+watch(
+  controllersCount,
+  newCount => {
     controllers.value = controllers.value.resize(newCount);
-  }
-});
+  },
+  { immediate: true },
+);
 
 const updateUniverse = (index: number, newUniverse: number) => {
   const current = controllers.value.values[index];

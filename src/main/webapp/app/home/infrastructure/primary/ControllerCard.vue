@@ -20,7 +20,7 @@
         variant="outlined"
         hide-details="auto"
         class="mb-3"
-        @update:model-value="emit('update:universe', +$event)"
+        @update:model-value="updateUniverse(+$event)"
       ></v-text-field>
       <v-text-field
         :model-value="controller.outputs.length"
@@ -31,7 +31,7 @@
         variant="outlined"
         hide-details="auto"
         class="mb-3"
-        @update:model-value="emit('update:outputs-count', +$event)"
+        @update:model-value="updateOutputsCount(+$event)"
       ></v-text-field>
 
       <div class="outputs-list mt-4 text-left">
@@ -40,9 +40,9 @@
           :key="outputIndex"
           :output="output"
           :index="outputIndex"
-          @add-bar="emit('add-bar', outputIndex)"
-          @remove-bar="emit('remove-bar', outputIndex)"
-          @toggle-bar="emit('toggle-bar', outputIndex, $event)"
+          @add-bar="addBar(outputIndex)"
+          @remove-bar="removeBar(outputIndex)"
+          @toggle-bar="toggleBar(outputIndex, $event)"
         />
       </div>
     </v-card-text>
@@ -53,17 +53,46 @@
 import type { Controller } from '@/home/domain/Controller';
 import LedOutputCard from './LedOutputCard.vue';
 
-defineProps<{
+const props = defineProps<{
   controller: Controller;
   index: number;
 }>();
 
 const emit = defineEmits<{
-  'update:universe': [universe: number];
-  'update:outputs-count': [count: number];
-  'add-bar': [outputIndex: number];
-  'remove-bar': [outputIndex: number];
-  'toggle-bar': [outputIndex: number, barIndex: number];
+  'update:controller': [controller: Controller];
   duplicate: [];
 }>();
+
+const updateUniverse = (newUniverse: number) => {
+  if (newUniverse >= 0) {
+    emit('update:controller', props.controller.withUniverse(newUniverse));
+  }
+};
+
+const updateOutputsCount = (newCount: number) => {
+  if (newCount >= 0 && newCount <= 8) {
+    emit('update:controller', props.controller.resizeOutputs(newCount));
+  }
+};
+
+const addBar = (outputIndex: number) => {
+  const output = props.controller.outputs[outputIndex];
+  if (output) {
+    emit('update:controller', props.controller.replaceOutput(outputIndex, output.addBar()));
+  }
+};
+
+const removeBar = (outputIndex: number) => {
+  const output = props.controller.outputs[outputIndex];
+  if (output) {
+    emit('update:controller', props.controller.replaceOutput(outputIndex, output.removeBar()));
+  }
+};
+
+const toggleBar = (outputIndex: number, barIndex: number) => {
+  const output = props.controller.outputs[outputIndex];
+  if (output) {
+    emit('update:controller', props.controller.replaceOutput(outputIndex, output.toggleBar(barIndex)));
+  }
+};
 </script>

@@ -15,11 +15,7 @@
         <ControllerCard
           :controller="controller"
           :index="index"
-          @update:universe="updateUniverse(index, $event)"
-          @update:outputs-count="updateOutputsCount(index, $event)"
-          @add-bar="addBar(index, $event)"
-          @remove-bar="removeBar(index, $event)"
-          @toggle-bar="(outputIndex, barIndex) => toggleBar(index, outputIndex, barIndex)"
+          @update:controller="emit('update:controllers', props.controllers.replace(index, $event))"
           @duplicate="duplicateController(index)"
         />
       </div>
@@ -46,53 +42,6 @@ const controllersCount = computed({
     emit('update:controllers', props.controllers.resize(newCount));
   },
 });
-
-const updateUniverse = (index: number, newUniverse: number) => {
-  const current = props.controllers.values[index];
-  if (current && newUniverse >= 0) {
-    emit('update:controllers', props.controllers.replace(index, current.withUniverse(newUniverse)));
-  }
-};
-
-const updateOutputsCount = (index: number, newCount: number) => {
-  const current = props.controllers.values[index];
-  if (current && newCount >= 0 && newCount <= 8) {
-    emit('update:controllers', props.controllers.replace(index, current.resizeOutputs(newCount)));
-  }
-};
-
-const addBar = (controllerIndex: number, outputIndex: number) => {
-  const controller = props.controllers.values[controllerIndex];
-  if (controller) {
-    const output = controller.outputs[outputIndex];
-    if (output) {
-      emit('update:controllers', props.controllers.replace(controllerIndex, controller.replaceOutput(outputIndex, output.addBar())));
-    }
-  }
-};
-
-const removeBar = (controllerIndex: number, outputIndex: number) => {
-  const controller = props.controllers.values[controllerIndex];
-  if (controller) {
-    const output = controller.outputs[outputIndex];
-    if (output) {
-      emit('update:controllers', props.controllers.replace(controllerIndex, controller.replaceOutput(outputIndex, output.removeBar())));
-    }
-  }
-};
-
-const toggleBar = (controllerIndex: number, outputIndex: number, barIndex: number) => {
-  const controller = props.controllers.values[controllerIndex];
-  if (controller) {
-    const output = controller.outputs[outputIndex];
-    if (output) {
-      emit(
-        'update:controllers',
-        props.controllers.replace(controllerIndex, controller.replaceOutput(outputIndex, output.toggleBar(barIndex))),
-      );
-    }
-  }
-};
 
 const duplicateController = (index: number) => {
   emit('update:controllers', props.controllers.duplicate(index));

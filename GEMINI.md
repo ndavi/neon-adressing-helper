@@ -31,6 +31,8 @@ Il faut éviter au maximum l'utilisation de `undefined`. Il est préférable d'u
 
 Il est **impératif** de respecter le cycle TDD pour tout nouveau développement de fonctionnalité :
 
+On ne modifie pas les tests si c'est une refactorisation qui ne modifie pas le comportement de l'application.
+
 1.  🔴 **Red** : Écrire un test unitaire qui échoue pour définir le comportement.
 
 2.  🟢 **Green** : Écrire le code minimal nécessaire pour faire passer le test.

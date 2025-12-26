@@ -50,4 +50,42 @@ describe('Controller2DVisualizer', () => {
 
     expect(wrapper.text()).toContain('U: 10');
   });
+
+  it('Should zoom on wheel event', async () => {
+    const wrapper = mount(Controller2DVisualizer, {
+      props: { controllers: [] },
+    });
+
+    const svg = wrapper.find('svg');
+    const initialViewBox = svg.attributes('viewBox');
+
+    // Simulate zoom in
+    await svg.trigger('wheel', { deltaY: -100 });
+
+    const zoomedInViewBox = svg.attributes('viewBox');
+    expect(zoomedInViewBox).not.toBe(initialViewBox);
+  });
+
+  it('Should pan on mouse drag', async () => {
+    const wrapper = mount(Controller2DVisualizer, {
+      props: { controllers: [] },
+    });
+
+    const svg = wrapper.find('svg');
+    const initialViewBox = svg.attributes('viewBox');
+
+    // Start drag
+    await svg.trigger('mousedown', { clientX: 0, clientY: 0 });
+    // Dragging
+    await svg.trigger('mousemove', { clientX: 100, clientY: 100 });
+
+    // ViewBox should not change yet as we move the mouse, we need to ensure the logic updates the viewbox
+    // Actually, usually pan updates in real-time.
+
+    const pannedViewBox = svg.attributes('viewBox');
+    expect(pannedViewBox).not.toBe(initialViewBox);
+
+    // Stop drag
+    await svg.trigger('mouseup');
+  });
 });

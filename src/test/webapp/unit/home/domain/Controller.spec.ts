@@ -33,7 +33,13 @@ describe('Controller', () => {
     const updated = controller.replaceOutput(0, newOutput);
 
     expect(outputAt(updated, 0)).toBe(newOutput);
+    expect(outputAt(updated, 0)).toBe(newOutput);
     expect(outputAt(updated, 1)).toBe(outputAt(controller, 1)); // Others unchanged
+  });
+
+  it('should throw when resizing outputs above 8', () => {
+    const controller = Controller.new();
+    expect(() => controller.resizeOutputs(9)).toThrow('A controller cannot have more than 8 outputs');
   });
 });
 

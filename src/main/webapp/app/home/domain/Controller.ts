@@ -38,6 +38,12 @@ export class Controller {
   }
 
   resizeOutputs(newCount: number): Controller {
+    if (newCount < 0) {
+      throw new Error('Outputs count cannot be negative');
+    }
+    if (newCount > 8) {
+      throw new Error('A controller cannot have more than 8 outputs');
+    }
     if (this.shouldAddOutputs(newCount)) {
       const toAddCount = newCount - this.props.outputs.length;
       const toAdd = Array.from({ length: toAddCount }, () => LedOutput.new());

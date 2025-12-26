@@ -33,6 +33,8 @@
                   :model-value="controller.outputs.length"
                   label="Nombre de sorties"
                   type="number"
+                  min="0"
+                  max="8"
                   variant="outlined"
                   hide-details="auto"
                   class="mb-3"
@@ -96,7 +98,7 @@ const updateUniverse = (index: number, newUniverse: number) => {
 
 const updateOutputsCount = (index: number, newCount: number) => {
   const current = controllers.value.values[index];
-  if (current) {
+  if (current && newCount >= 0 && newCount <= 8) {
     controllers.value = controllers.value.replace(index, current.resizeOutputs(newCount));
   }
 };

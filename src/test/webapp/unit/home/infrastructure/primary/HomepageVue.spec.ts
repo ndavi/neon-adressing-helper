@@ -48,6 +48,38 @@ describe('When visiting the homepage', () => {
     thenNumberOfControllersIs(wrapper, -1); // Input value changes
     thenControllerCardsAreDisplayed(wrapper, 5); // But cards remain at 5
   });
+
+  it('Should have a maximum value of 8 for the outputs input', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 1);
+
+    // The outputs input is the second text field in the card
+    const card = wrapper.find('.controller-card');
+    const outputInput = card.findAll('input')[1];
+    if (!outputInput) throw new Error('Output input not found');
+    expect(outputInput.attributes('max')).toBe('8');
+  });
+
+  it('Should not update outputs when entering a number > 8', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 1);
+
+    // Default is usually 1 output (from Controller.new())
+    // Let's try to set to 9
+    const card = wrapper.find('.controller-card');
+    const outputInput = card.findAll('input')[1];
+    if (!outputInput) throw new Error('Output input not found');
+    await outputInput.setValue(9);
+
+    // Should remain at previous value (default 1)
+    // We need to check if the DOM updated or if the model updated.
+    // Since we blocked it in updateOutputsCount, the model shouldn't change.
+    // However, v-model works two-way. If we block the update, the value in the store doesn't change.
+    // Let's verify via the DOM element value or by checking effects (like number of output cards)
+
+    const outputCards = card.findAllComponents({ name: 'LedOutputCard' });
+    expect(outputCards.length).toBe(1);
+  });
 });
 
 const givenHomepage = (): VueWrapper => {

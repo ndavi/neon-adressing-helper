@@ -52,6 +52,7 @@
           @remove-bar="removeBar(outputIndex)"
           @toggle-bar="toggleBar(outputIndex, $event)"
           @duplicate="duplicateOutput(outputIndex)"
+          @delete="deleteOutput(outputIndex)"
         />
       </div>
     </v-card-text>
@@ -108,5 +109,9 @@ const toggleBar = (outputIndex: number, barIndex: number) => {
 
 const duplicateOutput = (outputIndex: number) => {
   emit('update:controller', props.controller.duplicateOutput(outputIndex));
+};
+
+const deleteOutput = (outputIndex: number) => {
+  emit('update:controller', props.controller.removeOutput(outputIndex));
 };
 </script>

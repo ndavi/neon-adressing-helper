@@ -82,6 +82,11 @@ export class Controller {
     return new Controller({ ...this.props, outputs: [...this.props.outputs, newOutput] });
   }
 
+  removeOutput(outputIndex: number): Controller {
+    const newOutputs = this.props.outputs.filter((_, index) => index !== outputIndex);
+    return new Controller({ ...this.props, outputs: newOutputs });
+  }
+
   private hasMaxOutputs(): boolean {
     return this.props.outputs.length >= 8;
   }

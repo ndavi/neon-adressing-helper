@@ -1,4 +1,5 @@
 import HomePage from '@/home/infrastructure/primary/HomePage.vue';
+import LedOutputCard from '@/home/infrastructure/primary/LedOutputCard.vue';
 import { selector } from '@test/DataSelectorHelper';
 import type { VueWrapper } from '@vue/test-utils';
 import { mount } from '@vue/test-utils';
@@ -91,88 +92,52 @@ describe('When visiting the homepage', () => {
   it('Should duplicate a controller when clicking the duplicate button', async () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
+    await whenSettingUniverse(wrapper, 100);
 
-    // Change some values in the first controller
-    const card = wrapper.find(selector('controller-card'));
-    const universeInput = card.find('input');
-    await universeInput.setValue(100);
-
-    await card.find(selector('duplicate-controller')).trigger('click');
+    await whenClickingDuplicateController(wrapper);
 
     thenControllerCardsAreDisplayed(wrapper, 2);
-
-    const cards = wrapper.findAll(selector('controller-card'));
-    const secondCard = cards[1];
-    if (!secondCard) throw new Error('Second card not found');
-    const secondUniverseInput = secondCard.find('input').element;
-    if (!(secondUniverseInput instanceof HTMLInputElement)) throw new Error('Not an input');
-    expect(secondUniverseInput.value).toBe('100');
+    thenSecondControllerHasUniverse(wrapper, 100);
   });
 
   it('Should duplicate an output when clicking the duplicate button', async () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
+    await whenSettingOutputsCount(wrapper, 1);
 
-    const card = wrapper.find(selector('controller-card'));
-    // Set 1 output initially
-    const outputInput = card.findAll('input')[1];
-    if (!outputInput) throw new Error('Output input not found');
-    await outputInput.setValue(1);
+    const outputCard = outputCardAt(wrapper, 0);
+    await whenAddingBarToOutput(wrapper, outputCard);
 
-    const outputCards = card.findAllComponents({ name: 'LedOutputCard' });
-    expect(outputCards.length).toBe(1);
-    const outputCard = outputCards[0];
+    await whenClickingDuplicateOutput(outputCard);
 
-    // Add a bar to make it unique
-    outputCard.vm.$emit('add-bar');
-    await wrapper.vm.$nextTick();
-
-    // Duplicate it
-    const duplicateBtn = outputCard.find(selector('duplicate-output'));
-    await duplicateBtn.trigger('click');
-
-    const updatedOutputCards = card.findAllComponents({ name: 'LedOutputCard' });
-    expect(updatedOutputCards.length).toBe(2);
-
-    // Check that the duplicated output also has 2 bars (initial + added)
-    // Actually the test above adds a bar, so it should have 2 bars. Default is 1 bar?
-    // Let's check LedOutput.ts: new() -> empty bars? No, check Controller.new().outputs -> [LedOutput.new()]. LedOutput.new() -> bars: []?
-    // Let's check LedOutput.spec.ts: givenAnEmptyLedOutput -> no bars.
-    // But Controller.new() -> outputs: [LedOutput.new()].
-    // Wait, Controller.new() -> outputs: [LedOutput.new()].
-    // LedOutput.new() -> bars: [].
-    // So initially 0 bars?
-    // Let's check LedOutputCard.vue to see if it adds a bar on mount or something?
-    // Or maybe I should just check the count.
-
-    // Let's look at LedOutput.spec.ts again. "Should have no bars initially".
-    // So if I add a bar, it has 1 bar.
-
-    const firstOutput = updatedOutputCards[0];
-    const secondOutput = updatedOutputCards[1];
-
-    // I can't easily check internal state of functional components or their props without inspecting props
-    expect(firstOutput.props('output').bars).toHaveLength(1);
-    expect(secondOutput.props('output').bars).toHaveLength(1);
+    thenOutputCardsAreDisplayed(wrapper, 2);
+    thenOutputHasBarsCount(outputCardAt(wrapper, 0), 1);
+    thenOutputHasBarsCount(outputCardAt(wrapper, 1), 1);
   });
 
   it('Should remove a controller when clicking the delete button', async () => {
     const wrapper = givenHomepage();
-    await whenEnteringNumberOfControllers(wrapper, 2); // Start with 2 controllers
+    await whenEnteringNumberOfControllers(wrapper, 2);
 
     thenControllerCardsAreDisplayed(wrapper, 2);
 
-    const firstCard = wrapper.find(selector('controller-card'));
-    const deleteBtn = firstCard.find(selector('delete-controller'));
-
-    await deleteBtn.trigger('click');
+    await whenClickingDeleteController(wrapper);
 
     thenControllerCardsAreDisplayed(wrapper, 1);
+    thenRemainingControllerIs(wrapper, 'Contrôleur 1');
+  });
 
-    // Verify the remaining controller is the one that was previously second (now index 0)
-    // We can check its title "Contrôleur 1" (which is index + 1)
-    const remainingCard = wrapper.find(selector('controller-card'));
-    expect(remainingCard.text()).toContain('Contrôleur 1');
+  it('Should remove an output when clicking the delete button', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 1);
+    await whenSettingOutputsCount(wrapper, 2);
+
+    thenOutputCardsAreDisplayed(wrapper, 2);
+
+    const firstOutput = outputCardAt(wrapper, 0);
+    await whenClickingDeleteOutput(firstOutput);
+
+    thenOutputCardsAreDisplayed(wrapper, 1);
   });
 });
 
@@ -343,6 +308,77 @@ const thenNumberOfControllersIs = (wrapper: VueWrapper, expectedCount: number) =
 const thenControllerCardsAreDisplayed = (wrapper: VueWrapper, expectedCount: number) => {
   const cards = wrapper.findAll(selector('controller-card'));
   expect(cards.length).toBe(expectedCount);
+};
+
+const whenSettingUniverse = async (wrapper: VueWrapper, universe: number) => {
+  const card = wrapper.find(selector('controller-card'));
+  const universeInput = card.find('input');
+  await universeInput.setValue(universe);
+};
+
+const whenClickingDuplicateController = async (wrapper: VueWrapper) => {
+  const card = wrapper.find(selector('controller-card'));
+  await card.find(selector('duplicate-controller')).trigger('click');
+};
+
+const thenSecondControllerHasUniverse = (wrapper: VueWrapper, expectedUniverse: number) => {
+  const cards = wrapper.findAll(selector('controller-card'));
+  const secondCard = cards[1];
+  if (!secondCard) throw new Error('Second card not found');
+  const secondUniverseInput = secondCard.find('input').element;
+  if (!(secondUniverseInput instanceof HTMLInputElement)) throw new Error('Not an input');
+  expect(secondUniverseInput.value).toBe(expectedUniverse.toString());
+};
+
+const whenSettingOutputsCount = async (wrapper: VueWrapper, count: number) => {
+  const card = wrapper.find(selector('controller-card'));
+  const outputInput = card.findAll('input')[1];
+  if (!outputInput) throw new Error('Output input not found');
+  await outputInput.setValue(count);
+};
+
+const outputCardAt = (wrapper: VueWrapper, index: number): VueWrapper<InstanceType<typeof LedOutputCard>> => {
+  const card = wrapper.find(selector('controller-card'));
+  const outputCards = card.findAllComponents(LedOutputCard);
+  const outputCard = outputCards[index];
+  if (!outputCard) throw new Error(`Output card at index ${index} not found`);
+  return outputCard;
+};
+
+const whenAddingBarToOutput = async (wrapper: VueWrapper, outputCard: VueWrapper<InstanceType<typeof LedOutputCard>>) => {
+  outputCard.vm.$emit('add-bar');
+  await wrapper.vm.$nextTick();
+};
+
+const whenClickingDuplicateOutput = async (outputCard: VueWrapper<InstanceType<typeof LedOutputCard>>) => {
+  const duplicateBtn = outputCard.find(selector('duplicate-output'));
+  await duplicateBtn.trigger('click');
+};
+
+const thenOutputCardsAreDisplayed = (wrapper: VueWrapper, expectedCount: number) => {
+  const card = wrapper.find(selector('controller-card'));
+  const outputCards = card.findAllComponents(LedOutputCard);
+  expect(outputCards.length).toBe(expectedCount);
+};
+
+const thenOutputHasBarsCount = (outputCard: VueWrapper<InstanceType<typeof LedOutputCard>>, expectedCount: number) => {
+  expect(outputCard.props().output.bars).toHaveLength(expectedCount);
+};
+
+const whenClickingDeleteController = async (wrapper: VueWrapper) => {
+  const firstCard = wrapper.find(selector('controller-card'));
+  const deleteBtn = firstCard.find(selector('delete-controller'));
+  await deleteBtn.trigger('click');
+};
+
+const thenRemainingControllerIs = (wrapper: VueWrapper, expectedTitle: string) => {
+  const remainingCard = wrapper.find(selector('controller-card'));
+  expect(remainingCard.text()).toContain(expectedTitle);
+};
+
+const whenClickingDeleteOutput = async (outputCard: VueWrapper<InstanceType<typeof LedOutputCard>>) => {
+  const deleteBtn = outputCard.find(selector('delete-output'));
+  await deleteBtn.trigger('click');
 };
 
 const readBlobContent = (blob: Blob): Promise<string> => {

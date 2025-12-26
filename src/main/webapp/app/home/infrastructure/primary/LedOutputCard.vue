@@ -40,8 +40,8 @@ const emit = defineEmits<{
 
 const getBarStyle = (bar: Bar): CSSProperties => {
   return {
-    width: bar.type === '2M' ? '20px' : '10px',
-    height: '10px',
+    width: bar.type === '2M' ? '48px' : '24px',
+    height: '24px',
   };
 };
 

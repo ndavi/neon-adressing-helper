@@ -3,14 +3,13 @@ import { LedOutput } from './LedOutput';
 export interface ControllerProps {
   universe: number;
   outputs: readonly LedOutput[];
-  startX: number;
 }
 
 export class Controller {
   private constructor(private readonly props: ControllerProps) {}
 
   static new(): Controller {
-    return new Controller({ universe: 0, outputs: [LedOutput.new()], startX: 0 });
+    return new Controller({ universe: 0, outputs: [LedOutput.new()] });
   }
 
   static of(props: ControllerProps): Controller {
@@ -23,10 +22,6 @@ export class Controller {
 
   get outputs(): readonly LedOutput[] {
     return this.props.outputs;
-  }
-
-  get startX(): number {
-    return this.props.startX;
   }
 
   withUniverse(newUniverse: number): Controller {

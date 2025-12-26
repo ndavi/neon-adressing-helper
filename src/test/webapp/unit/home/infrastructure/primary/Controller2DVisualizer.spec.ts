@@ -29,7 +29,7 @@ describe('Controller2DVisualizer', () => {
   });
 
   it('Should display universe number', () => {
-    const controllers = [Controller.of({ universe: 10, outputs: [], startX: 0 })];
+    const controllers = [Controller.of({ universe: 10, outputs: [] })];
     const wrapper = mount(Controller2DVisualizer, {
       props: {
         controllers,
@@ -41,7 +41,7 @@ describe('Controller2DVisualizer', () => {
 
   it('Should render outputs and bars', () => {
     const outputWithBars = LedOutput.new().addBar().addBar();
-    const controller = Controller.of({ universe: 1, outputs: [outputWithBars], startX: 0 });
+    const controller = Controller.of({ universe: 1, outputs: [outputWithBars] });
 
     const wrapper = mount(Controller2DVisualizer, {
       props: {

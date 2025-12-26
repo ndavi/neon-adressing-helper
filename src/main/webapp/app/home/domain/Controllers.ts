@@ -27,7 +27,7 @@ export class Controllers {
         return Controller.of({
           universe: index * 20,
           outputs: Controller.new().outputs,
-          startX: index * 400,
+          startX: index * 250,
         });
       });
       return new Controllers({ values: [...this.props.values, ...toAdd] });

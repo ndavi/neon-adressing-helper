@@ -38,7 +38,7 @@ describe('Controller2DVisualizer', () => {
     const nodes = wrapper.findAll('.controller-node');
     // We check the style attribute for 'left' property
     expect(nodes[0].attributes('style')).toContain('left: 0px');
-    expect(nodes[1].attributes('style')).toContain('left: 400px');
+    expect(nodes[1].attributes('style')).toContain('left: 250px');
   });
 
   it('Should display universe number', () => {

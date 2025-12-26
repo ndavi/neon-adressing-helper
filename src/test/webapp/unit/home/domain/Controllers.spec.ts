@@ -19,7 +19,7 @@ describe('Controllers Domain', () => {
     expect(controllerAt(resized, 0).startX).toBe(0);
     expect(controllerAt(resized, 1).universe).toBe(20);
     expect(controllerAt(resized, 1).outputs).toHaveLength(1);
-    expect(controllerAt(resized, 1).startX).toBe(400);
+    expect(controllerAt(resized, 1).startX).toBe(250);
     expect(controllers.values).toEqual([]); // Original should be unchanged
   });
 

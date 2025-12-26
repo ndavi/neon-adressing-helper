@@ -50,7 +50,7 @@ Il ne faut **jamais** écrire du code de production (méthodes, attributs public
 
 ## Architecture
 
-Le projet suit une architecture hexagonale et applique les principes du **Domain-Driven Design (DDD)**, même dans le frontend.
+Le projet suit une architecture hexagonale et applique les principes du **Domain-Driven Design (DDD)** ainsi que les principes **SOLID**, même dans le frontend.
 
 La logique métier doit être encapsulée dans le domaine et isolée du framework (Vue.js). Les objets du domaine doivent être placés dans un dossier `domain` à la racine de chaque module (ex: `src/main/webapp/app/home/domain`).
 

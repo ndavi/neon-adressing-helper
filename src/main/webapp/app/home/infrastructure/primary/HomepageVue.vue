@@ -21,49 +21,47 @@
               class="mb-4 flex-grow-0"
             ></v-text-field>
 
-            <div class="overflow-y-auto flex-grow-1 pr-2">
-              <v-row>
-                <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12" sm="6" md="4" lg="3">
-                  <v-card class="controller-card mb-4" variant="outlined" data-selector="controller-card">
-                    <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
-                    <v-card-text>
-                      <v-text-field
-                        :model-value="controller.universe"
-                        label="Univers de départ"
-                        type="number"
-                        min="0"
-                        variant="outlined"
-                        hide-details="auto"
-                        class="mb-3"
-                        @update:model-value="updateUniverse(index, +$event)"
-                      ></v-text-field>
-                      <v-text-field
-                        :model-value="controller.outputs.length"
-                        label="Nombre de sorties"
-                        type="number"
-                        min="0"
-                        max="8"
-                        variant="outlined"
-                        hide-details="auto"
-                        class="mb-3"
-                        @update:model-value="updateOutputsCount(index, +$event)"
-                      ></v-text-field>
+            <div class="overflow-y-auto flex-grow-1 pr-2 controllers-grid">
+              <div v-for="(controller, index) in controllers.values" :key="index" class="controller-card-wrapper">
+                <v-card class="controller-card mb-4" variant="outlined" data-selector="controller-card">
+                  <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
+                  <v-card-text>
+                    <v-text-field
+                      :model-value="controller.universe"
+                      label="Univers de départ"
+                      type="number"
+                      min="0"
+                      variant="outlined"
+                      hide-details="auto"
+                      class="mb-3"
+                      @update:model-value="updateUniverse(index, +$event)"
+                    ></v-text-field>
+                    <v-text-field
+                      :model-value="controller.outputs.length"
+                      label="Nombre de sorties"
+                      type="number"
+                      min="0"
+                      max="8"
+                      variant="outlined"
+                      hide-details="auto"
+                      class="mb-3"
+                      @update:model-value="updateOutputsCount(index, +$event)"
+                    ></v-text-field>
 
-                      <div class="outputs-list mt-4 text-left">
-                        <LedOutputCard
-                          v-for="(output, outputIndex) in controller.outputs"
-                          :key="outputIndex"
-                          :output="output"
-                          :index="outputIndex"
-                          @add-bar="addBar(index, outputIndex)"
-                          @remove-bar="removeBar(index, outputIndex)"
-                          @toggle-bar="toggleBar(index, outputIndex, $event)"
-                        />
-                      </div>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-              </v-row>
+                    <div class="outputs-list mt-4 text-left">
+                      <LedOutputCard
+                        v-for="(output, outputIndex) in controller.outputs"
+                        :key="outputIndex"
+                        :output="output"
+                        :index="outputIndex"
+                        @add-bar="addBar(index, outputIndex)"
+                        @remove-bar="removeBar(index, outputIndex)"
+                        @toggle-bar="toggleBar(index, outputIndex, $event)"
+                      />
+                    </div>
+                  </v-card-text>
+                </v-card>
+              </div>
             </div>
           </div>
         </template>
@@ -232,5 +230,35 @@ const downloadExampleCsv = () => {
 
 .full-height {
   height: 100%;
+}
+
+.controllers-grid {
+  container-type: inline-size;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-content: flex-start;
+}
+
+.controller-card-wrapper {
+  width: 100%;
+}
+
+@container (min-width: 600px) {
+  .controller-card-wrapper {
+    width: calc(50% - 8px);
+  }
+}
+
+@container (min-width: 900px) {
+  .controller-card-wrapper {
+    width: calc(33.333% - 11px);
+  }
+}
+
+@container (min-width: 1200px) {
+  .controller-card-wrapper {
+    width: calc(25% - 12px);
+  }
 }
 </style>

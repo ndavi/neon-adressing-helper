@@ -16,6 +16,9 @@ test.describe('Home', () => {
     await homePage.setControllersCount(5);
     await expect(homePage.controllersInput).toHaveValue('5');
 
+    await expect(homePage.visualizerNodes).toHaveCount(5);
+    await expect(homePage.visualizerNodes.first()).toContainText('U: 0');
+
     const download = await homePage.downloadExampleCsv();
     expect(download.suggestedFilename()).toBe('example.csv');
 

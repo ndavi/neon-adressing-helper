@@ -4,11 +4,13 @@ export class HomePage {
   readonly page: Page;
   readonly controllersInput: Locator;
   readonly downloadButton: Locator;
+  readonly visualizerNodes: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.controllersInput = page.locator('#controllers-count');
     this.downloadButton = page.locator('.button');
+    this.visualizerNodes = page.locator('.controller-node');
   }
 
   async goto() {
@@ -17,6 +19,10 @@ export class HomePage {
 
   async setControllersCount(count: number) {
     await this.controllersInput.fill(count.toString());
+  }
+
+  async getVisualizerNodesCount() {
+    return await this.visualizerNodes.count();
   }
 
   async downloadExampleCsv() {

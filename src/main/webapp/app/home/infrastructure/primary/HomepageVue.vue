@@ -1,7 +1,7 @@
 <template>
   <v-layout class="full-height">
-    <!-- Left Drawer: Controls -->
-    <v-navigation-drawer location="left" width="1000" permanent class="bg-surface">
+    <!-- Main Content: Controls (80%) -->
+    <v-main class="bg-surface fill-height">
       <div class="pa-4 full-height d-flex flex-column">
         <v-text-field
           id="controllers-count"
@@ -15,7 +15,7 @@
 
         <div class="overflow-y-auto flex-grow-1 pr-2">
           <v-row>
-            <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12" md="4">
+            <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12" sm="6" md="4" lg="3">
               <v-card class="controller-card mb-4" variant="outlined">
                 <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
                 <v-card-text>
@@ -58,17 +58,15 @@
           </v-row>
         </div>
       </div>
-    </v-navigation-drawer>
-
-    <!-- Main Content: Visualization -->
-    <v-main class="bg-grey-lighten-4 fill-height">
-      <Controller2DVisualizer :controllers="controllers.values" class="fill-height" />
     </v-main>
 
+    <!-- Right Drawer: Visualization (20%) -->
+    <v-navigation-drawer location="right" width="20%" permanent class="bg-grey-lighten-4">
+      <Controller2DVisualizer :controllers="controllers.values" class="fill-height" />
+    </v-navigation-drawer>
+
     <v-footer app elevation="4" class="justify-center">
-      <v-btn color="primary" size="large" class="button" prepend-icon="mdi-download" @click="downloadExampleCsv">
-        Télécharger un exemple CSV
-      </v-btn>
+      <v-btn color="primary" size="large" class="button" prepend-icon="mdi-download" @click="downloadExampleCsv"> Télécharger CSV </v-btn>
     </v-footer>
   </v-layout>
 </template>

@@ -1,6 +1,21 @@
 # Neon Addressing Tool - Guidelines
 
+### Documentation & Références
+
+Pour garantir l'utilisation des dernières API et des meilleures pratiques :
+
+- Utilise **Context7** (`resolve-library-id` et `get-library-docs`) pour consulter la documentation officielle de **Vue 3**, **Vitest**, **Playwright**, et toute autre bibliothèque tiers.
+- Pour l'UX et les composants UI, utilise exclusivement le serveur MCP de **Vuetify** : https://mcp.vuetifyjs.com/
+
 ## Développement
+
+- **Framework** : Tu utilises **Vue 3**.
+- **Syntaxe** : Utilise exclusivement la **Composition API** avec la syntaxe `<script setup lang="ts">`. L'utilisation de l'Options API est interdite.
+- **État & Logique** :
+  - Extrais la logique métier complexe dans des **composables** (fichiers `.ts`) pour garder les composants `.vue` focalisés sur la vue.
+- **Typage des Composants** :
+  - Utilise les définitions de types génériques pour les props et les emits (ex: `defineProps<{ myProp: string }>()`).
+  - Évite les types `any` dans les templates.
 
 ### TypeScript
 
@@ -35,10 +50,6 @@ La logique métier doit être encapsulée dans le domaine et isolée du framewor
 Le domaine doit être le plus **immuable** possible. On privilégie les types primitifs et les structures de données immuables, en minimisant les effets de bord. Les entités et value objects doivent être conçus pour ne pas être modifiés après leur création. Toute opération de transformation (ex: `resize`) doit renvoyer une nouvelle instance de l'objet plutôt que de modifier l'instance existante.
 
 Il est interdit de déplacer du code dans un dossier **shared** ou **common** tant qu'il n'est pas effectivement utilisé par au moins deux contextes différents. On privilégie la duplication ou la localisation dans le contexte initial jusqu'à ce qu'un besoin de partage réel émerge.
-
-## UX / Design
-
-Pour l'UX et les composants UI, on utilise le serveur MCP de Vuetify : https://mcp.vuetifyjs.com/
 
 ## Development Workflow
 

@@ -12,8 +12,10 @@ describe('Controllers Domain', () => {
     const resized = controllers.resize(2);
 
     expect(resized.values).toHaveLength(2);
-    expect(resized.values[0]).toEqual({ universe: 1, outputs: 16 });
-    expect(resized.values[1]).toEqual({ universe: 1, outputs: 16 });
+    expect(resized.values[0].universe).toBe(1);
+    expect(resized.values[0].outputs).toHaveLength(16);
+    expect(resized.values[1].universe).toBe(1);
+    expect(resized.values[1].outputs).toHaveLength(16);
     expect(controllers.values).toEqual([]); // Original should be unchanged
   });
 

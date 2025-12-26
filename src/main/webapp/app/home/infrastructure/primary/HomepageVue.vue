@@ -26,20 +26,33 @@
               <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
               <v-card-text>
                 <v-text-field
-                  v-model.number="controller.universe"
+                  :model-value="controller.universe"
                   label="Univers de départ"
                   type="number"
                   variant="outlined"
                   hide-details="auto"
                   class="mb-3"
+                  @update:model-value="updateUniverse(index, +$event)"
                 ></v-text-field>
                 <v-text-field
-                  v-model.number="controller.outputs"
+                  :model-value="controller.outputs.length"
                   label="Nombre de sorties"
                   type="number"
                   variant="outlined"
                   hide-details="auto"
+                  class="mb-3"
+                  @update:model-value="updateOutputsCount(index, +$event)"
                 ></v-text-field>
+
+                <div class="outputs-list mt-4 text-left">
+                  <LedOutputCard
+                    v-for="(output, outputIndex) in controller.outputs"
+                    :key="outputIndex"
+                    :output="output"
+                    :index="outputIndex"
+                    @add-bar="addBar(index, outputIndex)"
+                  />
+                </div>
               </v-card-text>
             </v-card>
           </v-col>
@@ -49,32 +62,53 @@
   </v-container>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import type { Controller } from '@/home/domain/Controller';
 import { Controllers } from '@/home/domain/Controllers';
+import { ref, watch } from 'vue';
 import VueLogo from '../../../../content/images/VueLogo.png';
 import { downloadFile } from './FileDownloader';
+import LedOutputCard from './LedOutputCard.vue';
 
-export default {
-  name: 'HomepageVue',
-  data() {
-    return {
-      controllersCount: 0,
-      controllers: Controllers.empty().values,
-      VueLogo,
-    };
-  },
-  watch: {
-    controllersCount(newCount: number) {
-      this.controllers = Controllers.of(this.controllers).resize(newCount).values;
-    },
-  },
-  methods: {
-    downloadExampleCsv() {
-      downloadFile(this.getExampleCsvContent(), 'example.csv', 'text/csv;charset=utf-8;');
-    },
+const controllersCount = ref(0);
+const controllers = ref<readonly Controller[]>(Controllers.empty().values);
 
-    getExampleCsvContent() {
-      return `Fixture Definition Name;Start Universe;Start Channel;StartX;StartY;EndX;EndY;Width;Fixture Name
+watch(controllersCount, newCount => {
+  controllers.value = Controllers.of(controllers.value).resize(newCount).values;
+});
+
+const updateUniverse = (index: number, newUniverse: number) => {
+  const current = controllers.value[index];
+  const updated = current.withUniverse(newUniverse);
+  replaceController(index, updated);
+};
+
+const updateOutputsCount = (index: number, newCount: number) => {
+  const current = controllers.value[index];
+  const updated = current.resizeOutputs(newCount);
+  replaceController(index, updated);
+};
+
+const addBar = (controllerIndex: number, outputIndex: number) => {
+  const controller = controllers.value[controllerIndex];
+  const output = controller.outputs[outputIndex];
+  const newOutput = output.addBar();
+  const updatedController = controller.replaceOutput(outputIndex, newOutput);
+  replaceController(controllerIndex, updatedController);
+};
+
+const replaceController = (index: number, newController: Controller) => {
+  const newControllers = [...controllers.value];
+  newControllers[index] = newController;
+  controllers.value = newControllers;
+};
+
+const downloadExampleCsv = () => {
+  downloadFile(getExampleCsvContent(), 'example.csv', 'text/csv;charset=utf-8;');
+};
+
+const getExampleCsvContent = () => {
+  return `Fixture Definition Name;Start Universe;Start Channel;StartX;StartY;EndX;EndY;Width;Fixture Name
 BARRE NEON - 2M;0;1;10;0;10;200;15;CONTROLLEUR-0/C0-OUT-1/LED-0
 BARRE NEON - 2M;0;358;10;200;10;400;15;CONTROLLEUR-0/C0-OUT-1/LED-1
 BARRE NEON - 2M;1;203;50;0;50;200;15;CONTROLLEUR-0/C0-OUT-2/LED-2
@@ -123,7 +157,5 @@ BARRE NEON - 2M;82;405;1850;0;1850;200;15;CONTROLLEUR-4/C4-OUT-3/LED-44
 BARRE NEON - 2M;83;250;1850;200;1850;400;15;CONTROLLEUR-4/C4-OUT-3/LED-45
 BARRE NEON - 2M;84;95;1890;0;1890;200;15;CONTROLLEUR-4/C4-OUT-4/LED-46
 BARRE NEON - 2M;84;452;1890;200;1890;400;15;CONTROLLEUR-4/C4-OUT-4/LED-47`;
-    },
-  },
 };
 </script>

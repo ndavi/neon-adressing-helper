@@ -5,7 +5,7 @@
         v-for="(controller, index) in controllers"
         :key="index"
         class="controller-node"
-        :style="{ left: controller.startX + 'px', top: '50px' }"
+        :style="{ left: index * 220 + 'px', top: '50px' }"
       >
         <div class="controller-box"></div>
         <div class="controller-label">U: {{ controller.universe }}</div>

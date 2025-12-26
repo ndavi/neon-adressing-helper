@@ -34,7 +34,18 @@ describe('When visiting the homepage', () => {
 });
 
 const givenHomepage = (): VueWrapper => {
-  return mount(HomepageVue);
+  return mount(
+    {
+      template: '<v-app><HomepageVue /></v-app>',
+    },
+    {
+      global: {
+        components: {
+          HomepageVue,
+        },
+      },
+    },
+  ).findComponent(HomepageVue);
 };
 
 const givenMockedDomForDownload = () => {

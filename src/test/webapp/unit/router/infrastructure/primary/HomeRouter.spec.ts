@@ -13,11 +13,19 @@ beforeEach(() => {
 });
 
 const wrap = (): VueWrapper => {
-  return mount(HomepageVue, {
-    global: {
-      plugins: [router],
+  return mount(
+    {
+      template: '<v-app><HomepageVue /></v-app>',
     },
-  });
+    {
+      global: {
+        plugins: [router],
+        components: {
+          HomepageVue,
+        },
+      },
+    },
+  );
 };
 
 describe('Router', () => {
@@ -27,7 +35,7 @@ describe('Router', () => {
 
       const wrapper = wrap();
 
-      expect(wrapper.html()).toContain('Neon Addressing Tool');
+      expect(wrapper.html()).toContain('Nombre de contrôleurs');
     });
   });
 });

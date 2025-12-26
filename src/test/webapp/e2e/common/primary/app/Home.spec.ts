@@ -12,7 +12,6 @@ test.describe('Home', () => {
     const homePage = new HomePage(page);
     await homePage.goto();
     await expect(page).toHaveTitle('NeonAdressingTool');
-    await homePage.verifyLogoVisible();
 
     await homePage.setControllersCount(5);
     await expect(homePage.controllersInput).toHaveValue('5');

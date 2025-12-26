@@ -2,9 +2,6 @@
   <v-container class="text-center fill-height justify-center">
     <v-row justify="center" align="center">
       <v-col cols="12">
-        <v-img alt="Vue logo" :src="VueLogo" class="mx-auto mb-5" height="200" width="200" />
-        <h1 class="text-h3 font-weight-bold mb-5">Neon Addressing Tool</h1>
-
         <div class="mx-auto" style="max-width: 400px">
           <v-text-field
             id="controllers-count"
@@ -14,10 +11,6 @@
             variant="outlined"
             class="mb-4"
           ></v-text-field>
-
-          <v-btn color="primary" size="large" class="button" prepend-icon="mdi-download" @click="downloadExampleCsv">
-            Télécharger un exemple CSV
-          </v-btn>
         </div>
 
         <v-row class="mt-5">
@@ -60,13 +53,18 @@
       </v-col>
     </v-row>
   </v-container>
+
+  <v-footer app elevation="4" class="justify-center">
+    <v-btn color="primary" size="large" class="button" prepend-icon="mdi-download" @click="downloadExampleCsv">
+      Télécharger un exemple CSV
+    </v-btn>
+  </v-footer>
 </template>
 
 <script setup lang="ts">
 import type { Controller } from '@/home/domain/Controller';
 import { Controllers } from '@/home/domain/Controllers';
 import { ref, watch } from 'vue';
-import VueLogo from '../../../../content/images/VueLogo.png';
 import { downloadFile } from './FileDownloader';
 import LedOutputCard from './LedOutputCard.vue';
 

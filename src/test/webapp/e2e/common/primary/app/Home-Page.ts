@@ -11,17 +11,6 @@ export class HomePage {
     this.downloadButton = page.locator('.button');
   }
 
-  async verifyLogoVisible() {
-    const logo = this.page.locator('img[alt="Vue logo"]');
-    await logo.waitFor({ state: 'visible' });
-    const isVisible = await logo.isVisible();
-    if (!isVisible) throw new Error('Logo is not visible');
-
-    // Check if image is actually loaded (naturalWidth > 0)
-    const naturalWidth = await logo.evaluate((img: HTMLImageElement) => img.naturalWidth);
-    if (naturalWidth === 0) throw new Error('Logo image failed to load (naturalWidth is 0)');
-  }
-
   async goto() {
     await this.page.goto('/');
   }

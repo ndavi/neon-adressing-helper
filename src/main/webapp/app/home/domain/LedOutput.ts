@@ -37,8 +37,9 @@ export class LedOutput {
 
   toggleBar(index: number): LedOutput {
     const newBars = [...this._bars];
-    if (this.hasBarAtIndex(index)) {
-      newBars[index] = newBars[index].toggle();
+    const bar = newBars[index];
+    if (bar !== undefined) {
+      newBars[index] = bar.toggle();
     }
     return new LedOutput(newBars);
   }

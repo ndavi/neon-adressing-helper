@@ -1,3 +1,5 @@
+import { Optional } from '@/common/domain/Optional';
+import type { Controller } from '@/home/domain/Controller';
 import { Controllers } from '@/home/domain/Controllers';
 import { describe, expect, it } from 'vitest';
 
@@ -12,10 +14,10 @@ describe('Controllers Domain', () => {
     const resized = controllers.resize(2);
 
     expect(resized.values).toHaveLength(2);
-    expect(resized.values[0].universe).toBe(0);
-    expect(resized.values[0].outputs).toHaveLength(1);
-    expect(resized.values[1].universe).toBe(20);
-    expect(resized.values[1].outputs).toHaveLength(1);
+    expect(controllerAt(resized, 0).universe).toBe(0);
+    expect(controllerAt(resized, 0).outputs).toHaveLength(1);
+    expect(controllerAt(resized, 1).universe).toBe(20);
+    expect(controllerAt(resized, 1).outputs).toHaveLength(1);
     expect(controllers.values).toEqual([]); // Original should be unchanged
   });
 
@@ -25,7 +27,9 @@ describe('Controllers Domain', () => {
     const resized = controllers.resize(2);
 
     expect(resized.values).toHaveLength(2);
-    expect(resized.values[0].universe).toBe(0);
-    expect(resized.values[1].universe).toBe(20);
+    expect(controllerAt(resized, 0).universe).toBe(0);
+    expect(controllerAt(resized, 1).universe).toBe(20);
   });
 });
+
+const controllerAt = (controllers: Controllers, index: number): Controller => Optional.ofNullable(controllers.values[index]).orElseThrow();

@@ -19,7 +19,7 @@
     "prettier:format": "prettier --write .",
     "preview": "vite preview",
     "start": "vite",
-    "test": "vitest run",
+    "test": "npm run build:tsc && vitest run",
     "test:coverage": "vitest run --coverage",
     "watch": "npm-run-all --parallel watch:*",
     "watch:test": "vitest --",

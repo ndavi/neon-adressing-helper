@@ -1,3 +1,4 @@
+import { Optional } from '@/common/domain/Optional';
 import type { BarType } from '@/home/domain/LedOutput';
 import { LedOutput } from '@/home/domain/LedOutput';
 import LedOutputCard from '@/home/infrastructure/primary/LedOutputCard.vue';
@@ -82,7 +83,7 @@ const whenClickingAddBar = async (wrapper: VueWrapper) => {
 const whenClickingBarAtIndex = async (wrapper: VueWrapper, index: number) => {
   // Assuming bars are rendered in order
   const bars = wrapper.findAll('.rounded'); // Using class from template
-  await bars[index].trigger('click');
+  await barAt(bars, index).trigger('click');
 };
 
 const thenItDisplaysOutputIndex = (wrapper: VueWrapper, index: number) => {
@@ -99,16 +100,18 @@ const thenAddBarEventIsEmitted = (wrapper: VueWrapper) => {
 
 const thenToggleBarEventIsEmittedWithIndex = (wrapper: VueWrapper, index: number) => {
   expect(wrapper.emitted('toggle-bar')).toBeTruthy();
-  expect(wrapper.emitted('toggle-bar')![0]).toEqual([index]);
+  expect(Optional.ofNullable(wrapper.emitted('toggle-bar')).orElseThrow()[0]).toEqual([index]);
 };
 
 const thenBarAtIndexHasWidth = (wrapper: VueWrapper, index: number, width: string) => {
   const bars = wrapper.findAll('.rounded');
-  const style = bars[index].attributes('style');
+  const style = barAt(bars, index).attributes('style');
   expect(style).toContain(`width: ${width}`);
 };
 
 const thenBarAtIndexHasClass = (wrapper: VueWrapper, index: number, className: string) => {
   const bars = wrapper.findAll('.rounded');
-  expect(bars[index].classes()).toContain(className);
+  expect(barAt(bars, index).classes()).toContain(className);
 };
+
+const barAt = (bars: ReturnType<VueWrapper['findAll']>, index: number) => Optional.ofNullable(bars[index]).orElseThrow();

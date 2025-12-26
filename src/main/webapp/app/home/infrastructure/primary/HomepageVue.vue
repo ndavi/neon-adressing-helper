@@ -65,12 +65,12 @@
 <script setup lang="ts">
 import type { Controller } from '@/home/domain/Controller';
 import { Controllers } from '@/home/domain/Controllers';
-import { ref, watch } from 'vue';
+import { ref, shallowRef, watch } from 'vue';
 import { downloadFile } from './FileDownloader';
 import LedOutputCard from './LedOutputCard.vue';
 
 const controllersCount = ref(0);
-const controllers = ref<readonly Controller[]>(Controllers.empty().values);
+const controllers = shallowRef<readonly Controller[]>(Controllers.empty().values);
 
 watch(controllersCount, newCount => {
   controllers.value = Controllers.of(controllers.value).resize(newCount).values;
@@ -78,30 +78,42 @@ watch(controllersCount, newCount => {
 
 const updateUniverse = (index: number, newUniverse: number) => {
   const current = controllers.value[index];
-  const updated = current.withUniverse(newUniverse);
-  replaceController(index, updated);
+  if (current) {
+    const updated = current.withUniverse(newUniverse);
+    replaceController(index, updated);
+  }
 };
 
 const updateOutputsCount = (index: number, newCount: number) => {
   const current = controllers.value[index];
-  const updated = current.resizeOutputs(newCount);
-  replaceController(index, updated);
+  if (current) {
+    const updated = current.resizeOutputs(newCount);
+    replaceController(index, updated);
+  }
 };
 
 const addBar = (controllerIndex: number, outputIndex: number) => {
   const controller = controllers.value[controllerIndex];
-  const output = controller.outputs[outputIndex];
-  const newOutput = output.addBar();
-  const updatedController = controller.replaceOutput(outputIndex, newOutput);
-  replaceController(controllerIndex, updatedController);
+  if (controller) {
+    const output = controller.outputs[outputIndex];
+    if (output) {
+      const newOutput = output.addBar();
+      const updatedController = controller.replaceOutput(outputIndex, newOutput);
+      replaceController(controllerIndex, updatedController);
+    }
+  }
 };
 
 const toggleBar = (controllerIndex: number, outputIndex: number, barIndex: number) => {
   const controller = controllers.value[controllerIndex];
-  const output = controller.outputs[outputIndex];
-  const newOutput = output.toggleBar(barIndex);
-  const updatedController = controller.replaceOutput(outputIndex, newOutput);
-  replaceController(controllerIndex, updatedController);
+  if (controller) {
+    const output = controller.outputs[outputIndex];
+    if (output) {
+      const newOutput = output.toggleBar(barIndex);
+      const updatedController = controller.replaceOutput(outputIndex, newOutput);
+      replaceController(controllerIndex, updatedController);
+    }
+  }
 };
 
 const replaceController = (index: number, newController: Controller) => {

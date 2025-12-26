@@ -1,6 +1,7 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
+    "strict": true,
     "allowJs": true,
     "sourceMap": true,
     "types": ["vite/client", "vitest/globals"],

@@ -1,11 +1,11 @@
-import type { AxiosInstance, AxiosResponse } from 'axios';
-import { vi, type MockedFunction } from 'vitest';
+import type { AxiosResponse } from 'axios';
+import { vi, type Mock } from 'vitest';
 
 export interface AxiosStubInstance {
-  get: MockedFunction<AxiosInstance['get']>;
-  put: MockedFunction<AxiosInstance['put']>;
-  post: MockedFunction<AxiosInstance['post']>;
-  delete: MockedFunction<AxiosInstance['delete']>;
+  get: Mock;
+  put: Mock;
+  post: Mock;
+  delete: Mock;
 }
 
 export const stubAxiosInstance = (): AxiosStubInstance => ({

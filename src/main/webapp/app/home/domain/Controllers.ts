@@ -20,7 +20,7 @@ export class Controllers {
       const toAddCount = newCount - this._values.length;
       const toAdd = Array.from({ length: toAddCount }, (_, i) => {
         const index = this._values.length + i;
-        return Controller.of(index * 20, Controller.new().outputs);
+        return Controller.of(index * 20, Controller.new().outputs, index * 400);
       });
       return new Controllers([...this._values, ...toAdd]);
     }

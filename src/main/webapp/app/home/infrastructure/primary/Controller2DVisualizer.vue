@@ -3,11 +3,12 @@
     <div class="visualizer-content">
       <div v-for="(controller, index) in controllers" :key="index" class="controller-node" data-selector="controller-node">
         <div class="controller-box">
-          <div v-for="(output, oIndex) in controller.outputs" :key="oIndex" class="output-node">
+          <div v-for="(output, oIndex) in controller.outputs" :key="oIndex" class="output-node" data-selector="output-node">
             <div
               v-for="(bar, bIndex) in output.bars"
               :key="bIndex"
               class="bar-node"
+              data-selector="bar-node"
               :class="{ 'bar-2m': bar.type === '2M', 'bar-1m': bar.type === '1M' }"
             ></div>
           </div>

@@ -3,6 +3,7 @@ import { Controllers } from '@/home/domain/Controllers';
 import { LedOutput } from '@/home/domain/LedOutput';
 import { Universe } from '@/home/domain/Universe';
 import Controller2DVisualizer from '@/home/infrastructure/primary/Controller2DVisualizer.vue';
+import { selector } from '@test/DataSelectorHelper';
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
@@ -14,7 +15,7 @@ describe('Controller2DVisualizer', () => {
       },
     });
 
-    expect(wrapper.findAll('.controller-node')).toHaveLength(0);
+    expect(wrapper.findAll(selector('controller-node'))).toHaveLength(0);
   });
 
   it('Should render controllers in a container', () => {
@@ -25,7 +26,7 @@ describe('Controller2DVisualizer', () => {
       },
     });
 
-    const nodes = wrapper.findAll('.controller-node');
+    const nodes = wrapper.findAll(selector('controller-node'));
     expect(nodes).toHaveLength(2);
   });
 
@@ -50,10 +51,10 @@ describe('Controller2DVisualizer', () => {
       },
     });
 
-    const outputNodes = wrapper.findAll('.output-node');
+    const outputNodes = wrapper.findAll(selector('output-node'));
     expect(outputNodes).toHaveLength(1);
 
-    const barNodes = wrapper.findAll('.bar-node');
+    const barNodes = wrapper.findAll(selector('bar-node'));
     expect(barNodes).toHaveLength(2);
   });
 });

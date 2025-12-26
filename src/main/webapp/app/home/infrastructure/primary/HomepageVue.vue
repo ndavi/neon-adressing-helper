@@ -24,6 +24,7 @@
                   :model-value="controller.universe"
                   label="Univers de départ"
                   type="number"
+                  min="0"
                   variant="outlined"
                   hide-details="auto"
                   class="mb-3"
@@ -91,7 +92,7 @@ watch(controllersCount, newCount => {
 
 const updateUniverse = (index: number, newUniverse: number) => {
   const current = controllers.value.values[index];
-  if (current) {
+  if (current && newUniverse >= 0) {
     controllers.value = controllers.value.replace(index, current.withUniverse(newUniverse));
   }
 };

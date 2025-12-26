@@ -34,6 +34,9 @@ export class Controller {
   }
 
   withUniverse(newUniverse: number): Controller {
+    if (newUniverse < 0) {
+      throw new Error('Universe cannot be negative');
+    }
     return new Controller({ ...this.props, universe: newUniverse });
   }
 

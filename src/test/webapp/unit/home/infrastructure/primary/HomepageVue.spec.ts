@@ -80,6 +80,54 @@ describe('When visiting the homepage', () => {
     const outputCards = card.findAllComponents({ name: 'LedOutputCard' });
     expect(outputCards.length).toBe(1);
   });
+
+  it('Should have a minimum value of 0 for the universe input', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 1);
+
+    // First input in the card is universe
+    const card = wrapper.find('.controller-card');
+    const universeInput = card.findAll('input')[0];
+    if (!universeInput) throw new Error('Universe input not found');
+    expect(universeInput.attributes('min')).toBe('0');
+  });
+
+  it('Should not update universe when entering a negative number', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 1);
+
+    // First input in the card is universe
+    const card = wrapper.find('.controller-card');
+    const universeInput = card.findAll('input')[0];
+    if (!universeInput) throw new Error('Universe input not found');
+    await universeInput.setValue(-5);
+
+    // Should remain at default (0)
+    // We can verify by checking if the value in DOM follows (v-model) but store update is blocked
+    // Ideally we check if the prop passed to visualizer or similar is unchanged, but let's check the effect or re-read DOM (which might have updated if v-model isn't manually reset, but in our logic we block the store update).
+    // Let's assume the store is the source of truth for the app state.
+
+    // Since we handle state via `controllers.value`, and the template binds to `controller.universe`, if we block update, the visualizer should show 0.
+    // But testing visualizer props is hard from here without digging deep.
+    // Let's check that the input value (if reflected back from store) or simplier, verify no error thrown and state valid.
+
+    // Accessing internal state for verification
+    // We check the input value remaining at 0 because :model-value binds to the state,
+    // and since the state update is blocked, it should remain 0.
+    // Note: In some test environments, the input value might temporarily reflect the user input
+    // before Vue updates it back. But since we use :model-value, the source of truth is the prop.
+
+    // Let's rely on the fact that if we didn't crash and the state didn't change,
+    // retrieving the bound value or just assuming safety is enough?
+    // No, let's try to verify the input value.
+
+    // Verify that the state passed to the visualizer remains consistent (universe 0)
+    const visualizer = wrapper.findComponent({ name: 'Controller2DVisualizer' });
+    const controllersProp = visualizer.props('controllers'); // Rely on implicit any/unknown or runtime check if needed
+    // Safety check to satisfy TS if needed, or just access if allowed
+    if (!Array.isArray(controllersProp)) throw new Error('Controllers prop is not an array');
+    expect(controllersProp[0].universe).toBe(0);
+  });
 });
 
 const givenHomepage = (): VueWrapper => {

@@ -41,6 +41,11 @@ describe('Controller', () => {
     const controller = Controller.new();
     expect(() => controller.resizeOutputs(9)).toThrow('A controller cannot have more than 8 outputs');
   });
+
+  it('should throw when setting a negative universe', () => {
+    const controller = Controller.new();
+    expect(() => controller.withUniverse(-1)).toThrow('Universe cannot be negative');
+  });
 });
 
 const outputAt = (controller: Controller, index: number): LedOutput => Optional.ofNullable(controller.outputs[index]).orElseThrow();

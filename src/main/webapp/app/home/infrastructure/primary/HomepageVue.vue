@@ -23,7 +23,7 @@
 
             <div class="overflow-y-auto flex-grow-1 pr-2">
               <v-row>
-                <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12" sm="6" lg="4">
+                <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12" sm="6" md="4" lg="3">
                   <v-card class="controller-card mb-4" variant="outlined" data-selector="controller-card">
                     <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
                     <v-card-text>

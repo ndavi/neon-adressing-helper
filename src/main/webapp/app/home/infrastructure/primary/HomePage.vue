@@ -23,44 +23,15 @@
 
             <div class="overflow-y-auto flex-grow-1 pr-2 controllers-grid">
               <div v-for="(controller, index) in controllers.values" :key="index" class="controller-card-wrapper">
-                <v-card class="controller-card" variant="outlined" data-selector="controller-card">
-                  <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
-                  <v-card-text>
-                    <v-text-field
-                      :model-value="controller.universe"
-                      label="Univers de départ"
-                      type="number"
-                      min="0"
-                      variant="outlined"
-                      hide-details="auto"
-                      class="mb-3"
-                      @update:model-value="updateUniverse(index, +$event)"
-                    ></v-text-field>
-                    <v-text-field
-                      :model-value="controller.outputs.length"
-                      label="Nombre de sorties"
-                      type="number"
-                      min="0"
-                      max="8"
-                      variant="outlined"
-                      hide-details="auto"
-                      class="mb-3"
-                      @update:model-value="updateOutputsCount(index, +$event)"
-                    ></v-text-field>
-
-                    <div class="outputs-list mt-4 text-left">
-                      <LedOutputCard
-                        v-for="(output, outputIndex) in controller.outputs"
-                        :key="outputIndex"
-                        :output="output"
-                        :index="outputIndex"
-                        @add-bar="addBar(index, outputIndex)"
-                        @remove-bar="removeBar(index, outputIndex)"
-                        @toggle-bar="toggleBar(index, outputIndex, $event)"
-                      />
-                    </div>
-                  </v-card-text>
-                </v-card>
+                <ControllerCard
+                  :controller="controller"
+                  :index="index"
+                  @update:universe="updateUniverse(index, $event)"
+                  @update:outputs-count="updateOutputsCount(index, $event)"
+                  @add-bar="addBar(index, $event)"
+                  @remove-bar="removeBar(index, $event)"
+                  @toggle-bar="(outputIndex, barIndex) => toggleBar(index, outputIndex, barIndex)"
+                />
               </div>
             </div>
           </div>
@@ -87,44 +58,16 @@
         <div class="overflow-y-auto flex-grow-1 pr-2">
           <v-row>
             <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12" sm="6">
-              <v-card class="controller-card mb-4" variant="outlined" data-selector="controller-card">
-                <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
-                <v-card-text>
-                  <v-text-field
-                    :model-value="controller.universe"
-                    label="Univers de départ"
-                    type="number"
-                    min="0"
-                    variant="outlined"
-                    hide-details="auto"
-                    class="mb-3"
-                    @update:model-value="updateUniverse(index, +$event)"
-                  ></v-text-field>
-                  <v-text-field
-                    :model-value="controller.outputs.length"
-                    label="Nombre de sorties"
-                    type="number"
-                    min="0"
-                    max="8"
-                    variant="outlined"
-                    hide-details="auto"
-                    class="mb-3"
-                    @update:model-value="updateOutputsCount(index, +$event)"
-                  ></v-text-field>
-
-                  <div class="outputs-list mt-4 text-left">
-                    <LedOutputCard
-                      v-for="(output, outputIndex) in controller.outputs"
-                      :key="outputIndex"
-                      :output="output"
-                      :index="outputIndex"
-                      @add-bar="addBar(index, outputIndex)"
-                      @remove-bar="removeBar(index, outputIndex)"
-                      @toggle-bar="toggleBar(index, outputIndex, $event)"
-                    />
-                  </div>
-                </v-card-text>
-              </v-card>
+              <ControllerCard
+                :controller="controller"
+                :index="index"
+                class="mb-4"
+                @update:universe="updateUniverse(index, $event)"
+                @update:outputs-count="updateOutputsCount(index, $event)"
+                @add-bar="addBar(index, $event)"
+                @remove-bar="removeBar(index, $event)"
+                @toggle-bar="(outputIndex, barIndex) => toggleBar(index, outputIndex, barIndex)"
+              />
             </v-col>
           </v-row>
         </div>
@@ -153,8 +96,8 @@ import { CsvExporter } from '@/home/domain/CsvExporter';
 import { ref, shallowRef, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 import Controller2DVisualizer from './Controller2DVisualizer.vue';
+import ControllerCard from './ControllerCard.vue';
 import { downloadFile } from './FileDownloader';
-import LedOutputCard from './LedOutputCard.vue';
 
 const { mdAndUp } = useDisplay();
 

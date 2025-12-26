@@ -1,4 +1,4 @@
-import HomepageVue from '@/home/infrastructure/primary/HomepageVue.vue';
+import HomePage from '@/home/infrastructure/primary/HomePage.vue';
 import { routes } from '@/router';
 import { mount, type VueWrapper } from '@vue/test-utils';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -15,13 +15,13 @@ beforeEach(() => {
 const wrap = (): VueWrapper => {
   return mount(
     {
-      template: '<v-app><HomepageVue /></v-app>',
+      template: '<v-app><HomePage /></v-app>',
     },
     {
       global: {
         plugins: [router],
         components: {
-          HomepageVue,
+          HomePage,
         },
       },
     },
@@ -29,8 +29,8 @@ const wrap = (): VueWrapper => {
 };
 
 describe('Router', () => {
-  describe.for(['/', '/home'])('Navigation on HomepageVue', url => {
-    it(`should navigate on HomepageVue when the URL is ${url}`, async () => {
+  describe.for(['/', '/home'])('Navigation on Home', url => {
+    it(`should navigate on Home when the URL is ${url}`, async () => {
       await router.push(url);
 
       const wrapper = wrap();

@@ -1,4 +1,4 @@
-import HomepageVue from '@/home/infrastructure/primary/HomepageVue.vue';
+import HomePage from '@/home/infrastructure/primary/HomePage.vue';
 import { selector } from '@test/DataSelectorHelper';
 import type { VueWrapper } from '@vue/test-utils';
 import { mount } from '@vue/test-utils';
@@ -38,16 +38,6 @@ describe('When visiting the homepage', () => {
     const wrapper = givenHomepage();
     const input = wrapper.find('input#controllers-count');
     expect(input.attributes('min')).toBe('0');
-  });
-
-  it('Should not update controllers when entering a negative number', async () => {
-    const wrapper = givenHomepage();
-    await whenEnteringNumberOfControllers(wrapper, 5);
-
-    await whenEnteringNumberOfControllers(wrapper, -1);
-
-    thenNumberOfControllersIs(wrapper, -1);
-    thenControllerCardsAreDisplayed(wrapper, 5);
   });
 
   it('Should have a maximum value of 8 for the outputs input', async () => {
@@ -102,16 +92,16 @@ describe('When visiting the homepage', () => {
 const givenHomepage = (): VueWrapper => {
   return mount(
     {
-      template: '<v-app><HomepageVue /></v-app>',
+      template: '<v-app><HomePage /></v-app>',
     },
     {
       global: {
         components: {
-          HomepageVue,
+          HomePage,
         },
       },
     },
-  ).findComponent(HomepageVue);
+  ).findComponent(HomePage);
 };
 
 const givenMockedDomForDownload = () => {

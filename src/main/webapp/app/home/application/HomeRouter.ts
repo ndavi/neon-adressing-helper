@@ -1,14 +1,14 @@
-import HomepageVue from '@/home/infrastructure/primary/HomepageVue.vue';
+import HomePage from '@/home/infrastructure/primary/HomePage.vue';
 import type { RouteRecordRaw } from 'vue-router';
 
 export const homeRoutes = (): RouteRecordRaw[] => [
   {
     path: '/',
-    redirect: { name: 'Homepage' },
+    redirect: { name: 'Home' },
   },
   {
     path: '/home',
-    name: 'Homepage',
-    component: HomepageVue,
+    name: 'Home',
+    component: HomePage,
   },
 ];

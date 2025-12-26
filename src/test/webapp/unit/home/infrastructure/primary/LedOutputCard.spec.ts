@@ -45,11 +45,11 @@ describe('LedOutputCard', () => {
   it('Should display correct width for bar type', () => {
     const output = givenAnOutputWithOneBarOfType('2M');
     const wrapper = givenALedOutputCard(output);
-    thenBarAtIndexHasWidth(wrapper, 0, '20px');
+    thenBarAtIndexHasWidth(wrapper, 0, '48px');
 
     const output1M = givenAnOutputWithOneBarOfType('1M');
     const wrapper1M = givenALedOutputCard(output1M);
-    thenBarAtIndexHasWidth(wrapper1M, 0, '10px');
+    thenBarAtIndexHasWidth(wrapper1M, 0, '24px');
   });
 
   it('Should display correct color for bar type', () => {

@@ -46,6 +46,8 @@ Les tests doivent **écrire une histoire**. Les noms des tests (le contenu du `i
 
 Il ne faut **jamais** écrire du code de production (méthodes, attributs publics) uniquement pour faciliter les tests. Le code de production doit refléter les besoins du domaine.
 
+**Tests CSS** : On ne cherche pas à tester le CSS. On teste le CSS uniquement si cela a une vraie valeur métier, sinon on l'évite car c'est fragile et coûteux à maintenir.
+
 ## Architecture
 
 Le projet suit une architecture hexagonale et applique les principes du **Domain-Driven Design (DDD)**, même dans le frontend.

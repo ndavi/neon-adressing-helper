@@ -15,7 +15,7 @@
         </div>
 
         <v-row class="mt-5">
-          <v-col v-for="(controller, index) in controllers" :key="index" cols="12">
+          <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12">
             <v-card class="controller-card" variant="outlined">
               <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
               <v-card-text>
@@ -57,7 +57,7 @@
 
       <!-- Right Column: Visualization -->
       <v-col cols="12" md="6" class="fill-height bg-grey-lighten-4 pa-0">
-        <Controller2DVisualizer :controllers="controllers" />
+        <Controller2DVisualizer :controllers="controllers.values" />
       </v-col>
     </v-row>
   </v-container>
@@ -70,7 +70,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Controller } from '@/home/domain/Controller';
 import { Controllers } from '@/home/domain/Controllers';
 import { CsvExporter } from '@/home/domain/CsvExporter';
 import { ref, shallowRef, watch } from 'vue';
@@ -79,72 +78,58 @@ import { downloadFile } from './FileDownloader';
 import LedOutputCard from './LedOutputCard.vue';
 
 const controllersCount = ref(0);
-const controllers = shallowRef<readonly Controller[]>(Controllers.empty().values);
+const controllers = shallowRef<Controllers>(Controllers.empty());
 
 watch(controllersCount, newCount => {
-  controllers.value = Controllers.of(controllers.value).resize(newCount).values;
+  controllers.value = controllers.value.resize(newCount);
 });
 
 const updateUniverse = (index: number, newUniverse: number) => {
-  const current = controllers.value[index];
+  const current = controllers.value.values[index];
   if (current) {
-    const updated = current.withUniverse(newUniverse);
-    replaceController(index, updated);
+    controllers.value = controllers.value.replace(index, current.withUniverse(newUniverse));
   }
 };
 
 const updateOutputsCount = (index: number, newCount: number) => {
-  const current = controllers.value[index];
+  const current = controllers.value.values[index];
   if (current) {
-    const updated = current.resizeOutputs(newCount);
-    replaceController(index, updated);
+    controllers.value = controllers.value.replace(index, current.resizeOutputs(newCount));
   }
 };
 
 const addBar = (controllerIndex: number, outputIndex: number) => {
-  const controller = controllers.value[controllerIndex];
+  const controller = controllers.value.values[controllerIndex];
   if (controller) {
     const output = controller.outputs[outputIndex];
     if (output) {
-      const newOutput = output.addBar();
-      const updatedController = controller.replaceOutput(outputIndex, newOutput);
-      replaceController(controllerIndex, updatedController);
+      controllers.value = controllers.value.replace(controllerIndex, controller.replaceOutput(outputIndex, output.addBar()));
     }
   }
 };
 
 const removeBar = (controllerIndex: number, outputIndex: number) => {
-  const controller = controllers.value[controllerIndex];
+  const controller = controllers.value.values[controllerIndex];
   if (controller) {
     const output = controller.outputs[outputIndex];
     if (output) {
-      const newOutput = output.removeBar();
-      const updatedController = controller.replaceOutput(outputIndex, newOutput);
-      replaceController(controllerIndex, updatedController);
+      controllers.value = controllers.value.replace(controllerIndex, controller.replaceOutput(outputIndex, output.removeBar()));
     }
   }
 };
 
 const toggleBar = (controllerIndex: number, outputIndex: number, barIndex: number) => {
-  const controller = controllers.value[controllerIndex];
+  const controller = controllers.value.values[controllerIndex];
   if (controller) {
     const output = controller.outputs[outputIndex];
     if (output) {
-      const newOutput = output.toggleBar(barIndex);
-      const updatedController = controller.replaceOutput(outputIndex, newOutput);
-      replaceController(controllerIndex, updatedController);
+      controllers.value = controllers.value.replace(controllerIndex, controller.replaceOutput(outputIndex, output.toggleBar(barIndex)));
     }
   }
 };
 
-const replaceController = (index: number, newController: Controller) => {
-  const newControllers = [...controllers.value];
-  newControllers[index] = newController;
-  controllers.value = newControllers;
-};
-
 const downloadExampleCsv = () => {
-  downloadFile(CsvExporter.toCsv(controllers.value), 'neon-addressing.csv', 'text/csv;charset=utf-8;');
+  downloadFile(CsvExporter.toCsv(controllers.value.values), 'neon-addressing.csv', 'text/csv;charset=utf-8;');
 };
 </script>
 

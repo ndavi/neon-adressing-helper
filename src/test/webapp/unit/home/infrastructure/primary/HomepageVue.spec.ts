@@ -1,6 +1,7 @@
 import HomepageVue from '@/home/infrastructure/primary/HomepageVue.vue';
 import type { VueWrapper } from '@vue/test-utils';
 import { mount } from '@vue/test-utils';
+import type { Mock } from 'vitest';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('When visiting the homepage', () => {
@@ -127,7 +128,7 @@ const whenConfiguringExampleState = async (wrapper: VueWrapper) => {
   }
 };
 
-const thenCsvContentIsCorrect = async (createObjectURLMock: any) => {
+const thenCsvContentIsCorrect = async (createObjectURLMock: Mock) => {
   const expectedCsv = `Fixture Definition Name;Start Universe;Start Channel;StartX;StartY;EndX;EndY;Width;Fixture Name
 BARRE NEON - 2M;0;1;10;0;10;200;15;CONTROLLEUR-0/C0-OUT-1/LED-0
 BARRE NEON - 2M;0;358;10;200;10;400;15;CONTROLLEUR-0/C0-OUT-1/LED-1
@@ -179,7 +180,11 @@ BARRE NEON - 2M;84;95;1890;0;1890;200;15;CONTROLLEUR-4/C4-OUT-4/LED-46
 BARRE NEON - 2M;84;452;1890;200;1890;400;15;CONTROLLEUR-4/C4-OUT-4/LED-47`;
 
   expect(createObjectURLMock).toHaveBeenCalledTimes(1);
-  const blob = createObjectURLMock.mock.calls[0][0];
+  const calls = createObjectURLMock.mock.calls;
+  if (calls.length === 0 || !calls[0]) {
+    throw new Error('No calls to createObjectURL');
+  }
+  const blob = calls[0][0];
   if (!(blob instanceof Blob)) {
     throw new Error('Expected a Blob');
   }
@@ -189,7 +194,7 @@ BARRE NEON - 2M;84;452;1890;200;1890;400;15;CONTROLLEUR-4/C4-OUT-4/LED-47`;
   expect(text.trim()).toBe(expectedCsv.trim());
 };
 
-const thenFileIsDownloaded = (linkMock: HTMLAnchorElement, clickMock: any) => {
+const thenFileIsDownloaded = (linkMock: HTMLAnchorElement, clickMock: Mock) => {
   expect(linkMock.setAttribute).toHaveBeenCalledWith('download', 'neon-addressing.csv');
   expect(clickMock).toHaveBeenCalled();
 };

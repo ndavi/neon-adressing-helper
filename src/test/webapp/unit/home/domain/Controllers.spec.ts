@@ -30,6 +30,17 @@ describe('Controllers Domain', () => {
     expect(controllerAt(resized, 0).universe).toBe(0);
     expect(controllerAt(resized, 1).universe).toBe(20);
   });
+
+  it('Should replace a controller at a given index', () => {
+    const controllers = Controllers.empty().resize(2);
+    const originalController = controllerAt(controllers, 0);
+    const modifiedController = originalController.withUniverse(999);
+
+    const updated = controllers.replace(0, modifiedController);
+
+    expect(controllerAt(updated, 0).universe).toBe(999);
+    expect(controllerAt(updated, 1)).toBe(controllerAt(controllers, 1));
+  });
 });
 
 const controllerAt = (controllers: Controllers, index: number): Controller => Optional.ofNullable(controllers.values[index]).orElseThrow();

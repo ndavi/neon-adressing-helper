@@ -35,6 +35,14 @@ export class Controllers {
     return new Controllers({ values: this.props.values.slice(0, newCount) });
   }
 
+  replace(index: number, controller: Controller): Controllers {
+    const newValues = [...this.props.values];
+    if (index >= 0 && index < newValues.length) {
+      newValues[index] = controller;
+    }
+    return new Controllers({ values: newValues });
+  }
+
   private shouldAddControllers(newCount: number): boolean {
     return newCount > this.props.values.length;
   }

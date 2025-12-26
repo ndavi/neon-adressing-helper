@@ -1,3 +1,5 @@
+import { Optional } from '@/common/domain/Optional';
+
 export type BarType = '2M' | '1M';
 
 interface BarProps {
@@ -53,10 +55,9 @@ export class LedOutput {
 
   toggleBar(index: number): LedOutput {
     const newBars = [...this.props.bars];
-    const bar = newBars[index];
-    if (bar !== undefined) {
+    Optional.ofNullable(newBars[index]).ifPresent((bar: Bar) => {
       newBars[index] = bar.toggle();
-    }
+    });
     return new LedOutput({ bars: newBars });
   }
 

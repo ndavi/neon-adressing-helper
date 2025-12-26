@@ -36,6 +36,7 @@ Il est **impératif** de respecter le cycle TDD pour tout nouveau développement
 3.  🔵 **Refactor** : Améliorer la qualité du code tout en gardant les tests au vert.
 
 À la fin de chaque fonctionnalité, un passage de **refactorisation** est obligatoire sur le code écrit. Il faut privilégier l'**extraction de méthodes** (Extract Method) pour rendre le code expressif et faciliter sa compréhension immédiate.
+Toute condition `if` un peu complexe doit être extraite dans une méthode nommée (ex: `isEligible(...)`) pour clarifier l'intention métier.
 
 Le code de **test** doit être structuré selon le pattern **Given-When-Then**. Cette structure doit être rendue explicite par l'extraction de méthodes dont le nom commence par `given`, `when` ou `then` (ex: `givenMockedDownload`, `whenClickingOnDownload`, `thenFileIsDownloaded`).
 

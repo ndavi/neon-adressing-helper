@@ -16,11 +16,18 @@ export class Controllers {
   }
 
   resize(newCount: number): Controllers {
-    if (newCount > this._values.length) {
+    if (this.shouldAddControllers(newCount)) {
       const toAddCount = newCount - this._values.length;
-      const toAdd = Array.from({ length: toAddCount }, () => Controller.new());
+      const toAdd = Array.from({ length: toAddCount }, (_, i) => {
+        const index = this._values.length + i;
+        return Controller.of(index * 20, Controller.new().outputs);
+      });
       return new Controllers([...this._values, ...toAdd]);
     }
     return new Controllers(this._values.slice(0, newCount));
+  }
+
+  private shouldAddControllers(newCount: number): boolean {
+    return newCount > this._values.length;
   }
 }

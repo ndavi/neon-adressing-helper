@@ -5,8 +5,8 @@ import { describe, expect, it } from 'vitest';
 describe('Controller', () => {
   it('should initialize with default values', () => {
     const controller = Controller.new();
-    expect(controller.universe).toBe(1);
-    expect(controller.outputs).toHaveLength(16);
+    expect(controller.universe).toBe(0);
+    expect(controller.outputs).toHaveLength(1);
   });
 
   it('should resize outputs', () => {
@@ -15,14 +15,9 @@ describe('Controller', () => {
   });
 
   it('should keep existing outputs when increasing size', () => {
-    const initialController = Controller.new().resizeOutputs(1);
-    const outputWithBar = initialController.outputs[0].addBar();
-
-    // Simulate updating the controller with the modified output
-    // Wait, Controller needs a way to update an output or replace the list.
-    // For this test, let's assume we create a controller with specific outputs
-
+    const outputWithBar = LedOutput.new().addBar();
     const controllerWithBar = Controller.of(1, [outputWithBar]);
+
     const resized = controllerWithBar.resizeOutputs(2);
 
     expect(resized.outputs).toHaveLength(2);

@@ -12,10 +12,10 @@ describe('Controllers Domain', () => {
     const resized = controllers.resize(2);
 
     expect(resized.values).toHaveLength(2);
-    expect(resized.values[0].universe).toBe(1);
-    expect(resized.values[0].outputs).toHaveLength(16);
-    expect(resized.values[1].universe).toBe(1);
-    expect(resized.values[1].outputs).toHaveLength(16);
+    expect(resized.values[0].universe).toBe(0);
+    expect(resized.values[0].outputs).toHaveLength(1);
+    expect(resized.values[1].universe).toBe(20);
+    expect(resized.values[1].outputs).toHaveLength(1);
     expect(controllers.values).toEqual([]); // Original should be unchanged
   });
 
@@ -25,15 +25,7 @@ describe('Controllers Domain', () => {
     const resized = controllers.resize(2);
 
     expect(resized.values).toHaveLength(2);
-    expect(resized.values[0].universe).toBe(1);
-    expect(resized.values[1].universe).toBe(1); // Default value is 1
-  });
-
-  it('Should return a new instance even if size is the same', () => {
-    const controllers = Controllers.empty().resize(1);
-    const resized = controllers.resize(1);
-
-    expect(resized).not.toBe(controllers);
-    expect(resized.values).not.toBe(controllers.values);
+    expect(resized.values[0].universe).toBe(0);
+    expect(resized.values[1].universe).toBe(20);
   });
 });

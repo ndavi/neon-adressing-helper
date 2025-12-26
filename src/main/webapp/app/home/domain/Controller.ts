@@ -7,11 +7,7 @@ export class Controller {
   ) {}
 
   static new(): Controller {
-    // Default 16 outputs
-    return new Controller(
-      1,
-      Array.from({ length: 16 }, () => LedOutput.new()),
-    );
+    return new Controller(0, [LedOutput.new()]);
   }
 
   static of(universe: number, outputs: readonly LedOutput[]): Controller {
@@ -31,12 +27,16 @@ export class Controller {
   }
 
   resizeOutputs(newCount: number): Controller {
-    if (newCount > this._outputs.length) {
+    if (this.shouldAddOutputs(newCount)) {
       const toAddCount = newCount - this._outputs.length;
       const toAdd = Array.from({ length: toAddCount }, () => LedOutput.new());
       return new Controller(this._universe, [...this._outputs, ...toAdd]);
     }
     return new Controller(this._universe, this._outputs.slice(0, newCount));
+  }
+
+  private shouldAddOutputs(newCount: number): boolean {
+    return newCount > this._outputs.length;
   }
 
   replaceOutput(index: number, newOutput: LedOutput): Controller {

@@ -1,5 +1,5 @@
 import HomePage from '@/home/infrastructure/primary/HomePage.vue';
-import { selector } from '@test/DataSelectorHelper';
+import { selector } from '@test/DataSelector.ts';
 import type { VueWrapper } from '@vue/test-utils';
 import { mount } from '@vue/test-utils';
 import type { Mock } from 'vitest';

@@ -2,7 +2,7 @@ import { Optional } from '@/common/domain/Optional';
 import type { BarType } from '@/home/domain/LedOutput';
 import { LedOutput } from '@/home/domain/LedOutput';
 import LedOutputCard from '@/home/infrastructure/primary/LedOutputCard.vue';
-import { selector } from '@test/DataSelectorHelper';
+import { selector } from '@test/DataSelector.ts';
 import { type VueWrapper, mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 

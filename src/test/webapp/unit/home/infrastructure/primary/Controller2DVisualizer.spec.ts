@@ -3,7 +3,7 @@ import { Controllers } from '@/home/domain/Controllers';
 import { LedOutput } from '@/home/domain/LedOutput';
 import { Universe } from '@/home/domain/Universe';
 import Controller2DVisualizer from '@/home/infrastructure/primary/Controller2DVisualizer.vue';
-import { selector } from '@test/DataSelectorHelper';
+import { selector } from '@test/DataSelector.ts';
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 

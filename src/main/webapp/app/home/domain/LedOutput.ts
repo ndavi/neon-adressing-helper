@@ -1,50 +1,58 @@
 export type BarType = '2M' | '1M';
 
+interface BarProps {
+  type: BarType;
+}
+
 export class Bar {
-  private constructor(private readonly _type: BarType) {}
+  private constructor(private readonly props: BarProps) {}
 
   static new(type: BarType = '2M'): Bar {
-    return new Bar(type);
+    return new Bar({ type });
   }
 
   get type(): BarType {
-    return this._type;
+    return this.props.type;
   }
 
   toggle(): Bar {
-    return new Bar(this.is2M() ? '1M' : '2M');
+    return Bar.new(this.is2M() ? '1M' : '2M');
   }
 
   private is2M(): boolean {
-    return this._type === '2M';
+    return this.props.type === '2M';
   }
 }
 
+interface LedOutputProps {
+  bars: readonly Bar[];
+}
+
 export class LedOutput {
-  private constructor(private readonly _bars: readonly Bar[] = []) {}
+  private constructor(private readonly props: LedOutputProps) {}
 
   static new(): LedOutput {
-    return new LedOutput();
+    return new LedOutput({ bars: [] });
   }
 
   get bars(): readonly Bar[] {
-    return this._bars;
+    return this.props.bars;
   }
 
   addBar(): LedOutput {
-    return new LedOutput([...this._bars, Bar.new()]);
+    return new LedOutput({ bars: [...this.props.bars, Bar.new()] });
   }
 
   toggleBar(index: number): LedOutput {
-    const newBars = [...this._bars];
+    const newBars = [...this.props.bars];
     const bar = newBars[index];
     if (bar !== undefined) {
       newBars[index] = bar.toggle();
     }
-    return new LedOutput(newBars);
+    return new LedOutput({ bars: newBars });
   }
 
   private hasBarAtIndex(index: number): boolean {
-    return index >= 0 && index < this._bars.length;
+    return index >= 0 && index < this.props.bars.length;
   }
 }

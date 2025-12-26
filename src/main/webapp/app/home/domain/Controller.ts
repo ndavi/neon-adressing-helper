@@ -1,52 +1,54 @@
 import { LedOutput } from './LedOutput';
 
+export interface ControllerProps {
+  universe: number;
+  outputs: readonly LedOutput[];
+  startX: number;
+}
+
 export class Controller {
-  private constructor(
-    private readonly _universe: number,
-    private readonly _outputs: readonly LedOutput[],
-    private readonly _startX: number,
-  ) {}
+  private constructor(private readonly props: ControllerProps) {}
 
   static new(): Controller {
-    return new Controller(0, [LedOutput.new()], 0);
+    return new Controller({ universe: 0, outputs: [LedOutput.new()], startX: 0 });
   }
 
-  static of(universe: number, outputs: readonly LedOutput[], startX: number): Controller {
-    return new Controller(universe, outputs, startX);
+  static of(props: ControllerProps): Controller {
+    return new Controller(props);
   }
 
   get universe(): number {
-    return this._universe;
+    return this.props.universe;
   }
 
   get outputs(): readonly LedOutput[] {
-    return this._outputs;
+    return this.props.outputs;
   }
 
   get startX(): number {
-    return this._startX;
+    return this.props.startX;
   }
 
   withUniverse(newUniverse: number): Controller {
-    return new Controller(newUniverse, this._outputs, this._startX);
+    return new Controller({ ...this.props, universe: newUniverse });
   }
 
   resizeOutputs(newCount: number): Controller {
     if (this.shouldAddOutputs(newCount)) {
-      const toAddCount = newCount - this._outputs.length;
+      const toAddCount = newCount - this.props.outputs.length;
       const toAdd = Array.from({ length: toAddCount }, () => LedOutput.new());
-      return new Controller(this._universe, [...this._outputs, ...toAdd], this._startX);
+      return new Controller({ ...this.props, outputs: [...this.props.outputs, ...toAdd] });
     }
-    return new Controller(this._universe, this._outputs.slice(0, newCount), this._startX);
+    return new Controller({ ...this.props, outputs: this.props.outputs.slice(0, newCount) });
   }
 
   private shouldAddOutputs(newCount: number): boolean {
-    return newCount > this._outputs.length;
+    return newCount > this.props.outputs.length;
   }
 
   replaceOutput(index: number, newOutput: LedOutput): Controller {
-    const newOutputs = [...this._outputs];
+    const newOutputs = [...this.props.outputs];
     newOutputs[index] = newOutput;
-    return new Controller(this._universe, newOutputs, this._startX);
+    return new Controller({ ...this.props, outputs: newOutputs });
   }
 }

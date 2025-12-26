@@ -56,6 +56,36 @@ Le domaine doit être le plus **immuable** possible. On privilégie les types pr
 
 Il est interdit de déplacer du code dans un dossier **shared** ou **common** tant qu'il n'est pas effectivement utilisé par au moins deux contextes différents. On privilégie la duplication ou la localisation dans le contexte initial jusqu'à ce qu'un besoin de partage réel émerge.
 
+### Initialisation des Objets du Domaine
+
+Chaque classe du domaine (Entité ou Value Object) doit être initialisée via **une seule interface** passée au constructeur, regroupant toutes ses propriétés. Cela remplace les longues listes d'arguments.
+
+**Exemple :**
+
+```typescript
+// 1. Définir l'interface des propriétés
+interface ControllerProps {
+  universe: number;
+  outputs: readonly LedOutput[];
+  startX: number;
+}
+
+// 2. Utiliser l'interface dans le constructeur
+export class Controller {
+  private constructor(private readonly props: ControllerProps) {}
+
+  // Factory method utilisant l'interface (ou des arguments nommés si pertinent pour l'API publique)
+  static of(props: ControllerProps): Controller {
+    return new Controller(props);
+  }
+
+  // Accesseurs
+  get universe(): number {
+    return this.props.universe;
+  }
+}
+```
+
 ## Development Workflow
 
 1. **End-to-End (E2E) Test**: Write Playwright tests only when necessary, adhering to TDD principles. Focus on verifying critical user journeys and global application stability, rather than granular feature testing.

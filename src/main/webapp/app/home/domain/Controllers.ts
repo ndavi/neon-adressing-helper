@@ -1,33 +1,41 @@
 import { Controller } from './Controller';
 
+interface ControllersProps {
+  values: readonly Controller[];
+}
+
 export class Controllers {
-  private constructor(private readonly _values: readonly Controller[] = []) {}
+  private constructor(private readonly props: ControllersProps) {}
 
   static empty(): Controllers {
-    return new Controllers();
+    return new Controllers({ values: [] });
   }
 
   static of(values: readonly Controller[]): Controllers {
-    return new Controllers(values);
+    return new Controllers({ values });
   }
 
   get values(): readonly Controller[] {
-    return this._values;
+    return this.props.values;
   }
 
   resize(newCount: number): Controllers {
     if (this.shouldAddControllers(newCount)) {
-      const toAddCount = newCount - this._values.length;
+      const toAddCount = newCount - this.props.values.length;
       const toAdd = Array.from({ length: toAddCount }, (_, i) => {
-        const index = this._values.length + i;
-        return Controller.of(index * 20, Controller.new().outputs, index * 400);
+        const index = this.props.values.length + i;
+        return Controller.of({
+          universe: index * 20,
+          outputs: Controller.new().outputs,
+          startX: index * 400,
+        });
       });
-      return new Controllers([...this._values, ...toAdd]);
+      return new Controllers({ values: [...this.props.values, ...toAdd] });
     }
-    return new Controllers(this._values.slice(0, newCount));
+    return new Controllers({ values: this.props.values.slice(0, newCount) });
   }
 
   private shouldAddControllers(newCount: number): boolean {
-    return newCount > this._values.length;
+    return newCount > this.props.values.length;
   }
 }

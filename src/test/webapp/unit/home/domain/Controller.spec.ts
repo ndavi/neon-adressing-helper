@@ -17,7 +17,7 @@ describe('Controller', () => {
 
   it('should keep existing outputs when increasing size', () => {
     const outputWithBar = LedOutput.new().addBar();
-    const controllerWithBar = Controller.of(1, [outputWithBar], 0);
+    const controllerWithBar = Controller.of({ universe: 1, outputs: [outputWithBar], startX: 0 });
 
     const resized = controllerWithBar.resizeOutputs(2);
 

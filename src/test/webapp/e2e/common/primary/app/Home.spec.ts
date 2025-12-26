@@ -20,7 +20,7 @@ test.describe('Home', () => {
     await expect(homePage.visualizerNodes.first()).toContainText('U: 0');
 
     const download = await homePage.downloadExampleCsv();
-    expect(download.suggestedFilename()).toBe('example.csv');
+    expect(download.suggestedFilename()).toBe('neon-addressing.csv');
 
     await homePage.takeScreenshot('homepage-ux');
   });

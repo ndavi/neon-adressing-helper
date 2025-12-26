@@ -45,6 +45,21 @@ describe('Controllers Domain', () => {
     const controllers = Controllers.init();
     expect(() => controllers.resize(-1)).toThrow('Controllers count cannot be negative');
   });
+
+  it('Should duplicate a controller and append it to the end with a new index', () => {
+    const controllers = Controllers.init().resize(2);
+    const originalController = controllerAt(controllers, 0).withUniverse(42).resizeOutputs(3);
+    const updatedControllers = controllers.replace(0, originalController);
+
+    const duplicatedControllers = updatedControllers.duplicate(0);
+
+    expect(duplicatedControllers.values).toHaveLength(3);
+
+    const duplicated = controllerAt(duplicatedControllers, 2);
+    expect(duplicated.universe).toBe(42);
+    expect(duplicated.outputs).toHaveLength(3);
+    expect(duplicated.index).toBe(2);
+  });
 });
 
 const controllerAt = (controllers: Controllers, index: number): Controller => Optional.ofNullable(controllers.values[index]).orElseThrow();

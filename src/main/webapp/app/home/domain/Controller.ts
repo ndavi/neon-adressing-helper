@@ -58,4 +58,11 @@ export class Controller {
     newOutputs[index] = newOutput;
     return new Controller({ ...this.props, outputs: newOutputs });
   }
+
+  duplicate(newIndex: number): Controller {
+    return new Controller({
+      ...this.props,
+      index: newIndex,
+    });
+  }
 }

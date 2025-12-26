@@ -87,6 +87,27 @@ describe('When visiting the homepage', () => {
     if (!Array.isArray(controllersProp)) throw new Error('Controllers prop is not an array');
     expect(controllersProp[0].universe).toBe(0);
   });
+
+  it('Should duplicate a controller when clicking the duplicate button', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 1);
+
+    // Change some values in the first controller
+    const card = wrapper.find(selector('controller-card'));
+    const universeInput = card.find('input');
+    await universeInput.setValue(100);
+
+    await card.find(selector('duplicate-controller')).trigger('click');
+
+    thenControllerCardsAreDisplayed(wrapper, 2);
+
+    const cards = wrapper.findAll(selector('controller-card'));
+    const secondCard = cards[1];
+    if (!secondCard) throw new Error('Second card not found');
+    const secondUniverseInput = secondCard.find('input').element;
+    if (!(secondUniverseInput instanceof HTMLInputElement)) throw new Error('Not an input');
+    expect(secondUniverseInput.value).toBe('100');
+  });
 });
 
 const givenHomepage = (): VueWrapper => {

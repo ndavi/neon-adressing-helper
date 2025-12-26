@@ -51,6 +51,15 @@ export class Controllers {
     return new Controllers({ values: newValues });
   }
 
+  duplicate(index: number): Controllers {
+    const controllerToDuplicate = this.props.values[index];
+    if (!controllerToDuplicate) {
+      return this;
+    }
+    const duplicated = controllerToDuplicate.duplicate(this.props.values.length);
+    return new Controllers({ values: [...this.props.values, duplicated] });
+  }
+
   private shouldAddControllers(newCount: number): boolean {
     return newCount > this.props.values.length;
   }

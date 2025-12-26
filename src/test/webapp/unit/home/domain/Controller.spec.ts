@@ -44,4 +44,23 @@ describe('Controller', () => {
     const controller = Controller.new();
     expect(() => controller.withUniverse(-1)).toThrow('Universe cannot be negative');
   });
+
+  it('should duplicate with a new index', () => {
+    const controller = Controller.of({
+      universe: Universe.of(42),
+      outputs: [LedOutput.new().addBar()],
+      index: 1,
+    });
+
+    const duplicated = controller.duplicate(5);
+
+    expect(duplicated.universe).toBe(42);
+    expect(duplicated.outputs).toHaveLength(1);
+    const output = duplicated.outputs[0];
+    if (!output) {
+      throw new Error('Output should be defined');
+    }
+    expect(output.bars).toHaveLength(1);
+    expect(duplicated.index).toBe(5);
+  });
 });

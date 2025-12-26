@@ -1,6 +1,16 @@
 <template>
   <v-card class="controller-card" variant="outlined" data-selector="controller-card">
-    <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
+    <v-card-title class="d-flex align-center">
+      Contrôleur {{ index + 1 }}
+      <v-spacer></v-spacer>
+      <v-btn
+        icon="mdi-content-copy"
+        variant="text"
+        density="comfortable"
+        data-selector="duplicate-controller"
+        @click="emit('duplicate')"
+      ></v-btn>
+    </v-card-title>
     <v-card-text>
       <v-text-field
         :model-value="controller.universe"
@@ -54,5 +64,6 @@ const emit = defineEmits<{
   'add-bar': [outputIndex: number];
   'remove-bar': [outputIndex: number];
   'toggle-bar': [outputIndex: number, barIndex: number];
+  duplicate: [];
 }>();
 </script>

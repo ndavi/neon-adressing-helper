@@ -20,6 +20,7 @@
           @add-bar="addBar(index, $event)"
           @remove-bar="removeBar(index, $event)"
           @toggle-bar="(outputIndex, barIndex) => toggleBar(index, outputIndex, barIndex)"
+          @duplicate="duplicateController(index)"
         />
       </div>
     </div>
@@ -91,6 +92,10 @@ const toggleBar = (controllerIndex: number, outputIndex: number, barIndex: numbe
       );
     }
   }
+};
+
+const duplicateController = (index: number) => {
+  emit('update:controllers', props.controllers.duplicate(index));
 };
 </script>
 

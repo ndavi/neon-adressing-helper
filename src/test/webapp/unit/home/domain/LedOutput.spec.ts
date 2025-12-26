@@ -27,6 +27,12 @@ describe('LedOutput Domain', () => {
     const updatedOutput = whenTogglingBarAtIndex(output, 0);
     thenBarIsType(barAt(updatedOutput, 0), '2M');
   });
+
+  it('Should remove the last bar', () => {
+    const output = givenAnOutputWithOne2MBar();
+    const updatedOutput = output.removeBar();
+    thenOutputHasNoBars(updatedOutput);
+  });
 });
 
 const barAt = (output: LedOutput, index: number): Bar => Optional.ofNullable(output.bars[index]).orElseThrow();

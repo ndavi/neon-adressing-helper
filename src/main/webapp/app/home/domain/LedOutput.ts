@@ -43,6 +43,14 @@ export class LedOutput {
     return new LedOutput({ bars: [...this.props.bars, Bar.new()] });
   }
 
+  removeBar(): LedOutput {
+    if (this.props.bars.length === 0) {
+      return this;
+    }
+    const newBars = this.props.bars.slice(0, -1);
+    return new LedOutput({ bars: newBars });
+  }
+
   toggleBar(index: number): LedOutput {
     const newBars = [...this.props.bars];
     const bar = newBars[index];

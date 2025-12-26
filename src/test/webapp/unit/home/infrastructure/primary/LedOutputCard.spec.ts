@@ -32,6 +32,15 @@ describe('LedOutputCard', () => {
     thenToggleBarEventIsEmittedWithIndex(wrapper, 0);
   });
 
+  it('Should emit "remove-bar" when clicking the minus button', async () => {
+    const output = givenAnEmptyOutput();
+    const wrapper = givenALedOutputCard(output);
+
+    await whenClickingRemoveBar(wrapper);
+
+    thenRemoveBarEventIsEmitted(wrapper);
+  });
+
   it('Should display correct width for bar type', () => {
     const output = givenAnOutputWithOneBarOfType('2M');
     const wrapper = givenALedOutputCard(output);
@@ -77,7 +86,11 @@ const givenALedOutputCard = (output: LedOutput): VueWrapper => {
 };
 
 const whenClickingAddBar = async (wrapper: VueWrapper) => {
-  await wrapper.find('button').trigger('click');
+  await wrapper.find('.mdi-plus').trigger('click');
+};
+
+const whenClickingRemoveBar = async (wrapper: VueWrapper) => {
+  await wrapper.find('.mdi-minus').trigger('click');
 };
 
 const whenClickingBarAtIndex = async (wrapper: VueWrapper, index: number) => {
@@ -96,6 +109,10 @@ const thenItDisplaysBarCount = (wrapper: VueWrapper, count: number) => {
 
 const thenAddBarEventIsEmitted = (wrapper: VueWrapper) => {
   expect(wrapper.emitted('add-bar')).toBeTruthy();
+};
+
+const thenRemoveBarEventIsEmitted = (wrapper: VueWrapper) => {
+  expect(wrapper.emitted('remove-bar')).toBeTruthy();
 };
 
 const thenToggleBarEventIsEmittedWithIndex = (wrapper: VueWrapper, index: number) => {

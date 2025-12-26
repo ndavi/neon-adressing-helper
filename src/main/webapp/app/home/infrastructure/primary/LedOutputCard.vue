@@ -4,9 +4,11 @@
       <span class="text-subtitle-2">Sortie {{ index + 1 }}</span>
       <v-spacer></v-spacer>
       <span class="text-caption mr-2">{{ output.bars.length }} barres</span>
+      <v-btn icon="mdi-minus" size="x-small" variant="text" @click="emit('remove-bar')"></v-btn>
       <v-btn icon="mdi-plus" size="x-small" variant="text" @click="emit('add-bar')"></v-btn>
     </v-card-text>
-    <div v-if="output.bars.length > 0" class="d-flex px-4 pb-2 flex-wrap">
+
+    <div class="d-flex flex-wrap gap-1 px-2 pb-2">
       <div
         v-for="(bar, i) in output.bars"
         :key="i"
@@ -31,6 +33,7 @@ defineProps<{
 
 const emit = defineEmits<{
   'add-bar': [];
+  'remove-bar': [];
   'toggle-bar': [index: number];
 }>();
 

@@ -45,6 +45,7 @@
                     :output="output"
                     :index="outputIndex"
                     @add-bar="addBar(index, outputIndex)"
+                    @remove-bar="removeBar(index, outputIndex)"
                     @toggle-bar="toggleBar(index, outputIndex, $event)"
                   />
                 </div>
@@ -105,6 +106,18 @@ const addBar = (controllerIndex: number, outputIndex: number) => {
     const output = controller.outputs[outputIndex];
     if (output) {
       const newOutput = output.addBar();
+      const updatedController = controller.replaceOutput(outputIndex, newOutput);
+      replaceController(controllerIndex, updatedController);
+    }
+  }
+};
+
+const removeBar = (controllerIndex: number, outputIndex: number) => {
+  const controller = controllers.value[controllerIndex];
+  if (controller) {
+    const output = controller.outputs[outputIndex];
+    if (output) {
+      const newOutput = output.removeBar();
       const updatedController = controller.replaceOutput(outputIndex, newOutput);
       replaceController(controllerIndex, updatedController);
     }

@@ -1,4 +1,5 @@
 import { LedOutput } from './LedOutput';
+import { OutputsCount } from './OutputsCount';
 import { Universe } from './Universe';
 
 export interface ControllerProps {
@@ -39,18 +40,13 @@ export class Controller {
   }
 
   resizeOutputs(newCount: number): Controller {
-    if (newCount < 0) {
-      throw new Error('Outputs count cannot be negative');
-    }
-    if (newCount > 8) {
-      throw new Error('A controller cannot have more than 8 outputs');
-    }
-    if (this.shouldAddOutputs(newCount)) {
-      const toAddCount = newCount - this.props.outputs.length;
+    const targetCount = OutputsCount.of(newCount).get();
+    if (this.shouldAddOutputs(targetCount)) {
+      const toAddCount = targetCount - this.props.outputs.length;
       const toAdd = Array.from({ length: toAddCount }, () => LedOutput.new());
       return new Controller({ ...this.props, outputs: [...this.props.outputs, ...toAdd] });
     }
-    return new Controller({ ...this.props, outputs: this.props.outputs.slice(0, newCount) });
+    return new Controller({ ...this.props, outputs: this.props.outputs.slice(0, targetCount) });
   }
 
   private shouldAddOutputs(newCount: number): boolean {

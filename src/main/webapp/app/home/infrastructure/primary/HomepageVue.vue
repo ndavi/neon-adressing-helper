@@ -1,76 +1,76 @@
 <template>
-  <v-container fluid class="full-height align-start">
-    <v-row class="full-height">
-      <!-- Left Column: Controls -->
-      <v-col cols="12" md="6" class="overflow-y-auto scrollable-column">
-        <div class="mx-auto" style="max-width: 400px">
-          <v-text-field
-            id="controllers-count"
-            v-model.number="controllersCount"
-            label="Nombre de contrôleurs"
-            type="number"
-            min="0"
-            variant="outlined"
-            class="mb-4"
-          ></v-text-field>
+  <v-layout class="full-height">
+    <!-- Left Drawer: Controls -->
+    <v-navigation-drawer location="left" width="400" permanent class="bg-surface">
+      <div class="pa-4 full-height d-flex flex-column">
+        <v-text-field
+          id="controllers-count"
+          v-model.number="controllersCount"
+          label="Nombre de contrôleurs"
+          type="number"
+          min="0"
+          variant="outlined"
+          class="mb-4 flex-grow-0"
+        ></v-text-field>
+
+        <div class="overflow-y-auto flex-grow-1 pr-2">
+          <v-row>
+            <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12">
+              <v-card class="controller-card mb-4" variant="outlined">
+                <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
+                <v-card-text>
+                  <v-text-field
+                    :model-value="controller.universe"
+                    label="Univers de départ"
+                    type="number"
+                    min="0"
+                    variant="outlined"
+                    hide-details="auto"
+                    class="mb-3"
+                    @update:model-value="updateUniverse(index, +$event)"
+                  ></v-text-field>
+                  <v-text-field
+                    :model-value="controller.outputs.length"
+                    label="Nombre de sorties"
+                    type="number"
+                    min="0"
+                    max="8"
+                    variant="outlined"
+                    hide-details="auto"
+                    class="mb-3"
+                    @update:model-value="updateOutputsCount(index, +$event)"
+                  ></v-text-field>
+
+                  <div class="outputs-list mt-4 text-left">
+                    <LedOutputCard
+                      v-for="(output, outputIndex) in controller.outputs"
+                      :key="outputIndex"
+                      :output="output"
+                      :index="outputIndex"
+                      @add-bar="addBar(index, outputIndex)"
+                      @remove-bar="removeBar(index, outputIndex)"
+                      @toggle-bar="toggleBar(index, outputIndex, $event)"
+                    />
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
         </div>
+      </div>
+    </v-navigation-drawer>
 
-        <v-row class="mt-5">
-          <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12">
-            <v-card class="controller-card" variant="outlined">
-              <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
-              <v-card-text>
-                <v-text-field
-                  :model-value="controller.universe"
-                  label="Univers de départ"
-                  type="number"
-                  min="0"
-                  variant="outlined"
-                  hide-details="auto"
-                  class="mb-3"
-                  @update:model-value="updateUniverse(index, +$event)"
-                ></v-text-field>
-                <v-text-field
-                  :model-value="controller.outputs.length"
-                  label="Nombre de sorties"
-                  type="number"
-                  min="0"
-                  max="8"
-                  variant="outlined"
-                  hide-details="auto"
-                  class="mb-3"
-                  @update:model-value="updateOutputsCount(index, +$event)"
-                ></v-text-field>
+    <!-- Main Content: Visualization -->
+    <v-main class="bg-grey-lighten-4 fill-height">
+      <Controller2DVisualizer :controllers="controllers.values" class="fill-height" />
+    </v-main>
 
-                <div class="outputs-list mt-4 text-left">
-                  <LedOutputCard
-                    v-for="(output, outputIndex) in controller.outputs"
-                    :key="outputIndex"
-                    :output="output"
-                    :index="outputIndex"
-                    @add-bar="addBar(index, outputIndex)"
-                    @remove-bar="removeBar(index, outputIndex)"
-                    @toggle-bar="toggleBar(index, outputIndex, $event)"
-                  />
-                </div>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-col>
-
-      <!-- Right Column: Visualization -->
-      <v-col cols="12" md="6" class="fill-height bg-grey-lighten-4 pa-0">
-        <Controller2DVisualizer :controllers="controllers.values" />
-      </v-col>
-    </v-row>
-  </v-container>
-
-  <v-footer app elevation="4" class="justify-center">
-    <v-btn color="primary" size="large" class="button" prepend-icon="mdi-download" @click="downloadExampleCsv">
-      Télécharger un exemple CSV
-    </v-btn>
-  </v-footer>
+    <v-footer app elevation="4" class="justify-center">
+      <v-btn color="primary" size="large" class="button" prepend-icon="mdi-download" @click="downloadExampleCsv">
+        Télécharger un exemple CSV
+      </v-btn>
+    </v-footer>
+  </v-layout>
 </template>
 
 <script setup lang="ts">
@@ -141,9 +141,6 @@ const downloadExampleCsv = () => {
 
 <style scoped>
 @media (min-width: 960px) {
-  .scrollable-column {
-    max-height: 100dvh;
-  }
   .full-height {
     height: 100%;
   }

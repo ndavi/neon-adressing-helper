@@ -29,7 +29,7 @@ defineProps<{
 <style scoped>
 .visualizer-viewport {
   width: 100%;
-  height: 600px;
+  height: 100%;
   overflow: auto;
   position: relative;
   background-color: #f5f5f5;

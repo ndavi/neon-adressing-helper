@@ -19,7 +19,7 @@ export class CsvController {
     return new CsvController(controller);
   }
 
-  get lines(): readonly CsvLine[] {
+  lines(startLineIndex: number): readonly CsvLine[] {
     const lines: CsvLine[] = [];
     let currentGlobalChannel = this.controller.universe * 512;
 
@@ -46,7 +46,7 @@ export class CsvController {
           endX: currentX,
           endY: currentY + length,
           width,
-          fixtureName: `${this.controller.name}/C${this.controller.index}-OUT-${outputIndex + 1}/LED-${lines.length}`,
+          fixtureName: `${this.controller.name}/C${this.controller.index}-OUT-${outputIndex + 1}/LED-${startLineIndex + lines.length}`,
         });
 
         currentGlobalChannel += channels;

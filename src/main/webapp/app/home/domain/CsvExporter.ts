@@ -6,9 +6,13 @@ export class CsvExporter {
     const header = 'Fixture Definition Name;Start Universe;Start Channel;StartX;StartY;EndX;EndY;Width;Fixture Name';
     const lines: string[] = [header];
 
+    let lineCount = 0;
     for (const controller of controllers) {
       const csvController = CsvController.of(controller);
-      csvController.lines.forEach(line => {
+      const controllerLines = csvController.lines(lineCount);
+      lineCount += controllerLines.length;
+
+      controllerLines.forEach(line => {
         lines.push(
           [
             line.fixtureDefinitionName,

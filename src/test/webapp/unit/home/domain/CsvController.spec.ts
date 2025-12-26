@@ -13,7 +13,7 @@ describe('CsvController', () => {
     });
 
     // When
-    const csvLines = CsvController.of(controller).lines;
+    const csvLines = CsvController.of(controller).lines(0);
 
     // Then
     expect(csvLines).toHaveLength(1);

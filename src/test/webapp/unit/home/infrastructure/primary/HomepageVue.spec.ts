@@ -8,6 +8,8 @@ describe('When visiting the homepage', () => {
     const { createObjectURLMock, linkMock, clickMock } = givenMockedDomForDownload();
     const wrapper = givenHomepage();
 
+    await whenEnteringNumberOfControllers(wrapper, 5);
+    await whenConfiguringExampleState(wrapper);
     await whenClickingOnDownload(wrapper);
 
     await thenCsvContentIsCorrect(createObjectURLMock);
@@ -81,6 +83,50 @@ const whenEnteringNumberOfControllers = async (wrapper: VueWrapper, count: numbe
   await input.setValue(count);
 };
 
+const whenConfiguringExampleState = async (wrapper: VueWrapper) => {
+  // Configure controller counts
+  const cards = wrapper.findAll('.controller-card');
+  for (let i = 0; i < 5; i++) {
+    const targetCount = i < 4 ? 8 : 4;
+    const card = cards[i];
+    if (!card) throw new Error(`Controller card ${i} not found`);
+    const inputs = card.findAll('input');
+    // Index 1: outputs count
+    const input = inputs[1];
+    if (!input) throw new Error('Output input not found');
+    await input.setValue(targetCount);
+  }
+
+  // Add bars
+  // Iterating by index to re-fetch wrapper at each step prevents stale element issues
+  for (let i = 0; i < 5; i++) {
+    const outputCount = i < 4 ? 8 : 4;
+
+    for (let k = 0; k < outputCount; k++) {
+      // Re-find the card and buttons at this exact moment
+      const currentCard = wrapper.findAll('.controller-card')[i];
+      if (!currentCard) throw new Error(`Card ${i} not found`);
+
+      const outputCards = currentCard.findAllComponents({ name: 'LedOutputCard' });
+      const outputCard = outputCards[k];
+      if (!outputCard) throw new Error(`Output card ${k} not found for C${i}`);
+
+      // Emit 'add-bar' once
+      outputCard.vm.$emit('add-bar');
+      await wrapper.vm.$nextTick(); // Wait for parent to react
+
+      // Check if we need a second bar
+      // C0-C3: outputs 0-1 get 2 bars.
+      // C4: all outputs get 2 bars.
+      const needsSecondBar = (i < 4 && k < 2) || i === 4;
+      if (needsSecondBar) {
+        outputCard.vm.$emit('add-bar');
+        await wrapper.vm.$nextTick();
+      }
+    }
+  }
+};
+
 const thenCsvContentIsCorrect = async (createObjectURLMock: any) => {
   const expectedCsv = `Fixture Definition Name;Start Universe;Start Channel;StartX;StartY;EndX;EndY;Width;Fixture Name
 BARRE NEON - 2M;0;1;10;0;10;200;15;CONTROLLEUR-0/C0-OUT-1/LED-0
@@ -130,7 +176,7 @@ BARRE NEON - 2M;82;48;1810;200;1810;400;15;CONTROLLEUR-4/C4-OUT-2/LED-43
 BARRE NEON - 2M;82;405;1850;0;1850;200;15;CONTROLLEUR-4/C4-OUT-3/LED-44
 BARRE NEON - 2M;83;250;1850;200;1850;400;15;CONTROLLEUR-4/C4-OUT-3/LED-45
 BARRE NEON - 2M;84;95;1890;0;1890;200;15;CONTROLLEUR-4/C4-OUT-4/LED-46
-BARRE NEON - 2M;84;452;1890;200;1890;400;15;CONTROLLEUR-4/C4-OUT-4/LED-47`.replace(/^\uFEFF/, '');
+BARRE NEON - 2M;84;452;1890;200;1890;400;15;CONTROLLEUR-4/C4-OUT-4/LED-47`;
 
   expect(createObjectURLMock).toHaveBeenCalledTimes(1);
   const blob = createObjectURLMock.mock.calls[0][0];
@@ -139,11 +185,12 @@ BARRE NEON - 2M;84;452;1890;200;1890;400;15;CONTROLLEUR-4/C4-OUT-4/LED-47`.repla
   }
 
   const text = await readBlobContent(blob);
+  console.log('RECEIVED CSV:', text.trim());
   expect(text.trim()).toBe(expectedCsv.trim());
 };
 
 const thenFileIsDownloaded = (linkMock: HTMLAnchorElement, clickMock: any) => {
-  expect(linkMock.setAttribute).toHaveBeenCalledWith('download', 'example.csv');
+  expect(linkMock.setAttribute).toHaveBeenCalledWith('download', 'neon-addressing.csv');
   expect(clickMock).toHaveBeenCalled();
 };
 

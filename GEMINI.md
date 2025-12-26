@@ -25,7 +25,7 @@ L'utilisation du mot-clé `as` pour l'assertion de type est **interdite**. C'est
 - **Portée** : Tous les fichiers TypeScript du projet.
 - **Raison** : Garantir une sécurité de typage maximale et éviter les erreurs à l'exécution.
 
-Il faut éviter au maximum l'utilisation de `undefined`. Il est préférable d'utiliser un type qui a du sens dans le contexte métier (ex: un objet nul, une valeur par défaut) ou d'utiliser la classe `Optional` (fournie dans `common/domain/Optional.ts`).
+Il faut éviter au maximum l'utilisation de `undefined`. Il est préférable d'utiliser un type qui a du sens dans le contexte métier (ex: un symbole) ou d'utiliser la classe `Optional` (fournie dans `common/domain/Optional.ts`).
 
 ### Test Driven Development (TDD)
 

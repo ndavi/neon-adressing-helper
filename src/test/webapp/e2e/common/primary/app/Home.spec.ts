@@ -16,8 +16,13 @@ test.describe('Home', () => {
     await homePage.setControllersCount(5);
     await expect(homePage.controllersInput).toHaveValue('5');
 
-    await expect(homePage.visualizerNodes).toHaveCount(5);
-    await expect(homePage.visualizerNodes.first()).toContainText('U: 0');
+    // Only check visualizer nodes on desktop (md and up = 960px+)
+    const viewportSize = page.viewportSize();
+    const isDesktop = viewportSize !== null && viewportSize.width >= 960;
+    if (isDesktop) {
+      await expect(homePage.visualizerNodes).toHaveCount(5);
+      await expect(homePage.visualizerNodes.first()).toContainText('U: 0');
+    }
 
     const download = await homePage.downloadExampleCsv();
     expect(download.suggestedFilename()).toBe('neon-addressing.csv');

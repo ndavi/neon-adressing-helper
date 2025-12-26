@@ -1,7 +1,7 @@
 <template>
   <v-layout class="full-height">
     <!-- Right Drawer: Visualization (20%) -->
-    <v-navigation-drawer location="right" width="400" permanent class="bg-grey-lighten-4">
+    <v-navigation-drawer v-if="mdAndUp" location="right" width="400" permanent class="bg-grey-lighten-4">
       <Controller2DVisualizer :controllers="controllers.values" class="fill-height" />
     </v-navigation-drawer>
 
@@ -84,9 +84,12 @@
 import { Controllers } from '@/home/domain/Controllers';
 import { CsvExporter } from '@/home/domain/CsvExporter';
 import { ref, shallowRef, watch } from 'vue';
+import { useDisplay } from 'vuetify';
 import Controller2DVisualizer from './Controller2DVisualizer.vue';
 import { downloadFile } from './FileDownloader';
 import LedOutputCard from './LedOutputCard.vue';
+
+const { mdAndUp } = useDisplay();
 
 const controllersCount = ref(0);
 const controllers = shallowRef<Controllers>(Controllers.empty());

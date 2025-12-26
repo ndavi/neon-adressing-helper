@@ -1,7 +1,7 @@
 <template>
   <v-layout class="full-height">
     <!-- Left Drawer: Controls -->
-    <v-navigation-drawer location="left" width="700" permanent class="bg-surface">
+    <v-navigation-drawer location="left" width="1000" permanent class="bg-surface">
       <div class="pa-4 full-height d-flex flex-column">
         <v-text-field
           id="controllers-count"
@@ -15,7 +15,7 @@
 
         <div class="overflow-y-auto flex-grow-1 pr-2">
           <v-row>
-            <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12" md="6">
+            <v-col v-for="(controller, index) in controllers.values" :key="index" cols="12" md="4">
               <v-card class="controller-card mb-4" variant="outlined">
                 <v-card-title>Contrôleur {{ index + 1 }}</v-card-title>
                 <v-card-text>

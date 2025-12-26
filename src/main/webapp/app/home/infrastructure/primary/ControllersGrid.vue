@@ -2,25 +2,24 @@
   <div class="pa-4 full-height d-flex flex-column bg-surface">
     <v-text-field
       id="controllers-count"
-      :model-value="controllersCount"
+      v-model.number="controllersCount"
       label="Nombre de contrôleurs"
       type="number"
       min="0"
       variant="outlined"
       class="mb-4 flex-grow-0"
-      @update:model-value="emit('update:controllers-count', +$event)"
     ></v-text-field>
 
     <div class="overflow-y-auto flex-grow-1 pr-2 controllers-grid">
-      <div v-for="(controller, index) in controllers" :key="index" class="controller-card-wrapper">
+      <div v-for="(controller, index) in controllers.values" :key="index" class="controller-card-wrapper">
         <ControllerCard
           :controller="controller"
           :index="index"
-          @update:universe="emit('update:universe', { controllerIndex: index, universe: $event })"
-          @update:outputs-count="emit('update:outputs-count', { controllerIndex: index, count: $event })"
-          @add-bar="emit('add-bar', { controllerIndex: index, outputIndex: $event })"
-          @remove-bar="emit('remove-bar', { controllerIndex: index, outputIndex: $event })"
-          @toggle-bar="(outputIndex, barIndex) => emit('toggle-bar', { controllerIndex: index, outputIndex, barIndex })"
+          @update:universe="updateUniverse(index, $event)"
+          @update:outputs-count="updateOutputsCount(index, $event)"
+          @add-bar="addBar(index, $event)"
+          @remove-bar="removeBar(index, $event)"
+          @toggle-bar="(outputIndex, barIndex) => toggleBar(index, outputIndex, barIndex)"
         />
       </div>
     </div>
@@ -28,22 +27,71 @@
 </template>
 
 <script setup lang="ts">
-import type { Controller } from '@/home/domain/Controller';
+import type { Controllers } from '@/home/domain/Controllers';
+import { computed } from 'vue';
 import ControllerCard from './ControllerCard.vue';
 
-defineProps<{
-  controllersCount: number;
-  controllers: readonly Controller[];
+const props = defineProps<{
+  controllers: Controllers;
 }>();
 
 const emit = defineEmits<{
-  'update:controllers-count': [count: number];
-  'update:universe': [payload: { controllerIndex: number; universe: number }];
-  'update:outputs-count': [payload: { controllerIndex: number; count: number }];
-  'add-bar': [payload: { controllerIndex: number; outputIndex: number }];
-  'remove-bar': [payload: { controllerIndex: number; outputIndex: number }];
-  'toggle-bar': [payload: { controllerIndex: number; outputIndex: number; barIndex: number }];
+  'update:controllers': [controllers: Controllers];
 }>();
+
+const controllersCount = computed({
+  get: () => props.controllers.values.length,
+  set: (newCount: number) => {
+    emit('update:controllers', props.controllers.resize(newCount));
+  },
+});
+
+const updateUniverse = (index: number, newUniverse: number) => {
+  const current = props.controllers.values[index];
+  if (current && newUniverse >= 0) {
+    emit('update:controllers', props.controllers.replace(index, current.withUniverse(newUniverse)));
+  }
+};
+
+const updateOutputsCount = (index: number, newCount: number) => {
+  const current = props.controllers.values[index];
+  if (current && newCount >= 0 && newCount <= 8) {
+    emit('update:controllers', props.controllers.replace(index, current.resizeOutputs(newCount)));
+  }
+};
+
+const addBar = (controllerIndex: number, outputIndex: number) => {
+  const controller = props.controllers.values[controllerIndex];
+  if (controller) {
+    const output = controller.outputs[outputIndex];
+    if (output) {
+      emit('update:controllers', props.controllers.replace(controllerIndex, controller.replaceOutput(outputIndex, output.addBar())));
+    }
+  }
+};
+
+const removeBar = (controllerIndex: number, outputIndex: number) => {
+  const controller = props.controllers.values[controllerIndex];
+  if (controller) {
+    const output = controller.outputs[outputIndex];
+    if (output) {
+      emit('update:controllers', props.controllers.replace(controllerIndex, controller.replaceOutput(outputIndex, output.removeBar())));
+    }
+  }
+};
+
+const toggleBar = (controllerIndex: number, outputIndex: number, barIndex: number) => {
+  const controller = props.controllers.values[controllerIndex];
+  if (controller) {
+    const output = controller.outputs[outputIndex];
+    if (output) {
+      emit(
+        'update:controllers',
+        props.controllers.replace(controllerIndex, controller.replaceOutput(outputIndex, output.toggleBar(barIndex))),
+      );
+    }
+  }
+};
 </script>
 
 <style scoped>

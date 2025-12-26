@@ -7,7 +7,11 @@ interface ControllersProps {
 export class Controllers {
   private constructor(private readonly props: ControllersProps) {}
 
-  static empty(): Controllers {
+  static init(): Controllers {
+    return Controllers.empty().resize(1);
+  }
+
+  private static empty(): Controllers {
     return new Controllers({ values: [] });
   }
 

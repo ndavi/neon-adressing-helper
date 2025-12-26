@@ -17,7 +17,7 @@ describe('Controller2DVisualizer', () => {
   });
 
   it('Should render controllers in a container', () => {
-    const controllers = Controllers.empty().resize(2).values;
+    const controllers = Controllers.init().resize(2).values;
     const wrapper = mount(Controller2DVisualizer, {
       props: {
         controllers,

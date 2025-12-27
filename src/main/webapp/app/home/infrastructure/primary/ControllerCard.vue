@@ -30,6 +30,7 @@
             variant="outlined"
             hide-details="auto"
             class="mb-3"
+            data-selector="start-universe-input"
             @update:model-value="updateUniverse(+$event)"
           ></v-text-field>
         </v-col>
@@ -55,6 +56,7 @@
             variant="outlined"
             hide-details="auto"
             class="mb-3"
+            data-selector="outputs-count-input"
             @update:model-value="updateOutputsCount(+$event)"
           ></v-text-field>
         </v-col>

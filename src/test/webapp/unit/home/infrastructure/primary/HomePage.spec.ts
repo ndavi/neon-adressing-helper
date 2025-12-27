@@ -104,19 +104,14 @@ const whenEnteringNumberOfControllers = async (wrapper: VueWrapper, count: numbe
 
 const whenEnteringOutputsCount = async (wrapper: VueWrapper, count: number) => {
   const card = wrapper.find(selector('controller-card'));
-  // Vuetify inputs are tricky to find by label in unit tests without a proper selector.
-  // Outputs count is now index 1.
-  const inputs = card.findAll('input');
-  const targetInput = inputs[1];
-  if (!targetInput) throw new Error('Output input not found');
-  await targetInput.setValue(count);
+  const input = card.find(`${selector('outputs-count-input')} input`);
+  await input.setValue(count);
 };
 
 const whenEnteringUniverse = async (wrapper: VueWrapper, universe: number) => {
   const card = wrapper.find(selector('controller-card'));
-  const universeInput = card.findAll('input')[0];
-  if (!universeInput) throw new Error('Universe input not found');
-  await universeInput.setValue(universe);
+  const input = card.find(`${selector('start-universe-input')} input`);
+  await input.setValue(universe);
 };
 
 const thenNumberOfControllersIs = (wrapper: VueWrapper, expectedCount: number) => {
@@ -139,16 +134,14 @@ const thenControllersInputHasMinAttribute = (wrapper: VueWrapper, min: string) =
 
 const thenOutputsInputHasMinAttribute = (wrapper: VueWrapper, min: string) => {
   const card = wrapper.find(selector('controller-card'));
-  const outputInput = card.findAll('input')[1];
-  if (!outputInput) throw new Error('Output input not found');
-  expect(outputInput.attributes('min')).toBe(min);
+  const input = card.find(`${selector('outputs-count-input')} input`);
+  expect(input.attributes('min')).toBe(min);
 };
 
 const thenOutputsInputHasMaxAttribute = (wrapper: VueWrapper, max: string) => {
   const card = wrapper.find(selector('controller-card'));
-  const outputInput = card.findAll('input')[1];
-  if (!outputInput) throw new Error('Output input not found');
-  expect(outputInput.attributes('max')).toBe(max);
+  const input = card.find(`${selector('outputs-count-input')} input`);
+  expect(input.attributes('max')).toBe(max);
 };
 
 const thenOutputsCountIs = (wrapper: VueWrapper, expectedCount: number) => {
@@ -159,9 +152,8 @@ const thenOutputsCountIs = (wrapper: VueWrapper, expectedCount: number) => {
 
 const thenUniverseInputHasMinAttribute = (wrapper: VueWrapper, min: string) => {
   const card = wrapper.find(selector('controller-card'));
-  const universeInput = card.findAll('input')[0];
-  if (!universeInput) throw new Error('Universe input not found');
-  expect(universeInput.attributes('min')).toBe(min);
+  const input = card.find(`${selector('start-universe-input')} input`);
+  expect(input.attributes('min')).toBe(min);
 };
 
 const thenUniverseIs = (wrapper: VueWrapper, controllerIndex: number, expectedUniverse: number) => {

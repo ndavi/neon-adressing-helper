@@ -1,36 +1,81 @@
-import { expect, test } from '@playwright/test';
+import { type Download, type Page, expect, test } from '@playwright/test';
 import { HomePage } from './Home-Page';
 
 test.describe('Home', () => {
   test('display home page, interact and download', async ({ page }) => {
-    page.on('console', msg => {
-      if (msg.type() === 'error') {
-        console.error(`Console Error: "${msg.text()}"`);
-      }
-    });
+    handleConsoleErrors(page);
 
-    const homePage = new HomePage(page);
-    await homePage.goto();
-    await expect(page).toHaveTitle('NeonAdressingTool');
+    const homePage = await givenHomePage(page);
 
-    await homePage.setControllersCount(5);
-    await expect(homePage.controllersInput).toHaveValue('5');
+    await thenTitleIs(page, 'NeonAdressingTool');
 
-    // Only check visualizer nodes on desktop (md and up = 960px+)
-    const viewportSize = page.viewportSize();
-    const isDesktop = viewportSize !== null && viewportSize.width >= 960;
-    if (isDesktop) {
-      await expect(homePage.visualizerNodes).toHaveCount(5);
-      await expect(homePage.visualizerNodes.first()).toContainText('U: 0');
+    await whenSettingControllersCount(homePage, 5);
+    await thenControllersInputHasValue(homePage, '5');
+
+    await thenVisualizerNodesAreCorrect(page, homePage, 5);
+
+    await whenConfiguringExampleState(homePage);
+
+    const download = await whenDownloadingCsv(homePage);
+    thenCsvFilenameIs(download, 'neon-addressing.csv');
+
+    await thenCsvContentIsCorrect(download);
+
+    await homePage.takeScreenshot('homepage-ux');
+  });
+});
+
+const handleConsoleErrors = (page: Page) => {
+  page.on('console', msg => {
+    if (msg.type() === 'error') {
+      console.error(`Console Error: "${msg.text()}"`);
     }
+  });
+};
 
-    await homePage.configureExampleState();
+const givenHomePage = async (page: Page): Promise<HomePage> => {
+  const homePage = new HomePage(page);
+  await homePage.goto();
+  return homePage;
+};
 
-    const download = await homePage.downloadExampleCsv();
-    expect(download.suggestedFilename()).toBe('neon-addressing.csv');
+const whenSettingControllersCount = async (homePage: HomePage, count: number) => {
+  await homePage.setControllersCount(count);
+};
 
-    const csvContent = (await (await download.createReadStream()).toArray()).toString();
-    const expectedCsv = `Fixture Definition Name;Start Universe;Start Channel;StartX;StartY;EndX;EndY;Width;Fixture Name
+const whenConfiguringExampleState = async (homePage: HomePage) => {
+  await homePage.configureExampleState();
+};
+
+const whenDownloadingCsv = async (homePage: HomePage): Promise<Download> => {
+  return await homePage.downloadExampleCsv();
+};
+
+const thenTitleIs = async (page: Page, title: string) => {
+  await expect(page).toHaveTitle(title);
+};
+
+const thenControllersInputHasValue = async (homePage: HomePage, value: string) => {
+  await expect(homePage.controllersInput).toHaveValue(value);
+};
+
+const thenVisualizerNodesAreCorrect = async (page: Page, homePage: HomePage, expectedCount: number) => {
+  // Only check visualizer nodes on desktop (md and up = 960px+)
+  const viewportSize = page.viewportSize();
+  const isDesktop = viewportSize !== null && viewportSize.width >= 960;
+  if (isDesktop) {
+    await expect(homePage.visualizerNodes).toHaveCount(expectedCount);
+    await expect(homePage.visualizerNodes.first()).toContainText('U: 0');
+  }
+};
+
+const thenCsvFilenameIs = (download: Download, filename: string) => {
+  expect(download.suggestedFilename()).toBe(filename);
+};
+
+const thenCsvContentIsCorrect = async (download: Download) => {
+  const csvContent = (await (await download.createReadStream()).toArray()).toString();
+  const expectedCsv = `Fixture Definition Name;Start Universe;Start Channel;StartX;StartY;EndX;EndY;Width;Fixture Name
 BARRE NEON - 2M;0;1;10;0;10;200;15;CONTROLLEUR-0/C0-OUT-1/LED-0
 BARRE NEON - 2M;0;358;10;200;10;400;15;CONTROLLEUR-0/C0-OUT-1/LED-1
 BARRE NEON - 2M;1;203;50;0;50;200;15;CONTROLLEUR-0/C0-OUT-2/LED-2
@@ -79,8 +124,5 @@ BARRE NEON - 2M;82;405;1850;0;1850;200;15;CONTROLLEUR-4/C4-OUT-3/LED-44
 BARRE NEON - 2M;83;250;1850;200;1850;400;15;CONTROLLEUR-4/C4-OUT-3/LED-45
 BARRE NEON - 2M;84;95;1890;0;1890;200;15;CONTROLLEUR-4/C4-OUT-4/LED-46
 BARRE NEON - 2M;84;452;1890;200;1890;400;15;CONTROLLEUR-4/C4-OUT-4/LED-47`;
-    expect(csvContent.trim()).toBe(expectedCsv.trim());
-
-    await homePage.takeScreenshot('homepage-ux');
-  });
-});
+  expect(csvContent.trim()).toBe(expectedCsv.trim());
+};

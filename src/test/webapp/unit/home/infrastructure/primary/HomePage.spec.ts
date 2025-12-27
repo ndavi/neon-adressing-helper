@@ -23,77 +23,62 @@ describe('When visiting the homepage', () => {
 
   it('Should have a minimum value of 0 for the controllers input', () => {
     const wrapper = givenHomepage();
-    const input = wrapper.find('input#controllers-count');
-    expect(input.attributes('min')).toBe('0');
+    thenControllersInputHasMinAttribute(wrapper, '0');
   });
 
   it('Should have a minimum value of 1 for the outputs input', async () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    const card = wrapper.find(selector('controller-card'));
-    const outputInput = card.findAll('input')[1];
-    if (!outputInput) throw new Error('Output input not found');
-    expect(outputInput.attributes('min')).toBe('1');
+    thenOutputsInputHasMinAttribute(wrapper, '1');
   });
 
   it('Should not update outputs when entering a number < 1', async () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    const card = wrapper.find(selector('controller-card'));
-    const outputInput = card.findAll('input')[1];
-    if (!outputInput) throw new Error('Output input not found');
-    await outputInput.setValue(0);
+    await whenEnteringOutputsCount(wrapper, 0);
 
-    const outputCards = card.findAllComponents({ name: 'LedOutputCard' });
-    expect(outputCards.length).toBe(1);
+    thenOutputsCountIs(wrapper, 1);
   });
 
   it('Should have a maximum value of 8 for the outputs input', async () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    const card = wrapper.find(selector('controller-card'));
-    const outputInput = card.findAll('input')[1];
-    if (!outputInput) throw new Error('Output input not found');
-    await outputInput.setValue(9);
+    thenOutputsInputHasMaxAttribute(wrapper, '8');
+  });
 
-    const outputCards = card.findAllComponents({ name: 'LedOutputCard' });
-    expect(outputCards.length).toBe(1);
+  it('Should not update outputs when entering a number > 8', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 1);
+
+    await whenEnteringOutputsCount(wrapper, 9);
+
+    thenOutputsCountIs(wrapper, 1);
   });
 
   it('Should have a minimum value of 0 for the universe input', async () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    const card = wrapper.find(selector('controller-card'));
-    const universeInput = card.findAll('input')[0];
-    if (!universeInput) throw new Error('Universe input not found');
-    expect(universeInput.attributes('min')).toBe('0');
+    thenUniverseInputHasMinAttribute(wrapper, '0');
   });
 
   it('Should not update universe when entering a negative number', async () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    const card = wrapper.find(selector('controller-card'));
-    const universeInput = card.findAll('input')[0];
-    if (!universeInput) throw new Error('Universe input not found');
-    await universeInput.setValue(-5);
+    await whenEnteringUniverse(wrapper, -5);
 
-    const visualizer = wrapper.findComponent({ name: 'Controller2DVisualizer' });
-    const controllersProp = visualizer.props('controllers');
-    if (!Array.isArray(controllersProp)) throw new Error('Controllers prop is not an array');
-    expect(controllersProp[0].universe).toBe(0);
+    thenUniverseIs(wrapper, 0, 0);
   });
 
   it('Should disable delete output button when there is only one output', async () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
-    const deleteButton = wrapper.find(selector('delete-output'));
-    expect(deleteButton.attributes()).toHaveProperty('disabled');
+    thenDeleteOutputButtonIsDisabled(wrapper);
   });
 });
 
@@ -117,6 +102,20 @@ const whenEnteringNumberOfControllers = async (wrapper: VueWrapper, count: numbe
   await input.setValue(count);
 };
 
+const whenEnteringOutputsCount = async (wrapper: VueWrapper, count: number) => {
+  const card = wrapper.find(selector('controller-card'));
+  const outputInput = card.findAll('input')[1];
+  if (!outputInput) throw new Error('Output input not found');
+  await outputInput.setValue(count);
+};
+
+const whenEnteringUniverse = async (wrapper: VueWrapper, universe: number) => {
+  const card = wrapper.find(selector('controller-card'));
+  const universeInput = card.findAll('input')[0];
+  if (!universeInput) throw new Error('Universe input not found');
+  await universeInput.setValue(universe);
+};
+
 const thenNumberOfControllersIs = (wrapper: VueWrapper, expectedCount: number) => {
   const element = wrapper.find('input#controllers-count').element;
   if (!(element instanceof HTMLInputElement)) {
@@ -128,4 +127,48 @@ const thenNumberOfControllersIs = (wrapper: VueWrapper, expectedCount: number) =
 const thenControllerCardsAreDisplayed = (wrapper: VueWrapper, expectedCount: number) => {
   const cards = wrapper.findAll(selector('controller-card'));
   expect(cards.length).toBe(expectedCount);
+};
+
+const thenControllersInputHasMinAttribute = (wrapper: VueWrapper, min: string) => {
+  const input = wrapper.find('input#controllers-count');
+  expect(input.attributes('min')).toBe(min);
+};
+
+const thenOutputsInputHasMinAttribute = (wrapper: VueWrapper, min: string) => {
+  const card = wrapper.find(selector('controller-card'));
+  const outputInput = card.findAll('input')[1];
+  if (!outputInput) throw new Error('Output input not found');
+  expect(outputInput.attributes('min')).toBe(min);
+};
+
+const thenOutputsInputHasMaxAttribute = (wrapper: VueWrapper, max: string) => {
+  const card = wrapper.find(selector('controller-card'));
+  const outputInput = card.findAll('input')[1];
+  if (!outputInput) throw new Error('Output input not found');
+  expect(outputInput.attributes('max')).toBe(max);
+};
+
+const thenOutputsCountIs = (wrapper: VueWrapper, expectedCount: number) => {
+  const card = wrapper.find(selector('controller-card'));
+  const outputCards = card.findAllComponents({ name: 'LedOutputCard' });
+  expect(outputCards.length).toBe(expectedCount);
+};
+
+const thenUniverseInputHasMinAttribute = (wrapper: VueWrapper, min: string) => {
+  const card = wrapper.find(selector('controller-card'));
+  const universeInput = card.findAll('input')[0];
+  if (!universeInput) throw new Error('Universe input not found');
+  expect(universeInput.attributes('min')).toBe(min);
+};
+
+const thenUniverseIs = (wrapper: VueWrapper, controllerIndex: number, expectedUniverse: number) => {
+  const visualizer = wrapper.findComponent({ name: 'Controller2DVisualizer' });
+  const controllersProp = visualizer.props('controllers');
+  if (!Array.isArray(controllersProp)) throw new Error('Controllers prop is not an array');
+  expect(controllersProp[controllerIndex].universe).toBe(expectedUniverse);
+};
+
+const thenDeleteOutputButtonIsDisabled = (wrapper: VueWrapper) => {
+  const deleteButton = wrapper.find(selector('delete-output'));
+  expect(deleteButton.attributes()).toHaveProperty('disabled');
 };

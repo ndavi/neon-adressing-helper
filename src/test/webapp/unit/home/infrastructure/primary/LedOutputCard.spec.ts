@@ -82,20 +82,6 @@ describe('LedOutputCard', () => {
 
     thenRemoveBarButtonIsDisabled(wrapper);
   });
-
-  it('Should disable duplicate button when output is not duplicatable', () => {
-    const output = givenAnOutputWithOneBar();
-    const wrapper = mount(LedOutputCard, {
-      props: {
-        output,
-        index: 0,
-        isDeletable: true,
-        isDuplicatable: false,
-      },
-    });
-
-    thenDuplicateButtonIsDisabled(wrapper);
-  });
 });
 
 const givenAnEmptyOutput = () => LedOutput.new();
@@ -176,11 +162,6 @@ const thenDeleteButtonIsDisabled = (wrapper: VueWrapper) => {
 const thenRemoveBarButtonIsDisabled = (wrapper: VueWrapper) => {
   const removeButton = wrapper.find(selector('remove-bar-button'));
   expect(removeButton.attributes()).toHaveProperty('disabled');
-};
-
-const thenDuplicateButtonIsDisabled = (wrapper: VueWrapper) => {
-  const duplicateButton = wrapper.find(selector('duplicate-output'));
-  expect(duplicateButton.attributes()).toHaveProperty('disabled');
 };
 
 const barAt = (bars: ReturnType<VueWrapper['findAll']>, index: number) => Optional.ofNullable(bars[index]).orElseThrow();

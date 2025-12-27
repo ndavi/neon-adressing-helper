@@ -51,6 +51,10 @@ export class Controller {
     return !this.hasMaxOutputs();
   }
 
+  get canRemoveOutput(): boolean {
+    return this.props.outputs.length > 1;
+  }
+
   withUniverse(newUniverse: number): Controller {
     return new Controller({ ...this.props, universe: Universe.of(newUniverse) });
   }

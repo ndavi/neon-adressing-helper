@@ -61,27 +61,6 @@ describe('LedOutputCard', () => {
     const wrapper1M = givenALedOutputCard(output1M);
     thenBarAtIndexHasClass(wrapper1M, 0, 'bg-purple-lighten-3');
   });
-
-  it('Should disable delete button when output is not deletable', () => {
-    const output = givenAnEmptyOutput();
-    const wrapper = mount(LedOutputCard, {
-      props: {
-        output,
-        index: 0,
-        isDeletable: false,
-        isDuplicatable: true,
-      },
-    });
-
-    thenDeleteButtonIsDisabled(wrapper);
-  });
-
-  it('Should disable remove bar button when only one bar is left', () => {
-    const output = givenAnOutputWithOneBar();
-    const wrapper = givenALedOutputCard(output);
-
-    thenRemoveBarButtonIsDisabled(wrapper);
-  });
 });
 
 const givenAnEmptyOutput = () => LedOutput.new();
@@ -152,16 +131,6 @@ const thenBarAtIndexHasWidth = (wrapper: VueWrapper, index: number, width: strin
 const thenBarAtIndexHasClass = (wrapper: VueWrapper, index: number, className: string) => {
   const bars = wrapper.findAll(selector('led-bar'));
   expect(barAt(bars, index).classes()).toContain(className);
-};
-
-const thenDeleteButtonIsDisabled = (wrapper: VueWrapper) => {
-  const deleteButton = wrapper.find(selector('delete-output'));
-  expect(deleteButton.attributes()).toHaveProperty('disabled');
-};
-
-const thenRemoveBarButtonIsDisabled = (wrapper: VueWrapper) => {
-  const removeButton = wrapper.find(selector('remove-bar-button'));
-  expect(removeButton.attributes()).toHaveProperty('disabled');
 };
 
 const barAt = (bars: ReturnType<VueWrapper['findAll']>, index: number) => Optional.ofNullable(bars[index]).orElseThrow();

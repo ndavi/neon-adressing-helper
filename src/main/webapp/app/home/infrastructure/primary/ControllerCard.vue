@@ -63,7 +63,7 @@
           :key="outputIndex"
           :output="output"
           :index="outputIndex"
-          :is-deletable="controller.outputs.length > 1"
+          :is-deletable="controller.canRemoveOutput"
           :is-duplicatable="controller.canDuplicateOutput"
           @add-bar="addBar(outputIndex)"
           @remove-bar="removeBar(outputIndex)"

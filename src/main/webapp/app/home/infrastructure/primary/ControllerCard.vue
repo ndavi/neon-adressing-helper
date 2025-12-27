@@ -1,7 +1,14 @@
 <template>
   <v-card class="controller-card" variant="outlined" data-selector="controller-card">
     <v-card-title class="d-flex align-center">
-      Contrôleur {{ index + 1 }}
+      <div>
+        Contrôleur {{ index + 1 }}
+        <span class="text-caption text-grey-darken-1 ml-2">
+          (<span data-selector="universe-count">{{ controller.universeCount }}</span> univers, fin:
+          <span data-selector="end-universe">{{ controller.endUniverse }}</span
+          >)
+        </span>
+      </div>
       <v-spacer></v-spacer>
       <v-btn
         icon="mdi-content-copy"
@@ -33,18 +40,6 @@
             data-selector="start-universe-input"
             @update:model-value="updateUniverse(+$event)"
           ></v-text-field>
-        </v-col>
-        <v-col cols="6">
-          <div class="text-caption text-grey-darken-1">Nombre d'univers</div>
-          <div class="text-body-1 font-weight-bold" data-selector="universe-count">
-            {{ controller.universeCount }}
-          </div>
-        </v-col>
-        <v-col cols="6">
-          <div class="text-caption text-grey-darken-1">Univers de fin</div>
-          <div class="text-body-1 font-weight-bold" data-selector="end-universe">
-            {{ controller.endUniverse }}
-          </div>
         </v-col>
         <v-col cols="6">
           <v-text-field

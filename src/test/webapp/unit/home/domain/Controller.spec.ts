@@ -91,8 +91,15 @@ describe('Controller', () => {
     const updated = controller.removeOutput(1);
 
     expect(updated.outputs).toHaveLength(2);
-    // Verify remaining outputs are correct (original 0 and 2)
-    // Since default outputs are identical, this is subtle, but length check confirms removal.
-    // For robust test, we could modify one.
+  });
+
+  it('should not allow removing the last output', () => {
+    const controller = Controller.new();
+    expect(() => controller.removeOutput(0)).toThrow('A controller must have at least one output');
+  });
+
+  it('should throw when resizing outputs to 0', () => {
+    const controller = Controller.new();
+    expect(() => controller.resizeOutputs(0)).toThrow('A controller must have at least one output');
   });
 });

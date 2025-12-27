@@ -83,6 +83,9 @@ export class Controller {
   }
 
   removeOutput(outputIndex: number): Controller {
+    if (this.props.outputs.length <= 1) {
+      throw new Error('A controller must have at least one output');
+    }
     const newOutputs = this.props.outputs.filter((_, index) => index !== outputIndex);
     return new Controller({ ...this.props, outputs: newOutputs });
   }

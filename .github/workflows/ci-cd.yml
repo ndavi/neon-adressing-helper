@@ -1,11 +1,13 @@
-name: Deploy to FTP
+name: CI/CD
 
 on:
   push:
     branches: ['main']
+  pull_request:
+    branches: ['main']
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,10 +27,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Test
+        run: pnpm run test
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run E2E Tests
+        run: pnpm run e2e:headless
+
       - name: Build
         run: pnpm run build
 
       - name: FTP Deploy
+        if: github.ref == 'refs/heads/main'
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}

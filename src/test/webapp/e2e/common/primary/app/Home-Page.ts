@@ -76,10 +76,13 @@ export class HomePage {
       for (let k = 0; k < outputCount; k++) {
         const outputCard = currentCard.locator(selector('led-output-card')).nth(k);
 
-        await outputCard.locator(selector('add-bar-button')).click();
+        // Desired bar counts:
+        // (i < 4 && k < 2) || i === 4 -> 2 bars
+        // else -> 1 bar
+        const desiredBars = (i < 4 && k < 2) || i === 4 ? 2 : 1;
 
-        const needsSecondBar = (i < 4 && k < 2) || i === 4;
-        if (needsSecondBar) {
+        // We start with 1 bar.
+        if (desiredBars === 2) {
           await outputCard.locator(selector('add-bar-button')).click();
         }
       }

@@ -7,10 +7,12 @@ export class CsvExporter {
     const lines: string[] = [header];
 
     let lineCount = 0;
+    let controllerIndex = 0;
     for (const controller of controllers) {
       const csvController = CsvController.of(controller);
-      const controllerLines = csvController.lines(lineCount);
+      const controllerLines = csvController.lines(controllerIndex, lineCount);
       lineCount += controllerLines.length;
+      controllerIndex++;
 
       controllerLines.forEach(line => {
         lines.push(

@@ -17,9 +17,8 @@ const givenAControllerWithOneOutputAndOneBar = (): readonly CsvLine[] => {
   const controller = Controller.of({
     universe: Universe.of(0),
     outputs: [output],
-    index: 0,
   });
-  return CsvController.of(controller).lines(0);
+  return CsvController.of(controller).lines(0, 0);
 };
 
 const thenCsvLineIsCorrect = (line: CsvLine) => {
@@ -31,5 +30,5 @@ const thenCsvLineIsCorrect = (line: CsvLine) => {
   expect(line.endX).toBe(10);
   expect(line.endY).toBe(200);
   expect(line.width).toBe(15);
-  expect(line.fixtureName).toBe('CONTROLLEUR-0/C0-OUT-1/LED-0');
+  expect(line.fixtureName).toBe('CONTROLLEUR/C0-OUT-1/LED-0');
 };

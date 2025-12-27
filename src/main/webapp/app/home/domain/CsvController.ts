@@ -20,13 +20,13 @@ export class CsvController {
     return new CsvController(controller);
   }
 
-  lines(startLineIndex: number): readonly CsvLine[] {
+  lines(controllerIndex: number, startLineIndex: number): readonly CsvLine[] {
     const lines: CsvLine[] = [];
     let currentGlobalChannel = this.controller.universe * Universe.MAX_CHANNELS;
 
     this.controller.outputs.forEach((output, outputIndex) => {
       let currentY = 0;
-      const startX = 10 + this.controller.index * 440;
+      const startX = 10 + controllerIndex * 440;
       const currentX = startX + outputIndex * 40;
 
       output.bars.forEach(bar => {
@@ -44,7 +44,7 @@ export class CsvController {
           endX: currentX,
           endY: currentY + bar.length,
           width,
-          fixtureName: `${this.controller.name}/C${this.controller.index}-OUT-${outputIndex + 1}/LED-${startLineIndex + lines.length}`,
+          fixtureName: `${this.controller.name}/C${controllerIndex}-OUT-${outputIndex + 1}/LED-${startLineIndex + lines.length}`,
         });
 
         currentGlobalChannel += bar.channelCount;

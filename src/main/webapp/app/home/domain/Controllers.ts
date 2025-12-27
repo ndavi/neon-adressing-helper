@@ -39,7 +39,6 @@ export class Controllers {
         return Controller.of({
           universe: Universe.of(index * 20),
           outputs: Controller.new().outputs,
-          index,
         });
       });
       return new Controllers({ values: [...this.props.values, ...toAdd] });
@@ -64,7 +63,7 @@ export class Controllers {
     if (!controllerToDuplicate || !lastController) {
       return this;
     }
-    const duplicated = controllerToDuplicate.duplicate(this.props.values.length, lastController.universe + 20);
+    const duplicated = controllerToDuplicate.duplicate(lastController.universe + 20);
     return new Controllers({ values: [...this.props.values, duplicated] });
   }
 
@@ -72,7 +71,7 @@ export class Controllers {
     if (!this.isValidIndex(index)) {
       return this;
     }
-    const newValues = this.props.values.filter((_, i) => i !== index).map((controller, i) => controller.withIndex(i));
+    const newValues = this.props.values.filter((_, i) => i !== index);
 
     return new Controllers({ values: newValues });
   }

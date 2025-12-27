@@ -34,6 +34,6 @@ describe('CsvExporter', () => {
   function thenCsvContainsHeaderAndOneDataLine(csv: string) {
     const lines = csv.split('\n');
     expect(lines).toHaveLength(2);
-    expect(lines[1]).toBe('BARRE NEON - 2M;0;1;10;0;10;200;15;CONTROLLEUR-0/C0-OUT-1/LED-0');
+    expect(lines[1]).toBe('BARRE NEON - 2M;0;1;10;0;10;200;15;CONTROLLEUR/C0-OUT-1/LED-0');
   }
 });

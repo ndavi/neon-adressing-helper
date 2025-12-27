@@ -47,7 +47,7 @@ describe('Controllers Domain', () => {
     expect(() => controllers.resize(-1)).toThrow('Controllers count cannot be negative');
   });
 
-  it('Should duplicate a controller and append it to the end with a correct index and universe', () => {
+  it('Should duplicate a controller and append it to the end with a correct universe', () => {
     const controllers = Controllers.init().resize(2);
 
     const result = controllers.duplicate(0);
@@ -55,21 +55,17 @@ describe('Controllers Domain', () => {
     expect(result.values).toHaveLength(3);
 
     const duplicated = controllerAt(result, 2);
-    expect(duplicated.index).toBe(2);
     expect(duplicated.universe).toBe(40);
   });
 
-  it('Should remove a controller and reindex subsequent controllers', () => {
+  it('Should remove a controller', () => {
     const controllers = Controllers.init().resize(3);
 
     const updated = controllers.remove(1);
 
     expect(updated.values).toHaveLength(2);
 
-    expect(controllerAt(updated, 0).index).toBe(0);
     expect(controllerAt(updated, 0).universe).toBe(0);
-
-    expect(controllerAt(updated, 1).index).toBe(1);
     expect(controllerAt(updated, 1).universe).toBe(40);
   });
 

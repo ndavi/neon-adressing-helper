@@ -8,7 +8,6 @@ describe('Controller', () => {
     const controller = Controller.new();
     expect(controller.universe).toBe(0);
     expect(controller.outputs).toHaveLength(1);
-    expect(controller.index).toBe(0);
   });
 
   it('should resize outputs', () => {
@@ -19,7 +18,7 @@ describe('Controller', () => {
 
   it('should keep existing outputs when increasing size', () => {
     const outputWithBar = LedOutput.new().addBar();
-    const controllerWithBar = Controller.of({ universe: Universe.of(1), outputs: [outputWithBar], index: 1 });
+    const controllerWithBar = Controller.of({ universe: Universe.of(1), outputs: [outputWithBar] });
 
     const resized = controllerWithBar.resizeOutputs(2);
 
@@ -45,14 +44,13 @@ describe('Controller', () => {
     expect(() => controller.withUniverse(-1)).toThrow('Universe cannot be negative');
   });
 
-  it('should duplicate with a new index', () => {
+  it('should duplicate', () => {
     const controller = Controller.of({
       universe: Universe.of(42),
       outputs: [LedOutput.new().addBar()],
-      index: 1,
     });
 
-    const duplicated = controller.duplicate(5);
+    const duplicated = controller.duplicate();
 
     expect(duplicated.universe).toBe(62);
     expect(duplicated.outputs).toHaveLength(1);
@@ -61,7 +59,6 @@ describe('Controller', () => {
       throw new Error('Output should be defined');
     }
     expect(output.bars).toHaveLength(2);
-    expect(duplicated.index).toBe(5);
   });
 
   it('should duplicate an output', () => {
@@ -137,7 +134,6 @@ describe('Controller', () => {
       const controller = Controller.of({
         universe: Universe.of(10),
         outputs: [LedOutput.new()],
-        index: 0,
       });
 
       expect(controller.endUniverse).toBe(10);
@@ -150,7 +146,6 @@ describe('Controller', () => {
       const controller = Controller.of({
         universe: Universe.of(10),
         outputs: [LedOutput.new()],
-        index: 0,
       });
 
       expect(controller.endUniverse).toBe(10);

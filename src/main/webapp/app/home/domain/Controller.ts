@@ -5,14 +5,13 @@ import { Universe } from './Universe';
 export interface ControllerProps {
   universe: Universe;
   outputs: readonly LedOutput[];
-  index: number;
 }
 
 export class Controller {
   private constructor(private readonly props: ControllerProps) {}
 
   static new(): Controller {
-    return new Controller({ universe: Universe.of(0), outputs: [LedOutput.new()], index: 0 });
+    return new Controller({ universe: Universe.of(0), outputs: [LedOutput.new()] });
   }
 
   static of(props: ControllerProps): Controller {
@@ -43,20 +42,12 @@ export class Controller {
     return this.props.outputs;
   }
 
-  get index(): number {
-    return this.props.index;
-  }
-
   get name(): string {
-    return `CONTROLLEUR-${this.props.index}`;
+    return 'CONTROLLEUR';
   }
 
   withUniverse(newUniverse: number): Controller {
     return new Controller({ ...this.props, universe: Universe.of(newUniverse) });
-  }
-
-  withIndex(newIndex: number): Controller {
-    return new Controller({ ...this.props, index: newIndex });
   }
 
   resizeOutputs(newCount: number): Controller {
@@ -79,10 +70,9 @@ export class Controller {
     return new Controller({ ...this.props, outputs: newOutputs });
   }
 
-  duplicate(newIndex: number, newUniverse?: number): Controller {
+  duplicate(newUniverse?: number): Controller {
     return new Controller({
       ...this.props,
-      index: newIndex,
       universe: Universe.of(newUniverse ?? this.props.universe.get() + 20),
     });
   }

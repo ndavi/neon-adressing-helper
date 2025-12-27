@@ -4,7 +4,14 @@
       <span class="text-subtitle-2">Sortie {{ index + 1 }}</span>
       <v-spacer></v-spacer>
       <span class="text-caption mr-2">{{ output.bars.length }} barres</span>
-      <v-btn icon="mdi-content-copy" size="x-small" variant="text" data-selector="duplicate-output" @click="emit('duplicate')"></v-btn>
+      <v-btn
+        icon="mdi-content-copy"
+        size="x-small"
+        variant="text"
+        :disabled="!isDuplicatable"
+        data-selector="duplicate-output"
+        @click="emit('duplicate')"
+      ></v-btn>
       <v-btn
         icon="mdi-delete"
         size="x-small"
@@ -48,6 +55,7 @@ defineProps<{
   output: LedOutput;
   index: number;
   isDeletable: boolean;
+  isDuplicatable: boolean;
 }>();
 
 const emit = defineEmits<{

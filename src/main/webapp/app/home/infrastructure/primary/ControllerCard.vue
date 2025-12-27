@@ -64,6 +64,7 @@
           :output="output"
           :index="outputIndex"
           :is-deletable="controller.outputs.length > 1"
+          :is-duplicatable="controller.outputs.length < 8"
           @add-bar="addBar(outputIndex)"
           @remove-bar="removeBar(outputIndex)"
           @toggle-bar="toggleBar(outputIndex, $event)"

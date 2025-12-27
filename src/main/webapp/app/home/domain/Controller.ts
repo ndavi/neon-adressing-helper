@@ -73,7 +73,7 @@ export class Controller {
   duplicate(newUniverse?: number): Controller {
     return new Controller({
       ...this.props,
-      universe: Universe.of(newUniverse ?? this.props.universe.get() + 20),
+      universe: Universe.of(newUniverse ?? this.props.universe.get() + Universe.DEFAULT_INCREMENT),
     });
   }
 

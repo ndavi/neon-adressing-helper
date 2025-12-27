@@ -1,5 +1,6 @@
 export class Universe {
   static readonly MAX_CHANNELS = 512;
+  static readonly DEFAULT_INCREMENT = 20;
 
   private constructor(private readonly value: number) {}
 

@@ -34,10 +34,10 @@ export class Controllers {
     }
     if (this.shouldAddControllers(newCount)) {
       const toAddCount = newCount - this.props.values.length;
-      let lastUniverse = this.props.values[this.props.values.length - 1]?.universe ?? -20;
+      let lastUniverse = this.props.values[this.props.values.length - 1]?.universe ?? -Universe.DEFAULT_INCREMENT;
 
       const toAdd = Array.from({ length: toAddCount }, () => {
-        lastUniverse += 20;
+        lastUniverse += Universe.DEFAULT_INCREMENT;
         return Controller.of({
           universe: Universe.of(lastUniverse),
           outputs: Controller.new().outputs,
@@ -65,10 +65,9 @@ export class Controllers {
     if (!controllerToDuplicate || !lastController) {
       return this;
     }
-    const duplicated = controllerToDuplicate.duplicate(lastController.universe + 20);
+    const duplicated = controllerToDuplicate.duplicate(lastController.universe + Universe.DEFAULT_INCREMENT);
     return new Controllers({ values: [...this.props.values, duplicated] });
   }
-
   remove(index: number): Controllers {
     if (!this.isValidIndex(index)) {
       return this;

@@ -31,6 +31,10 @@ export class Controller {
     return Math.ceil(totalChannels / Universe.MAX_CHANNELS);
   }
 
+  get endUniverse(): number {
+    return this.universe + Math.max(0, this.universeCount - 1);
+  }
+
   private getTotalChannels(): number {
     return this.props.outputs.reduce((sum, output) => sum + output.channelCount, 0);
   }

@@ -61,6 +61,19 @@ describe('LedOutputCard', () => {
     const wrapper1M = givenALedOutputCard(output1M);
     thenBarAtIndexHasClass(wrapper1M, 0, 'bg-purple-lighten-3');
   });
+
+  it('Should disable delete button when output is not deletable', () => {
+    const output = givenAnEmptyOutput();
+    const wrapper = mount(LedOutputCard, {
+      props: {
+        output,
+        index: 0,
+        isDeletable: false,
+      },
+    });
+
+    thenDeleteButtonIsDisabled(wrapper);
+  });
 });
 
 const givenAnEmptyOutput = () => LedOutput.new();
@@ -82,6 +95,7 @@ const givenALedOutputCard = (output: LedOutput): VueWrapper => {
     props: {
       output,
       index: 2,
+      isDeletable: true,
     },
   });
 };
@@ -129,6 +143,11 @@ const thenBarAtIndexHasWidth = (wrapper: VueWrapper, index: number, width: strin
 const thenBarAtIndexHasClass = (wrapper: VueWrapper, index: number, className: string) => {
   const bars = wrapper.findAll(selector('led-bar'));
   expect(barAt(bars, index).classes()).toContain(className);
+};
+
+const thenDeleteButtonIsDisabled = (wrapper: VueWrapper) => {
+  const deleteButton = wrapper.find(selector('delete-output'));
+  expect(deleteButton.attributes()).toHaveProperty('disabled');
 };
 
 const barAt = (bars: ReturnType<VueWrapper['findAll']>, index: number) => Optional.ofNullable(bars[index]).orElseThrow();

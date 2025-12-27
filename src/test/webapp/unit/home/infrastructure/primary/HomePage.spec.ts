@@ -87,6 +87,14 @@ describe('When visiting the homepage', () => {
     if (!Array.isArray(controllersProp)) throw new Error('Controllers prop is not an array');
     expect(controllersProp[0].universe).toBe(0);
   });
+
+  it('Should disable delete output button when there is only one output', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 1);
+
+    const deleteButton = wrapper.find(selector('delete-output'));
+    expect(deleteButton.attributes()).toHaveProperty('disabled');
+  });
 });
 
 const givenHomepage = (): VueWrapper => {

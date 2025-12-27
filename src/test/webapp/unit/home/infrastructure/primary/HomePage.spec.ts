@@ -40,17 +40,30 @@ describe('When visiting the homepage', () => {
     expect(input.attributes('min')).toBe('0');
   });
 
-  it('Should have a maximum value of 8 for the outputs input', async () => {
+  it('Should have a minimum value of 1 for the outputs input', async () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 
     const card = wrapper.find(selector('controller-card'));
     const outputInput = card.findAll('input')[1];
     if (!outputInput) throw new Error('Output input not found');
-    expect(outputInput.attributes('max')).toBe('8');
+    expect(outputInput.attributes('min')).toBe('1');
   });
 
-  it('Should not update outputs when entering a number > 8', async () => {
+  it('Should not update outputs when entering a number < 1', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 1);
+
+    const card = wrapper.find(selector('controller-card'));
+    const outputInput = card.findAll('input')[1];
+    if (!outputInput) throw new Error('Output input not found');
+    await outputInput.setValue(0);
+
+    const outputCards = card.findAllComponents({ name: 'LedOutputCard' });
+    expect(outputCards.length).toBe(1);
+  });
+
+  it('Should have a maximum value of 8 for the outputs input', async () => {
     const wrapper = givenHomepage();
     await whenEnteringNumberOfControllers(wrapper, 1);
 

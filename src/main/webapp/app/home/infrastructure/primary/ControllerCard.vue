@@ -34,7 +34,7 @@
         :model-value="controller.outputs.length"
         label="Nombre de sorties"
         type="number"
-        min="0"
+        min="1"
         max="8"
         variant="outlined"
         hide-details="auto"
@@ -82,7 +82,7 @@ const updateUniverse = (newUniverse: number) => {
 };
 
 const updateOutputsCount = (newCount: number) => {
-  if (newCount >= 0 && newCount <= 8) {
+  if (newCount >= 1 && newCount <= 8) {
     emit('update:controller', props.controller.resizeOutputs(newCount));
   }
 };

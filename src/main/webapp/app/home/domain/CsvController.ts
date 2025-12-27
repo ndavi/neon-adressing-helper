@@ -44,7 +44,7 @@ export class CsvController {
           endX: currentX,
           endY: currentY + bar.length,
           width,
-          fixtureName: `${this.controller.name}/C${controllerIndex}-OUT-${outputIndex + 1}/LED-${startLineIndex + lines.length}`,
+          fixtureName: `${this.controller.name}-${controllerIndex}/C${controllerIndex}-OUT-${outputIndex + 1}/LED-${startLineIndex + lines.length}`,
         });
 
         currentGlobalChannel += bar.channelCount;

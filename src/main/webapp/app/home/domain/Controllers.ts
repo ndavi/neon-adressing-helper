@@ -34,10 +34,12 @@ export class Controllers {
     }
     if (this.shouldAddControllers(newCount)) {
       const toAddCount = newCount - this.props.values.length;
-      const toAdd = Array.from({ length: toAddCount }, (_, i) => {
-        const index = this.props.values.length + i;
+      let lastUniverse = this.props.values[this.props.values.length - 1]?.universe ?? -20;
+
+      const toAdd = Array.from({ length: toAddCount }, () => {
+        lastUniverse += 20;
         return Controller.of({
-          universe: Universe.of(index * 20),
+          universe: Universe.of(lastUniverse),
           outputs: Controller.new().outputs,
         });
       });

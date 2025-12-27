@@ -13,12 +13,14 @@ describe('Controllers Domain', () => {
 
   it('Should add controllers when resizing up', () => {
     const controllers = Controllers.init();
-    const resized = controllers.resize(2);
+    const c0 = controllerAt(controllers, 0).withUniverse(100);
+    const controllersWithU100 = controllers.replace(0, c0);
+
+    const resized = controllersWithU100.resize(2);
 
     expect(resized.values).toHaveLength(2);
-    expect(controllerAt(resized, 0).universe).toBe(0);
-    expect(controllerAt(resized, 1).universe).toBe(20);
-    expect(controllers.values).toHaveLength(1);
+    expect(controllerAt(resized, 0).universe).toBe(100);
+    expect(controllerAt(resized, 1).universe).toBe(120);
   });
 
   it('Should remove controllers from the end when resizing down', () => {

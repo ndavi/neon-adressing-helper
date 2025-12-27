@@ -42,7 +42,7 @@ describe('Controller2DVisualizer', () => {
   });
 
   it('Should render outputs and bars', () => {
-    const outputWithBars = LedOutput.new().addBar().addBar();
+    const outputWithBars = LedOutput.new().addBar(); // 2 bars
     const controller = Controller.of({ universe: Universe.of(1), outputs: [outputWithBars], index: 0 });
 
     const wrapper = mount(Controller2DVisualizer, {

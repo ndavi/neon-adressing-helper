@@ -1,7 +1,5 @@
 import { Controller } from '@/home/domain/Controller';
 import { CsvExporter } from '@/home/domain/CsvExporter';
-import { LedOutput } from '@/home/domain/LedOutput';
-import { Universe } from '@/home/domain/Universe';
 import { describe, expect, it } from 'vitest';
 
 describe('CsvExporter', () => {
@@ -22,11 +20,7 @@ describe('CsvExporter', () => {
   }
 
   function givenControllerWithOneOutputAndOneBar(): Controller {
-    return Controller.of({
-      universe: Universe.of(0),
-      outputs: [LedOutput.new().addBar()],
-      index: 0,
-    });
+    return Controller.new(); // Now has 1 bar by default
   }
 
   function whenExportingToCsv(controllers: Controller[]): string {

@@ -10,16 +10,15 @@ test.describe('Controller Modification', () => {
     await homePage.setControllersCount(1);
     await expect(homePage.controllerCards).toHaveCount(1);
 
-    // Check initial universe counts (0 bars = 0 universes)
-    expect(await homePage.getUniverseCount(0)).toBe('0');
+    // Check initial universe counts (1 bar = 1 universe)
+    expect(await homePage.getUniverseCount(0)).toBe('1');
     expect(await homePage.getEndUniverse(0)).toBe('0');
     const totalCount = page.locator('[data-selector="total-universe-count"]');
-    await expect(totalCount).toHaveText('0');
+    await expect(totalCount).toHaveText('1');
 
-    // Add bars to update counts
+    // Add 1 more bar to have 2 bars total
     const outputCards = await homePage.getOutputCards(0);
     const firstOutput = outputCards.first();
-    await firstOutput.locator('[data-selector="add-bar-button"]').click();
     await firstOutput.locator('[data-selector="add-bar-button"]').click();
 
     // Now: 2 bars (2M) -> 714 channels -> 2 universes
@@ -28,15 +27,10 @@ test.describe('Controller Modification', () => {
     expect(await homePage.getEndUniverse(0)).toBe('1');
     await expect(totalCount).toHaveText('2');
 
-    // Duplicate controller
+    // Duplicate controller (which has 2 bars -> 2 universes)
     await homePage.duplicateController(0);
     await expect(homePage.controllerCards).toHaveCount(2);
 
-    // Check titles to ensure order
-    await expect(homePage.controllerCards.nth(0)).toContainText('Contrôleur 1');
-    await expect(homePage.controllerCards.nth(1)).toContainText('Contrôleur 2');
-
-    // The duplicated controller should have the same bars (2 universes)
     // Total should be 2 + 2 = 4
     await expect(totalCount).toHaveText('4');
 

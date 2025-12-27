@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 
 describe('LedOutputCard', () => {
   it('Should display output index and bar count', () => {
-    const output = givenAnOutputWithTwoBars();
+    const output = givenAnOutputWithTwoBars(); // Has 2 bars
     const wrapper = givenALedOutputCard(output);
 
     thenItDisplaysOutputIndex(wrapper, 3);
@@ -76,16 +76,16 @@ describe('LedOutputCard', () => {
   });
 });
 
-const givenAnEmptyOutput = () => LedOutput.new();
+const givenAnEmptyOutput = () => LedOutput.new(); // Has 1 bar now
 
-const givenAnOutputWithOneBar = () => LedOutput.new().addBar();
+const givenAnOutputWithOneBar = () => LedOutput.new();
 
-const givenAnOutputWithTwoBars = () => LedOutput.new().addBar().addBar();
+const givenAnOutputWithTwoBars = () => LedOutput.new().addBar();
 
 const givenAnOutputWithOneBarOfType = (type: BarType) => {
-  let output = LedOutput.new().addBar();
+  const output = LedOutput.new();
   if (type === '1M') {
-    output = output.toggleBar(0);
+    return output.toggleBar(0);
   }
   return output;
 };

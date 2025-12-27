@@ -42,7 +42,7 @@ export class LedOutput {
   private constructor(private readonly props: LedOutputProps) {}
 
   static new(): LedOutput {
-    return new LedOutput({ bars: [] });
+    return new LedOutput({ bars: [Bar.new()] });
   }
 
   get bars(): readonly Bar[] {
@@ -58,8 +58,8 @@ export class LedOutput {
   }
 
   removeBar(): LedOutput {
-    if (this.props.bars.length === 0) {
-      return this;
+    if (this.props.bars.length <= 1) {
+      throw new Error('An output must have at least one bar');
     }
     const newBars = this.props.bars.slice(0, -1);
     return new LedOutput({ bars: newBars });

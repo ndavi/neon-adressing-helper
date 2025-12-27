@@ -1,6 +1,7 @@
 import { Optional } from '@/common/domain/Optional';
 import type { Controller } from '@/home/domain/Controller';
 import { Controllers } from '@/home/domain/Controllers';
+import { LedOutput } from '@/home/domain/LedOutput';
 import { describe, expect, it } from 'vitest';
 
 describe('Controllers Domain', () => {
@@ -82,8 +83,8 @@ describe('Controllers Domain', () => {
     // 2nd controller: 1 bar -> 1 universe
     // Total: 3 universes
     const controllers = Controllers.init().resize(2);
-    const c1 = controllerAt(controllers, 0).replaceOutput(0, controllerAt(controllers, 0).outputs[0]!.addBar().addBar());
-    const c2 = controllerAt(controllers, 1).replaceOutput(0, controllerAt(controllers, 1).outputs[0]!.addBar());
+    const c1 = controllerAt(controllers, 0).replaceOutput(0, LedOutput.new().addBar()); // 2 bars
+    const c2 = controllerAt(controllers, 1).replaceOutput(0, LedOutput.new()); // 1 bar
 
     const updated = controllers.replace(0, c1).replace(1, c2);
 

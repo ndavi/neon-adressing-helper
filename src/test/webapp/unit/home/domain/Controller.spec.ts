@@ -96,6 +96,14 @@ describe('Controller', () => {
     expect(() => controller.removeOutput(0)).toThrow('A controller must have at least one output');
   });
 
+  it('should tell if it can duplicate output', () => {
+    const controller = Controller.new();
+    expect(controller.canDuplicateOutput).toBe(true);
+
+    const fullController = controller.resizeOutputs(8);
+    expect(fullController.canDuplicateOutput).toBe(false);
+  });
+
   it('should throw when resizing outputs to 0', () => {
     const controller = Controller.new();
     expect(() => controller.resizeOutputs(0)).toThrow('A controller must have at least one output');

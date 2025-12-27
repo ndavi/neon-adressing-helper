@@ -47,6 +47,10 @@ export class Controller {
     return 'CONTROLLEUR';
   }
 
+  get canDuplicateOutput(): boolean {
+    return !this.hasMaxOutputs();
+  }
+
   withUniverse(newUniverse: number): Controller {
     return new Controller({ ...this.props, universe: Universe.of(newUniverse) });
   }

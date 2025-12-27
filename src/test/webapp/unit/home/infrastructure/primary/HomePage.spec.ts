@@ -80,6 +80,15 @@ describe('When visiting the homepage', () => {
 
     thenDeleteOutputButtonIsDisabled(wrapper);
   });
+
+  it('Should disable duplicate output button when the limit of 8 is reached', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 1);
+
+    await whenEnteringOutputsCount(wrapper, 8);
+
+    thenDuplicateOutputButtonIsDisabled(wrapper);
+  });
 });
 
 const givenHomepage = (): VueWrapper => {
@@ -166,4 +175,9 @@ const thenUniverseIs = (wrapper: VueWrapper, controllerIndex: number, expectedUn
 const thenDeleteOutputButtonIsDisabled = (wrapper: VueWrapper) => {
   const deleteButton = wrapper.find(selector('delete-output'));
   expect(deleteButton.attributes()).toHaveProperty('disabled');
+};
+
+const thenDuplicateOutputButtonIsDisabled = (wrapper: VueWrapper) => {
+  const duplicateButton = wrapper.find(selector('duplicate-output'));
+  expect(duplicateButton.attributes()).toHaveProperty('disabled');
 };

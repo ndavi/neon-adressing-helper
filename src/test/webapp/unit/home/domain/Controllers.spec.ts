@@ -47,17 +47,21 @@ describe('Controllers Domain', () => {
     expect(() => controllers.resize(-1)).toThrow('Controllers count cannot be negative');
   });
 
-  it('Should duplicate a controller and append it to the end with a new index', () => {
+  it('Should duplicate a controller and append it to the end with a correct index and universe', () => {
+    // C0: U0
+    // C1: U20
     const controllers = Controllers.init().resize(2);
-    const originalController = controllerAt(controllers, 0).withUniverse(42).resizeOutputs(3);
-    const updatedControllers = controllers.replace(0, originalController);
 
-    const duplicatedControllers = updatedControllers.duplicate(0);
+    // Duplicate C0 (U0)
+    const result = controllers.duplicate(0);
 
-    expect(duplicatedControllers.values).toHaveLength(3);
+    expect(result.values).toHaveLength(3);
 
-    const duplicated = controllerAt(duplicatedControllers, 2);
+    const duplicated = controllerAt(result, 2);
+    // New index should be 2 (end of list)
     expect(duplicated.index).toBe(2);
+    // Universe should be based on C1 (last): U20 + 20 = U40
+    expect(duplicated.universe).toBe(40);
   });
 
   it('Should remove a controller and reindex subsequent controllers', () => {
@@ -82,19 +86,6 @@ describe('Controllers Domain', () => {
     const updated = controllers.replace(0, c1).replace(1, c2);
 
     expect(updated.universeCount).toBe(3);
-  });
-
-  it('Should duplicate a controller based on the last controller universe', () => {
-    // C0: U0
-    // C1: U20
-    const controllers = Controllers.init().resize(2);
-
-    // Duplicate C0 (U0)
-    const result = controllers.duplicate(0);
-
-    const duplicated = controllerAt(result, 2);
-    // Should be U20 (last) + 20 = U40, NOT U0 + 20 = U20
-    expect(duplicated.universe).toBe(40);
   });
 });
 

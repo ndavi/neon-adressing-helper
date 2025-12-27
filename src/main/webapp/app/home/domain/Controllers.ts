@@ -24,6 +24,10 @@ export class Controllers {
     return this.props.values;
   }
 
+  get universeCount(): number {
+    return this.props.values.reduce((sum, controller) => sum + controller.universeCount, 0);
+  }
+
   resize(newCount: number): Controllers {
     if (newCount < 0) {
       throw new Error('Controllers count cannot be negative');

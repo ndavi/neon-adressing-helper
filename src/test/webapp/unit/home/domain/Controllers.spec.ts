@@ -76,6 +76,19 @@ describe('Controllers Domain', () => {
     expect(controllerAt(updated, 1).index).toBe(1);
     expect(controllerAt(updated, 1).universe).toBe(40); // 2 * 20 = 40
   });
+
+  it('Should return the total number of universes', () => {
+    // 1st controller: 2 bars -> 2 universes
+    // 2nd controller: 1 bar -> 1 universe
+    // Total: 3 universes
+    const controllers = Controllers.init().resize(2);
+    const c1 = controllerAt(controllers, 0).replaceOutput(0, controllerAt(controllers, 0).outputs[0]!.addBar().addBar());
+    const c2 = controllerAt(controllers, 1).replaceOutput(0, controllerAt(controllers, 1).outputs[0]!.addBar());
+
+    const updated = controllers.replace(0, c1).replace(1, c2);
+
+    expect(updated.universeCount).toBe(3);
+  });
 });
 
 const controllerAt = (controllers: Controllers, index: number): Controller => Optional.ofNullable(controllers.values[index]).orElseThrow();

@@ -1,14 +1,26 @@
 <template>
   <div class="pa-4 full-height d-flex flex-column bg-surface">
-    <v-text-field
-      id="controllers-count"
-      v-model.number="controllersCount"
-      label="Nombre de contrôleurs"
-      type="number"
-      min="0"
-      variant="outlined"
-      class="mb-4 flex-grow-0"
-    ></v-text-field>
+    <v-row dense class="flex-grow-0 mb-4">
+      <v-col cols="6">
+        <v-text-field
+          id="controllers-count"
+          v-model.number="controllersCount"
+          label="Nombre de contrôleurs"
+          type="number"
+          min="0"
+          variant="outlined"
+          hide-details="auto"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="6" class="d-flex align-center justify-center border rounded">
+        <div class="text-center">
+          <div class="text-caption text-grey-darken-1">Total Univers</div>
+          <div class="text-h6 font-weight-bold" data-selector="total-universe-count">
+            {{ controllers.universeCount }}
+          </div>
+        </div>
+      </v-col>
+    </v-row>
 
     <div class="overflow-y-auto flex-grow-1 pr-2 controllers-grid">
       <div v-for="(controller, index) in controllers.values" :key="index" class="controller-card-wrapper">

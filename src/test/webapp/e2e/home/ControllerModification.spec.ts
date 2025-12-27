@@ -64,4 +64,26 @@ test.describe('Controller Modification', () => {
     expect(await homePage.getUniverseCount(0)).toBe('2');
     expect(await homePage.getEndUniverse(0)).toBe('1');
   });
+
+  test('should display total universe count', async ({ page }) => {
+    const homePage = new HomePage(page);
+    await homePage.goto();
+
+    await homePage.setControllersCount(2);
+
+    const outputCards = await homePage.getOutputCards(0);
+    const firstOutput = outputCards.first();
+
+    // 1st controller: add 2 bars -> 2 universes
+    await firstOutput.locator('[data-selector="add-bar-button"]').click();
+    await firstOutput.locator('[data-selector="add-bar-button"]').click();
+
+    // 2nd controller: add 1 bar -> 1 universe
+    const outputCards2 = await homePage.getOutputCards(1);
+    await outputCards2.first().locator('[data-selector="add-bar-button"]').click();
+
+    // Total should be 3
+    const totalCount = await page.locator('[data-selector="total-universe-count"]').textContent();
+    expect(totalCount?.trim()).toBe('3');
+  });
 });

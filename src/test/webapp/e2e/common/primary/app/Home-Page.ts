@@ -17,7 +17,7 @@ export class HomePage {
   }
 
   async goto() {
-    await this.page.goto('/');
+    await this.page.goto('http://localhost:9000/');
   }
 
   async setControllersCount(count: number) {
@@ -46,6 +46,39 @@ export class HomePage {
 
   async getVisualizerNodesCount() {
     return await this.visualizerNodes.count();
+  }
+
+  async configureExampleState() {
+    const cards = this.controllerCards;
+    const count = await cards.count();
+
+    for (let i = 0; i < count; i++) {
+      const targetCount = i < 4 ? 8 : 4;
+      const card = cards.nth(i);
+      const outputInput = card.locator('input').nth(1);
+      await outputInput.fill(targetCount.toString());
+    }
+
+    // Wait for the UI to update after changing output counts
+    // This is implicit in Playwright actions but good to be aware of
+
+    for (let i = 0; i < count; i++) {
+      const outputCount = i < 4 ? 8 : 4;
+      const currentCard = cards.nth(i);
+
+      for (let k = 0; k < outputCount; k++) {
+        const outputCard = currentCard.locator(selector('led-output-card')).nth(k);
+
+        // Add first bar (0 -> 1)
+        await outputCard.locator(selector('add-bar-button')).click();
+
+        const needsSecondBar = (i < 4 && k < 2) || i === 4;
+        if (needsSecondBar) {
+          // Add second bar (1 -> 2)
+          await outputCard.locator(selector('add-bar-button')).click();
+        }
+      }
+    }
   }
 
   async downloadExampleCsv() {

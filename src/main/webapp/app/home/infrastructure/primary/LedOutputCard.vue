@@ -14,7 +14,14 @@
         data-selector="delete-output"
         @click="emit('delete')"
       ></v-btn>
-      <v-btn icon="mdi-minus" size="x-small" variant="text" data-selector="remove-bar-button" @click="emit('remove-bar')"></v-btn>
+      <v-btn
+        icon="mdi-minus"
+        size="x-small"
+        variant="text"
+        :disabled="output.bars.length <= 1"
+        data-selector="remove-bar-button"
+        @click="emit('remove-bar')"
+      ></v-btn>
       <v-btn icon="mdi-plus" size="x-small" variant="text" data-selector="add-bar-button" @click="emit('add-bar')"></v-btn>
     </v-card-text>
 

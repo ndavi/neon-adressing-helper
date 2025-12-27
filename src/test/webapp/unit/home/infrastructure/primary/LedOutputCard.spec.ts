@@ -34,7 +34,7 @@ describe('LedOutputCard', () => {
   });
 
   it('Should emit "remove-bar" when clicking the minus button', async () => {
-    const output = givenAnEmptyOutput();
+    const output = givenAnOutputWithTwoBars();
     const wrapper = givenALedOutputCard(output);
 
     await whenClickingRemoveBar(wrapper);
@@ -73,6 +73,13 @@ describe('LedOutputCard', () => {
     });
 
     thenDeleteButtonIsDisabled(wrapper);
+  });
+
+  it('Should disable remove bar button when only one bar is left', () => {
+    const output = givenAnOutputWithOneBar();
+    const wrapper = givenALedOutputCard(output);
+
+    thenRemoveBarButtonIsDisabled(wrapper);
   });
 });
 
@@ -148,6 +155,11 @@ const thenBarAtIndexHasClass = (wrapper: VueWrapper, index: number, className: s
 const thenDeleteButtonIsDisabled = (wrapper: VueWrapper) => {
   const deleteButton = wrapper.find(selector('delete-output'));
   expect(deleteButton.attributes()).toHaveProperty('disabled');
+};
+
+const thenRemoveBarButtonIsDisabled = (wrapper: VueWrapper) => {
+  const removeButton = wrapper.find(selector('remove-bar-button'));
+  expect(removeButton.attributes()).toHaveProperty('disabled');
 };
 
 const barAt = (bars: ReturnType<VueWrapper['findAll']>, index: number) => Optional.ofNullable(bars[index]).orElseThrow();

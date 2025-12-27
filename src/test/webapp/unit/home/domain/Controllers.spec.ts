@@ -83,6 +83,19 @@ describe('Controllers Domain', () => {
 
     expect(updated.universeCount).toBe(3);
   });
+
+  it('Should duplicate a controller based on the last controller universe', () => {
+    // C0: U0
+    // C1: U20
+    const controllers = Controllers.init().resize(2);
+
+    // Duplicate C0 (U0)
+    const result = controllers.duplicate(0);
+
+    const duplicated = controllerAt(result, 2);
+    // Should be U20 (last) + 20 = U40, NOT U0 + 20 = U20
+    expect(duplicated.universe).toBe(40);
+  });
 });
 
 const controllerAt = (controllers: Controllers, index: number): Controller => Optional.ofNullable(controllers.values[index]).orElseThrow();

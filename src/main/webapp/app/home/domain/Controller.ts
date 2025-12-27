@@ -79,11 +79,11 @@ export class Controller {
     return new Controller({ ...this.props, outputs: newOutputs });
   }
 
-  duplicate(newIndex: number): Controller {
+  duplicate(newIndex: number, newUniverse?: number): Controller {
     return new Controller({
       ...this.props,
       index: newIndex,
-      universe: Universe.of(this.props.universe.get() + 20),
+      universe: Universe.of(newUniverse ?? this.props.universe.get() + 20),
     });
   }
 

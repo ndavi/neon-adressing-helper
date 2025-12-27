@@ -60,10 +60,11 @@ export class Controllers {
       return this;
     }
     const controllerToDuplicate = this.props.values[index];
-    if (!controllerToDuplicate) {
+    const lastController = this.props.values[this.props.values.length - 1];
+    if (!controllerToDuplicate || !lastController) {
       return this;
     }
-    const duplicated = controllerToDuplicate.duplicate(this.props.values.length);
+    const duplicated = controllerToDuplicate.duplicate(this.props.values.length, lastController.universe + 20);
     return new Controllers({ values: [...this.props.values, duplicated] });
   }
 

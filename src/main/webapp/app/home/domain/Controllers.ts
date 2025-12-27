@@ -1,3 +1,4 @@
+import { Optional } from '@/common/domain/Optional';
 import { Controller } from './Controller';
 import { Universe } from './Universe';
 
@@ -34,7 +35,9 @@ export class Controllers {
     }
     if (this.shouldAddControllers(newCount)) {
       const toAddCount = newCount - this.props.values.length;
-      let lastUniverse = this.props.values[this.props.values.length - 1]?.universe ?? -Universe.DEFAULT_INCREMENT;
+      let lastUniverse = Optional.ofNullable(this.props.values[this.props.values.length - 1])
+        .map(c => c.universe)
+        .orElse(-Universe.DEFAULT_INCREMENT);
 
       const toAdd = Array.from({ length: toAddCount }, () => {
         lastUniverse += Universe.DEFAULT_INCREMENT;
@@ -65,9 +68,10 @@ export class Controllers {
     if (!controllerToDuplicate || !lastController) {
       return this;
     }
-    const duplicated = controllerToDuplicate.duplicate(lastController.universe + Universe.DEFAULT_INCREMENT);
+    const duplicated = controllerToDuplicate.duplicate(Optional.of(lastController.universe + Universe.DEFAULT_INCREMENT));
     return new Controllers({ values: [...this.props.values, duplicated] });
   }
+
   remove(index: number): Controllers {
     if (!this.isValidIndex(index)) {
       return this;

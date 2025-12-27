@@ -1,3 +1,4 @@
+import type { Optional } from '@/common/domain/Optional';
 import { LedOutput } from './LedOutput';
 import { OutputsCount } from './OutputsCount';
 import { Universe } from './Universe';
@@ -70,10 +71,10 @@ export class Controller {
     return new Controller({ ...this.props, outputs: newOutputs });
   }
 
-  duplicate(newUniverse?: number): Controller {
+  duplicate(newUniverse: Optional<number>): Controller {
     return new Controller({
       ...this.props,
-      universe: Universe.of(newUniverse ?? this.props.universe.get() + Universe.DEFAULT_INCREMENT),
+      universe: Universe.of(newUniverse.orElseGet(() => this.props.universe.get() + Universe.DEFAULT_INCREMENT)),
     });
   }
 

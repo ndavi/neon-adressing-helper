@@ -1,3 +1,4 @@
+import { Optional } from '@/common/domain/Optional';
 import { Controller } from '@/home/domain/Controller';
 import { LedOutput } from '@/home/domain/LedOutput';
 import { Universe } from '@/home/domain/Universe';
@@ -50,7 +51,7 @@ describe('Controller', () => {
       outputs: [LedOutput.new().addBar()],
     });
 
-    const duplicated = controller.duplicate();
+    const duplicated = controller.duplicate(Optional.empty());
 
     expect(duplicated.universe).toBe(62);
     expect(duplicated.outputs).toHaveLength(1);

@@ -20,7 +20,7 @@ describe('CsvExporter', () => {
   }
 
   function givenControllerWithOneOutputAndOneBar(): Controller {
-    return Controller.new(); // Now has 1 bar by default
+    return Controller.new();
   }
 
   function whenExportingToCsv(controllers: Controller[]): string {

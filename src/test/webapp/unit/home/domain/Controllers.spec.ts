@@ -18,7 +18,7 @@ describe('Controllers Domain', () => {
     expect(resized.values).toHaveLength(2);
     expect(controllerAt(resized, 0).universe).toBe(0);
     expect(controllerAt(resized, 1).universe).toBe(20);
-    expect(controllers.values).toHaveLength(1); // Original should be unchanged
+    expect(controllers.values).toHaveLength(1);
   });
 
   it('Should remove controllers from the end when resizing down', () => {
@@ -48,19 +48,14 @@ describe('Controllers Domain', () => {
   });
 
   it('Should duplicate a controller and append it to the end with a correct index and universe', () => {
-    // C0: U0
-    // C1: U20
     const controllers = Controllers.init().resize(2);
 
-    // Duplicate C0 (U0)
     const result = controllers.duplicate(0);
 
     expect(result.values).toHaveLength(3);
 
     const duplicated = controllerAt(result, 2);
-    // New index should be 2 (end of list)
     expect(duplicated.index).toBe(2);
-    // Universe should be based on C1 (last): U20 + 20 = U40
     expect(duplicated.universe).toBe(40);
   });
 

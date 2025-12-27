@@ -47,7 +47,6 @@ describe('LedOutput Domain', () => {
   });
 
   it('Should return correct total channel count for multiple bars', () => {
-    // 2M bar (357) + 1M bar (177) = 534
     const ledOutput = LedOutput.new().addBar().toggleBar(1);
     expect(ledOutput.channelCount).toBe(357 + 177);
   });

@@ -137,4 +137,4 @@ Desktop.ini
 
 .dist
 dist
-dist/
+dist/test-results/

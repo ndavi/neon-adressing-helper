@@ -95,6 +95,10 @@ export class Controller {
 ## Development Workflow
 
 1. **End-to-End (E2E) Test**: Write Playwright tests only when necessary, adhering to TDD principles. Focus on verifying critical user journeys and global application stability, rather than granular feature testing.
+   - **Manual Execution**: To run E2E tests manually, use the following command (specifying the config file is mandatory):
+     ```bash
+     pnpm exec playwright test src/test/webapp/e2e/common/primary/app/Home.spec.ts --config src/test/webapp/e2e/playwright.config.ts
+     ```
 2. **Unit Tests**: Drill down to the unit level (whenever possible and relevant) to implement business logic and components.
 3. **Implementation**: Write the minimum amount of code to make the tests pass.
 4. **Refactoring**: Improve code quality while keeping tests green.

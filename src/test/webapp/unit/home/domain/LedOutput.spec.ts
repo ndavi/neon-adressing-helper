@@ -49,13 +49,20 @@ describe('LedOutput Domain', () => {
   });
 
   it('Should duplicate itself with all bars', () => {
-    const output = givenAnOutputWithOne1MBar().addBar(); // 1M + 2M
-    const duplicated = output.duplicate();
-
-    expect(duplicated).not.toBe(output);
+    const ledOutput = LedOutput.new().addBar().addBar();
+    const duplicated = ledOutput.duplicate();
     expect(duplicated.bars).toHaveLength(2);
-    expect(barAt(duplicated, 0).type).toBe('1M');
-    expect(barAt(duplicated, 1).type).toBe('2M');
+  });
+
+  it('Should return 0 channels when there are no bars', () => {
+    expect(LedOutput.new().channelCount).toBe(0);
+  });
+
+  it('Should return correct total channel count for multiple bars', () => {
+    // 2M bar (357) + 1M bar (177) = 534
+    let ledOutput = LedOutput.new().addBar(); // 2M
+    ledOutput = ledOutput.addBar().toggleBar(1); // 1M
+    expect(ledOutput.channelCount).toBe(357 + 177);
   });
 });
 

@@ -23,6 +23,18 @@ export class Controller {
     return this.props.universe.get();
   }
 
+  get universeCount(): number {
+    const totalChannels = this.getTotalChannels();
+    if (totalChannels === 0) {
+      return 0;
+    }
+    return Math.ceil(totalChannels / Universe.MAX_CHANNELS);
+  }
+
+  private getTotalChannels(): number {
+    return this.props.outputs.reduce((sum, output) => sum + output.channelCount, 0);
+  }
+
   get outputs(): readonly LedOutput[] {
     return this.props.outputs;
   }

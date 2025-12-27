@@ -1,4 +1,6 @@
 export class Universe {
+  static readonly MAX_CHANNELS = 512;
+
   private constructor(private readonly value: number) {}
 
   static of(value: number): Universe {

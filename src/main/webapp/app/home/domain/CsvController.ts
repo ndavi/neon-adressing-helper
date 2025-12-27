@@ -1,4 +1,5 @@
 import type { Controller } from './Controller';
+import { Universe } from './Universe';
 
 export interface CsvLine {
   fixtureDefinitionName: string;
@@ -21,7 +22,7 @@ export class CsvController {
 
   lines(startLineIndex: number): readonly CsvLine[] {
     const lines: CsvLine[] = [];
-    let currentGlobalChannel = this.controller.universe * 512;
+    let currentGlobalChannel = this.controller.universe * Universe.MAX_CHANNELS;
 
     this.controller.outputs.forEach((output, outputIndex) => {
       let currentY = 0;
@@ -31,8 +32,8 @@ export class CsvController {
       output.bars.forEach(bar => {
         const width = 15;
 
-        const startUniverse = Math.floor(currentGlobalChannel / 512);
-        const startChannel = (currentGlobalChannel % 512) + 1;
+        const startUniverse = Math.floor(currentGlobalChannel / Universe.MAX_CHANNELS);
+        const startChannel = (currentGlobalChannel % Universe.MAX_CHANNELS) + 1;
 
         lines.push({
           fixtureDefinitionName: `BARRE NEON - ${bar.type}`,

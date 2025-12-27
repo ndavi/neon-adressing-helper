@@ -49,6 +49,10 @@ export class LedOutput {
     return this.props.bars;
   }
 
+  get channelCount(): number {
+    return this.props.bars.reduce((sum, bar) => sum + bar.channelCount, 0);
+  }
+
   addBar(): LedOutput {
     return new LedOutput({ bars: [...this.props.bars, Bar.new()] });
   }

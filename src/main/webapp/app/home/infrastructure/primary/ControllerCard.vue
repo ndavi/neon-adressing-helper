@@ -34,28 +34,16 @@
           ></v-text-field>
         </v-col>
         <v-col cols="6">
-          <v-text-field
-            :model-value="controller.universeCount"
-            label="Nombre d'univers"
-            type="number"
-            variant="outlined"
-            readonly
-            hide-details="auto"
-            class="mb-3"
-            data-selector="universe-count"
-          ></v-text-field>
+          <div class="text-caption text-grey-darken-1">Nombre d'univers</div>
+          <div class="text-body-1 font-weight-bold" data-selector="universe-count">
+            {{ controller.universeCount }}
+          </div>
         </v-col>
         <v-col cols="6">
-          <v-text-field
-            :model-value="controller.endUniverse"
-            label="Univers de fin"
-            type="number"
-            variant="outlined"
-            readonly
-            hide-details="auto"
-            class="mb-3"
-            data-selector="end-universe"
-          ></v-text-field>
+          <div class="text-caption text-grey-darken-1">Univers de fin</div>
+          <div class="text-body-1 font-weight-bold" data-selector="end-universe">
+            {{ controller.endUniverse }}
+          </div>
         </v-col>
         <v-col cols="6">
           <v-text-field

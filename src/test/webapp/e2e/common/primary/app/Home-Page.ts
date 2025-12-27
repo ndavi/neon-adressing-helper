@@ -41,19 +41,13 @@ export class HomePage {
   }
 
   async getUniverseCount(controllerIndex: number): Promise<string> {
-    const value = await this.controllerCards
-      .nth(controllerIndex)
-      .locator(`${selector('universe-count')} input`)
-      .inputValue();
-    return value;
+    const value = await this.controllerCards.nth(controllerIndex).locator(selector('universe-count')).textContent();
+    return value?.trim() || '';
   }
 
   async getEndUniverse(controllerIndex: number): Promise<string> {
-    const value = await this.controllerCards
-      .nth(controllerIndex)
-      .locator(`${selector('end-universe')} input`)
-      .inputValue();
-    return value;
+    const value = await this.controllerCards.nth(controllerIndex).locator(selector('end-universe')).textContent();
+    return value?.trim() || '';
   }
 
   async getOutputCards(controllerIndex: number) {

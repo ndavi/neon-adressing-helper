@@ -105,9 +105,9 @@ const whenEnteringNumberOfControllers = async (wrapper: VueWrapper, count: numbe
 const whenEnteringOutputsCount = async (wrapper: VueWrapper, count: number) => {
   const card = wrapper.find(selector('controller-card'));
   // Vuetify inputs are tricky to find by label in unit tests without a proper selector.
-  // In the new layout, 'Nombre de sorties' is the 4th input (0: start, 1: count, 2: end, 3: outputs)
+  // Outputs count is now index 1.
   const inputs = card.findAll('input');
-  const targetInput = inputs[3];
+  const targetInput = inputs[1];
   if (!targetInput) throw new Error('Output input not found');
   await targetInput.setValue(count);
 };
@@ -139,14 +139,14 @@ const thenControllersInputHasMinAttribute = (wrapper: VueWrapper, min: string) =
 
 const thenOutputsInputHasMinAttribute = (wrapper: VueWrapper, min: string) => {
   const card = wrapper.find(selector('controller-card'));
-  const outputInput = card.findAll('input')[3];
+  const outputInput = card.findAll('input')[1];
   if (!outputInput) throw new Error('Output input not found');
   expect(outputInput.attributes('min')).toBe(min);
 };
 
 const thenOutputsInputHasMaxAttribute = (wrapper: VueWrapper, max: string) => {
   const card = wrapper.find(selector('controller-card'));
-  const outputInput = card.findAll('input')[3];
+  const outputInput = card.findAll('input')[1];
   if (!outputInput) throw new Error('Output input not found');
   expect(outputInput.attributes('max')).toBe(max);
 };

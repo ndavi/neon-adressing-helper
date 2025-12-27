@@ -60,13 +60,13 @@ describe('Controller', () => {
     if (!output) {
       throw new Error('Output should be defined');
     }
-    expect(output.bars).toHaveLength(2); // Was 1 in test, but LedOutput.new() has 1 + addBar() = 2
+    expect(output.bars).toHaveLength(2);
     expect(duplicated.index).toBe(5);
   });
 
   it('should duplicate an output', () => {
     const controller = Controller.new();
-    const outputWithBar = LedOutput.new().addBar(); // Has 2 bars
+    const outputWithBar = LedOutput.new().addBar();
     const controllerWithBar = controller.replaceOutput(0, outputWithBar);
 
     const updated = controllerWithBar.duplicateOutput(0);
@@ -105,31 +105,24 @@ describe('Controller', () => {
 
   describe('Universe Count', () => {
     it('should return 1 universe when there is only one bar', () => {
-      const controller = Controller.new(); // Has 1 bar by default
+      const controller = Controller.new();
       expect(controller.universeCount).toBe(1);
     });
 
     it('should return 1 universe when total channels < 512', () => {
-      // 1 bar of 2M is 357 channels
       const controller = Controller.new();
 
-      // 357 channels -> 1 universe
       expect(controller.universeCount).toBe(1);
     });
 
     it('should return 2 universes when total channels > 512', () => {
-      // 2 bars of 2M is 357 * 2 = 714 channels
       const output = LedOutput.new().addBar();
       const controller = Controller.new().replaceOutput(0, output);
 
-      // 714 channels -> 2 universes
       expect(controller.universeCount).toBe(2);
     });
 
     it('should calculate across multiple outputs', () => {
-      // Output 1: 1 bar (357)
-      // Output 2: 1 bar (357)
-      // Total: 714 -> 2 universes
       const output1 = LedOutput.new();
       const output2 = LedOutput.new();
 
@@ -143,13 +136,13 @@ describe('Controller', () => {
     it('should calculate end universe', () => {
       const controller = Controller.of({
         universe: Universe.of(10),
-        outputs: [LedOutput.new()], // 1 bar = 1 universe
+        outputs: [LedOutput.new()],
         index: 0,
       });
 
       expect(controller.endUniverse).toBe(10);
 
-      const multiUniverseController = controller.replaceOutput(0, LedOutput.new().addBar()); // 2 bars = 2 universes
+      const multiUniverseController = controller.replaceOutput(0, LedOutput.new().addBar());
       expect(multiUniverseController.endUniverse).toBe(11);
     });
 

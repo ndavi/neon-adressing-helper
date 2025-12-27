@@ -61,30 +61,23 @@ describe('Controllers Domain', () => {
   });
 
   it('Should remove a controller and reindex subsequent controllers', () => {
-    // [0, 1, 2]
     const controllers = Controllers.init().resize(3);
 
-    // Remove index 1
     const updated = controllers.remove(1);
 
     expect(updated.values).toHaveLength(2);
 
-    // Check first one (was 0)
     expect(controllerAt(updated, 0).index).toBe(0);
     expect(controllerAt(updated, 0).universe).toBe(0);
 
-    // Check second one (was 2, now 1)
     expect(controllerAt(updated, 1).index).toBe(1);
-    expect(controllerAt(updated, 1).universe).toBe(40); // 2 * 20 = 40
+    expect(controllerAt(updated, 1).universe).toBe(40);
   });
 
   it('Should return the total number of universes', () => {
-    // 1st controller: 2 bars -> 2 universes
-    // 2nd controller: 1 bar -> 1 universe
-    // Total: 3 universes
     const controllers = Controllers.init().resize(2);
-    const c1 = controllerAt(controllers, 0).replaceOutput(0, LedOutput.new().addBar()); // 2 bars
-    const c2 = controllerAt(controllers, 1).replaceOutput(0, LedOutput.new()); // 1 bar
+    const c1 = controllerAt(controllers, 0).replaceOutput(0, LedOutput.new().addBar());
+    const c2 = controllerAt(controllers, 1).replaceOutput(0, LedOutput.new());
 
     const updated = controllers.replace(0, c1).replace(1, c2);
 

@@ -20,27 +20,57 @@
       ></v-btn>
     </v-card-title>
     <v-card-text>
-      <v-text-field
-        :model-value="controller.universe"
-        label="Univers de départ"
-        type="number"
-        min="0"
-        variant="outlined"
-        hide-details="auto"
-        class="mb-3"
-        @update:model-value="updateUniverse(+$event)"
-      ></v-text-field>
-      <v-text-field
-        :model-value="controller.outputs.length"
-        label="Nombre de sorties"
-        type="number"
-        min="1"
-        max="8"
-        variant="outlined"
-        hide-details="auto"
-        class="mb-3"
-        @update:model-value="updateOutputsCount(+$event)"
-      ></v-text-field>
+      <v-row dense>
+        <v-col cols="6">
+          <v-text-field
+            :model-value="controller.universe"
+            label="Univers de départ"
+            type="number"
+            min="0"
+            variant="outlined"
+            hide-details="auto"
+            class="mb-3"
+            @update:model-value="updateUniverse(+$event)"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="6">
+          <v-text-field
+            :model-value="controller.universeCount"
+            label="Nombre d'univers"
+            type="number"
+            variant="outlined"
+            readonly
+            hide-details="auto"
+            class="mb-3"
+            data-selector="universe-count"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="6">
+          <v-text-field
+            :model-value="controller.endUniverse"
+            label="Univers de fin"
+            type="number"
+            variant="outlined"
+            readonly
+            hide-details="auto"
+            class="mb-3"
+            data-selector="end-universe"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="6">
+          <v-text-field
+            :model-value="controller.outputs.length"
+            label="Nombre de sorties"
+            type="number"
+            min="1"
+            max="8"
+            variant="outlined"
+            hide-details="auto"
+            class="mb-3"
+            @update:model-value="updateOutputsCount(+$event)"
+          ></v-text-field>
+        </v-col>
+      </v-row>
 
       <div class="outputs-list mt-4 text-left">
         <LedOutputCard

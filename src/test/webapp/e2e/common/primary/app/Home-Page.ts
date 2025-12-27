@@ -40,6 +40,22 @@ export class HomePage {
     await this.controllerCards.nth(controllerIndex).locator(selector('delete-output')).nth(outputIndex).click();
   }
 
+  async getUniverseCount(controllerIndex: number): Promise<string> {
+    const value = await this.controllerCards
+      .nth(controllerIndex)
+      .locator(`${selector('universe-count')} input`)
+      .inputValue();
+    return value;
+  }
+
+  async getEndUniverse(controllerIndex: number): Promise<string> {
+    const value = await this.controllerCards
+      .nth(controllerIndex)
+      .locator(`${selector('end-universe')} input`)
+      .inputValue();
+    return value;
+  }
+
   async getOutputCards(controllerIndex: number) {
     return this.controllerCards.nth(controllerIndex).locator(selector('led-output-card')); // Assuming we have a selector for LedOutputCard if we added it, let's check
   }

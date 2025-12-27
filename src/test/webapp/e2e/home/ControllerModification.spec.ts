@@ -36,4 +36,32 @@ test.describe('Controller Modification', () => {
     await homePage.deleteOutput(0, 0);
     await expect(outputs).toHaveCount(1);
   });
+
+  test('should display universe count and end universe', async ({ page }) => {
+    const homePage = new HomePage(page);
+    await homePage.goto();
+
+    await homePage.setControllersCount(1);
+    const outputCards = await homePage.getOutputCards(0);
+    const firstOutput = outputCards.first();
+
+    // Initial state: 1 output with 0 bars -> 0 channels -> 0 universes
+    // Start universe is 0 (default)
+    expect(await homePage.getUniverseCount(0)).toBe('0');
+    expect(await homePage.getEndUniverse(0)).toBe('0');
+
+    // Add a bar to the first output (2M -> 357 channels)
+    await firstOutput.locator('[data-selector="add-bar-button"]').click();
+    // Now: 1 bar (2M) -> 357 channels -> 1 universe
+    // Start: 0, Count: 1, End: 0 + 1 - 1 = 0
+    expect(await homePage.getUniverseCount(0)).toBe('1');
+    expect(await homePage.getEndUniverse(0)).toBe('0');
+
+    // Add another bar to the first output
+    await firstOutput.locator('[data-selector="add-bar-button"]').click();
+    // Now: 2 bars (2M) -> 714 channels -> 2 universes
+    // Start: 0, Count: 2, End: 0 + 2 - 1 = 1
+    expect(await homePage.getUniverseCount(0)).toBe('2');
+    expect(await homePage.getEndUniverse(0)).toBe('1');
+  });
 });

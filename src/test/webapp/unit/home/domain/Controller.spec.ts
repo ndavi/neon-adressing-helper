@@ -54,7 +54,7 @@ describe('Controller', () => {
 
     const duplicated = controller.duplicate(5);
 
-    expect(duplicated.universe).toBe(42);
+    expect(duplicated.universe).toBe(62);
     expect(duplicated.outputs).toHaveLength(1);
     const output = duplicated.outputs[0];
     if (!output) {

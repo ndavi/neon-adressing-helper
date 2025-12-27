@@ -67,6 +67,7 @@ export class Controller {
     return new Controller({
       ...this.props,
       index: newIndex,
+      universe: Universe.of(this.props.universe.get() + 20),
     });
   }
 

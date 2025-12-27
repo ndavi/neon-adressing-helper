@@ -56,7 +56,7 @@ describe('Controllers Domain', () => {
     expect(duplicatedControllers.values).toHaveLength(3);
 
     const duplicated = controllerAt(duplicatedControllers, 2);
-    expect(duplicated.universe).toBe(42);
+    expect(duplicated.universe).toBe(62);
     expect(duplicated.outputs).toHaveLength(3);
     expect(duplicated.index).toBe(2);
   });

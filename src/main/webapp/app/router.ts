@@ -1,7 +1,13 @@
 import { homeRoutes } from '@/home/application/HomeRouter';
 import { createRouter, createWebHistory } from 'vue-router';
 
-export const routes = [...homeRoutes()];
+export const routes = [
+  ...homeRoutes(),
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/',
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(),

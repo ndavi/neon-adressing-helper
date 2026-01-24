@@ -1,20 +1,21 @@
 <template>
   <v-card class="controller-card" variant="outlined" data-selector="controller-card">
     <v-card-title class="d-flex align-center">
-      <div>
-        Contrôleur {{ index + 1 }}
-        <span class="text-caption text-grey-darken-1 ml-2">
+      <div style="min-width: 0">
+        <div>Contrôleur {{ index + 1 }}</div>
+        <div class="text-caption text-grey-darken-1">
           (<span data-selector="universe-count">{{ controller.universeCount }}</span> univers,
           <span data-selector="pixel-count">{{ controller.pixelCount }}</span> pixels, fin:
           <span data-selector="end-universe">{{ controller.endUniverse }}</span
           >)
-        </span>
+        </div>
       </div>
       <v-spacer></v-spacer>
       <v-btn
         icon="mdi-content-copy"
         variant="text"
         density="comfortable"
+        class="flex-shrink-0"
         data-selector="duplicate-controller"
         @click="emit('duplicate')"
       ></v-btn>
@@ -23,6 +24,7 @@
         variant="text"
         density="comfortable"
         color="error"
+        class="flex-shrink-0"
         data-selector="delete-controller"
         @click="emit('delete')"
       ></v-btn>

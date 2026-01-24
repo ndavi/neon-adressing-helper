@@ -25,6 +25,10 @@ export class Bar {
     return this.is2M() ? 357 : 177;
   }
 
+  get pixelCount(): number {
+    return this.is2M() ? 119 : 59;
+  }
+
   toggle(): Bar {
     return Bar.new(this.is2M() ? '1M' : '2M');
   }
@@ -45,12 +49,20 @@ export class LedOutput {
     return new LedOutput({ bars: [Bar.new()] });
   }
 
+  static of(bars: Bar[]): LedOutput {
+    return new LedOutput({ bars });
+  }
+
   get bars(): readonly Bar[] {
     return this.props.bars;
   }
 
   get channelCount(): number {
     return this.props.bars.reduce((sum, bar) => sum + bar.channelCount, 0);
+  }
+
+  get pixelCount(): number {
+    return this.props.bars.reduce((sum, bar) => sum + bar.pixelCount, 0);
   }
 
   addBar(): LedOutput {

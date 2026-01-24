@@ -4,7 +4,8 @@
       <div>
         Contrôleur {{ index + 1 }}
         <span class="text-caption text-grey-darken-1 ml-2">
-          (<span data-selector="universe-count">{{ controller.universeCount }}</span> univers, fin:
+          (<span data-selector="universe-count">{{ controller.universeCount }}</span> univers,
+          <span data-selector="pixel-count">{{ controller.pixelCount }}</span> pixels, fin:
           <span data-selector="end-universe">{{ controller.endUniverse }}</span
           >)
         </span>

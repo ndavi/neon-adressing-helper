@@ -35,6 +35,10 @@ export class Controller {
     return this.universe + Math.max(0, this.universeCount - 1);
   }
 
+  get pixelCount(): number {
+    return this.props.outputs.reduce((sum, output) => sum + output.pixelCount, 0);
+  }
+
   private getTotalChannels(): number {
     return this.props.outputs.reduce((sum, output) => sum + output.channelCount, 0);
   }

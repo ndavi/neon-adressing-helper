@@ -89,6 +89,13 @@ describe('When visiting the homepage', () => {
 
     thenDuplicateOutputButtonIsDisabled(wrapper);
   });
+
+  it('Should display the pixel count for a controller', async () => {
+    const wrapper = givenHomepage();
+    await whenEnteringNumberOfControllers(wrapper, 1);
+
+    thenPixelCountIs(wrapper, 119);
+  });
 });
 
 const givenHomepage = (): VueWrapper => {
@@ -180,4 +187,10 @@ const thenDeleteOutputButtonIsDisabled = (wrapper: VueWrapper) => {
 const thenDuplicateOutputButtonIsDisabled = (wrapper: VueWrapper) => {
   const duplicateButton = wrapper.find(selector('duplicate-output'));
   expect(duplicateButton.attributes()).toHaveProperty('disabled');
+};
+
+const thenPixelCountIs = (wrapper: VueWrapper, count: number) => {
+  const element = wrapper.find(selector('pixel-count'));
+  expect(element.exists()).toBe(true);
+  expect(element.text()).toBe(count.toString());
 };

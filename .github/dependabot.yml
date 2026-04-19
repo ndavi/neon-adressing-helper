@@ -1,0 +1,59 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 10
+    groups:
+      vue:
+        patterns:
+          - 'vue'
+          - 'vue-router'
+          - '@vue/*'
+          - 'vue-tsc'
+          - '@vitejs/plugin-vue'
+      vuetify:
+        patterns:
+          - 'vuetify'
+          - 'vite-plugin-vuetify'
+          - '@mdi/font'
+      vite:
+        patterns:
+          - 'vite'
+          - 'vite-tsconfig-paths'
+      testing:
+        patterns:
+          - 'vitest'
+          - '@vitest/*'
+          - '@playwright/*'
+          - '@vue/test-utils'
+          - 'jsdom'
+          - 'vitest-sonar-reporter'
+      eslint:
+        patterns:
+          - 'eslint'
+          - 'eslint-*'
+          - '@eslint/*'
+          - 'typescript-eslint'
+          - '@typescript-eslint/*'
+          - 'globals'
+      prettier:
+        patterns:
+          - 'prettier'
+          - 'prettier-*'
+          - '@prettier/*'
+      stylelint:
+        patterns:
+          - 'stylelint'
+          - 'stylelint-*'
+      typescript:
+        patterns:
+          - 'typescript'
+          - '@types/*'
+          - '@vue/tsconfig'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'

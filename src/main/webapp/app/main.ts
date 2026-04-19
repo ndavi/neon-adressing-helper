@@ -6,7 +6,11 @@ import AppVue from './AppVue.vue';
 import router from './router';
 // seed4j-needle-main-ts-import
 
-const vuetify = createVuetify();
+const vuetify = createVuetify({
+  theme: {
+    defaultTheme: 'light',
+  },
+});
 
 const app = createApp(AppVue);
 app.use(router);

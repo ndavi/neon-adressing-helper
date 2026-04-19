@@ -1,6 +1,6 @@
 <template>
   <div class="pa-4 full-height d-flex flex-column bg-surface">
-    <v-row dense class="flex-grow-0 mb-4">
+    <v-row density="comfortable" class="flex-grow-0 mb-4">
       <v-col cols="6">
         <v-text-field
           id="controllers-count"
@@ -14,7 +14,7 @@
       </v-col>
       <v-col cols="6" class="d-flex align-center justify-center border rounded">
         <div class="text-center">
-          <div class="text-caption text-grey-darken-1">Total Univers</div>
+          <div class="text-label-small text-grey-darken-1">Total Univers</div>
           <div class="text-h6 font-weight-bold" data-selector="total-universe-count">
             {{ controllers.universeCount }}
           </div>

@@ -3,7 +3,7 @@
     <v-card-title class="d-flex align-center">
       <div style="min-width: 0">
         <div>Contrôleur {{ index + 1 }}</div>
-        <div class="text-caption text-grey-darken-1">
+        <div class="text-label-small text-grey-darken-1">
           (<span data-selector="universe-count">{{ controller.universeCount }}</span> univers,
           <span data-selector="pixel-count">{{ controller.pixelCount }}</span> pixels, fin:
           <span data-selector="end-universe">{{ controller.endUniverse }}</span
@@ -30,7 +30,7 @@
       ></v-btn>
     </v-card-title>
     <v-card-text>
-      <v-row dense>
+      <v-row density="comfortable">
         <v-col cols="6">
           <v-text-field
             :model-value="controller.universe"

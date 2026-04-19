@@ -3,7 +3,7 @@
     <v-card-text class="d-flex align-center py-2">
       <span class="text-subtitle-2">Sortie {{ index + 1 }}</span>
       <v-spacer></v-spacer>
-      <span class="text-caption mr-2">{{ output.bars.length }} barres</span>
+      <span class="text-label-small text-grey-darken-1 mr-2">{{ output.bars.length }} barres</span>
       <v-btn
         icon="mdi-content-copy"
         size="x-small"

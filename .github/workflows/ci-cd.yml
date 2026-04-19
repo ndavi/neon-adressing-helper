@@ -65,6 +65,7 @@ jobs:
 
   deploy:
     needs: [lint, unit-test, e2e-test]
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -82,7 +83,6 @@ jobs:
       - name: Build
         run: pnpm run build
       - name: FTP Deploy
-        if: github.ref == 'refs/heads/main'
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.FTP_SERVER }}

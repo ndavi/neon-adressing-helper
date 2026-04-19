@@ -6,12 +6,14 @@ export class CsvExporter {
     const header = 'Fixture Definition Name;Start Universe;Start Channel;StartX;StartY;EndX;EndY;Width;Fixture Name';
     const lines: string[] = [header];
 
-    let lineCount = 0;
+    let ledCount = 0;
     let controllerIndex = 0;
     for (const controller of controllers) {
       const csvController = CsvController.of(controller);
-      const controllerLines = csvController.lines(controllerIndex, lineCount);
-      lineCount += controllerLines.length;
+      const controllerLines = csvController.lines(controllerIndex, ledCount);
+
+      const controllerLedCount = controllerLines.filter(line => line.fixtureDefinitionName.startsWith('BARRE NEON')).length;
+      ledCount += controllerLedCount;
       controllerIndex++;
 
       controllerLines.forEach(line => {

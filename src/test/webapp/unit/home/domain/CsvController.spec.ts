@@ -6,13 +6,15 @@ import { Universe } from '@/home/domain/Universe';
 import { describe, expect, it } from 'vitest';
 
 describe('CsvController', () => {
-  it('should generate CSV lines for a simple controller with 1 output and 1 bar', () => {
-    const lines = givenAControllerWithOneOutputAndOneBar();
+  it('should generate CSV lines for a simple controller with 1 output and 2 bars', () => {
+    const lines = givenAControllerWithOneOutputAndTwoBars();
+    expect(lines).toHaveLength(3);
     thenCsvLineIsCorrect(Optional.ofNullable(lines[0]).orElseThrow());
+    thenStrobeLineIsCorrect(Optional.ofNullable(lines[2]).orElseThrow());
   });
 });
 
-const givenAControllerWithOneOutputAndOneBar = (): readonly CsvLine[] => {
+const givenAControllerWithOneOutputAndTwoBars = (): readonly CsvLine[] => {
   const output = LedOutput.new().addBar();
   const controller = Controller.of({
     universe: Universe.of(0),
@@ -31,4 +33,16 @@ const thenCsvLineIsCorrect = (line: CsvLine) => {
   expect(line.endY).toBe(200);
   expect(line.width).toBe(15);
   expect(line.fixtureName).toBe('CONTROLLEUR-0/C0-OUT-1/LED-0');
+};
+
+const thenStrobeLineIsCorrect = (line: CsvLine) => {
+  expect(line.fixtureDefinitionName).toBe('NEON STROBE CONTROLEUR');
+  expect(line.startUniverse).toBe(1);
+  expect(line.startChannel).toBe(203);
+  expect(line.startX).toBe(0);
+  expect(line.startY).toBe(0);
+  expect(line.endX).toBe(0);
+  expect(line.endY).toBe(0);
+  expect(line.width).toBe(1);
+  expect(line.fixtureName).toBe('STROBES/STROBE-CONTROLLEUR-0');
 };

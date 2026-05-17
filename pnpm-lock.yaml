@@ -18,8 +18,8 @@ importers:
         specifier: 1.16.0
         version: 1.16.0
       piqure:
-        specifier: 2.2.0
-        version: 2.2.0
+        specifier: 2.2.1
+        version: 2.2.1
       vue:
         specifier: 3.5.34
         version: 3.5.34(typescript@5.9.3)
@@ -2150,8 +2150,8 @@ packages:
     engines: {node: '>=0.10'}
     hasBin: true
 
-  piqure@2.2.0:
-    resolution: {integrity: sha512-fE7oSwHyymXBd2utypu6wMZzydsLbKvbQvPCSZ91+ElEnVrDcQeEOPW1haiixXi6gmp3zo68Jn7kGRJGNiCJCQ==}
+  piqure@2.2.1:
+    resolution: {integrity: sha512-QABeVizwj87tA9Lh229fXlvJCyDbaLB32aVLg5rbsijpXyIpkKvDnoGo82MEvvy2XEUyESpQ1rFBu4bhGkk8VA==}
 
   pkg-types@1.3.1:
     resolution: {integrity: sha512-/Jm5M4RvtBFVkKWRu2BLUTNP8/M2a+UwuAX+ae4770q1qVGtfjG+WTCupoZixokjmHiry8uI+dlY8KXYV5HVVQ==}
@@ -4806,7 +4806,7 @@ snapshots:
 
   pidtree@0.6.0: {}
 
-  piqure@2.2.0: {}
+  piqure@2.2.1: {}
 
   pkg-types@1.3.1:
     dependencies:

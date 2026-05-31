@@ -30,8 +30,8 @@
     "arch-unit-ts": "1.0.9",
     "axios": "1.16.1",
     "piqure": "2.2.1",
-    "vue": "3.5.34",
-    "vue-router": "5.0.7",
+    "vue": "3.5.35",
+    "vue-router": "5.1.0",
     "vuetify": "4.0.8"
   },
   "devDependencies": {
@@ -70,7 +70,7 @@
     "vite-tsconfig-paths": "6.1.1",
     "vitest": "4.1.7",
     "vitest-sonar-reporter": "3.0.0",
-    "vue-tsc": "3.3.1"
+    "vue-tsc": "3.3.3"
   },
   "packageManager": "pnpm@10.26.1",
   "engines": {

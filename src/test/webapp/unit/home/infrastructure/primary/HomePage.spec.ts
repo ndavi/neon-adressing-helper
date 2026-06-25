@@ -1,10 +1,23 @@
+import { BarCatalog } from '@/bar-catalog/domain/BarCatalog';
+import { CompositeBar } from '@/bar-catalog/domain/CompositeBar';
+import { LocalStorageBarCatalogRepository } from '@/bar-catalog/infrastructure/secondary/LocalStorageBarCatalogRepository';
+import { Bar } from '@/common/domain/Bar';
 import HomePage from '@/home/infrastructure/primary/HomePage.vue';
 import { selector } from '@test/DataSelector.ts';
 import type { VueWrapper } from '@vue/test-utils';
 import { mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/bar-catalog/infrastructure/secondary/LocalStorageBarCatalogRepository');
 
 describe('When visiting the homepage', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    LocalStorageBarCatalogRepository.prototype.load = vi
+      .fn()
+      .mockReturnValue(BarCatalog.of([CompositeBar.of({ segments: [Bar.new('2M'), Bar.new('1M'), Bar.new('2M')] })]));
+  });
+
   it('Should provide catalog bars to ControllersGrid', () => {
     const wrapper = givenHomepage();
     const grid = wrapper.findComponent({ name: 'ControllersGrid' });

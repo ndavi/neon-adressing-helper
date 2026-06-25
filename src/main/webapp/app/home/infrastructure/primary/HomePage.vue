@@ -9,7 +9,7 @@
         class="main-content"
       >
         <template #left>
-          <ControllersGrid :controllers="controllers" :catalog-bars="catalogBars" @update:controllers="controllers = $event" />
+          <ControllersGrid :controllers="controllers" :catalog-bars="catalogOutputBars" @update:controllers="controllers = $event" />
         </template>
         <template #right>
           <Controller2DVisualizer :controllers="controllers.values" class="fill-height bg-grey-lighten-4" />
@@ -20,13 +20,23 @@
     <template v-else>
       <ControllersGrid
         :controllers="controllers"
-        :catalog-bars="catalogBars"
+        :catalog-bars="catalogOutputBars"
         class="main-content"
         @update:controllers="controllers = $event"
       />
     </template>
 
-    <v-footer app elevation="4" class="justify-center">
+    <v-footer app elevation="4" class="justify-center gap-4">
+      <v-btn
+        color="secondary"
+        variant="outlined"
+        size="large"
+        prepend-icon="mdi-format-list-bulleted"
+        data-selector="catalog-button"
+        :to="{ name: 'BarCatalog' }"
+      >
+        Barres custom
+      </v-btn>
       <v-btn
         color="primary"
         size="large"
@@ -42,12 +52,12 @@
 </template>
 
 <script setup lang="ts">
+import { LocalStorageBarCatalogRepository } from '@/bar-catalog/infrastructure/secondary/LocalStorageBarCatalogRepository';
 import ResizableSplitPane from '@/common/infrastructure/primary/ResizableSplitPane.vue';
 import { Controllers } from '@/home/domain/Controllers';
 import { CsvExporter } from '@/home/domain/CsvExporter';
-import { Bar } from '@/home/domain/LedOutput';
 import { OutputBar } from '@/home/domain/OutputBar';
-import { shallowRef } from 'vue';
+import { computed, shallowRef } from 'vue';
 import { useDisplay } from 'vuetify';
 import Controller2DVisualizer from './Controller2DVisualizer.vue';
 import ControllersGrid from './ControllersGrid.vue';
@@ -57,7 +67,8 @@ const { mdAndUp } = useDisplay();
 
 const controllers = shallowRef<Controllers>(Controllers.init());
 
-const catalogBars = [OutputBar.composite([Bar.new('2M'), Bar.new('1M'), Bar.new('2M')])];
+const barCatalogRepository = new LocalStorageBarCatalogRepository();
+const catalogOutputBars = computed(() => barCatalogRepository.load().bars.map(cb => OutputBar.composite([...cb.segments])));
 
 const downloadExampleCsv = () => {
   downloadFile(CsvExporter.toCsv(controllers.value.values), 'neon-addressing.csv', 'text/csv;charset=utf-8;');

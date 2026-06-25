@@ -1,4 +1,4 @@
-import { Bar, type BarType } from './LedOutput';
+import { Bar, type BarType } from '@/common/domain/Bar';
 
 interface OutputBarProps {
   segments: readonly Bar[];

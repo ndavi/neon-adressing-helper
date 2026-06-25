@@ -15,6 +15,13 @@ describe('LocalStorageBarCatalogRepository', () => {
     thenCatalogShouldBeEmpty(catalog);
   });
 
+  it('Should return an empty catalog when localStorage contains invalid JSON', () => {
+    const repository = givenRepository();
+    localStorage.setItem('neon-bar-catalog', 'invalid-json');
+    const catalog = whenLoadingCatalog(repository);
+    thenCatalogShouldBeEmpty(catalog);
+  });
+
   it('Should persist and retrieve the catalog', () => {
     const repository = givenRepository();
     const catalog = givenCatalogWithOneBar();

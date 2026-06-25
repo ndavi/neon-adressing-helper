@@ -11,9 +11,13 @@ export class LocalStorageBarCatalogRepository implements BarCatalogRepository {
     if (!raw) {
       return BarCatalog.empty();
     }
-    const parsed: BarType[][] = JSON.parse(raw);
-    const bars = parsed.map(segments => CompositeBar.of({ segments: segments.map(type => Bar.new(type)) }));
-    return BarCatalog.of(bars);
+    try {
+      const parsed: BarType[][] = JSON.parse(raw);
+      const bars = parsed.map(segments => CompositeBar.of({ segments: segments.map(type => Bar.new(type)) }));
+      return BarCatalog.of(bars);
+    } catch {
+      return BarCatalog.empty();
+    }
   }
 
   save(catalog: BarCatalog): void {

@@ -7,6 +7,9 @@ import { selector } from '@test/DataSelector.ts';
 import { type VueWrapper, mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+globalThis.visualViewport = { width: 1024, height: 768, addEventListener: () => {}, removeEventListener: () => {} } as any;
+
 describe('LedOutputCard', () => {
   it('Should display output index and bar count', () => {
     const output = givenAnOutputWithTwoBars();
@@ -95,10 +98,13 @@ const whenClickingRemoveBar = async (wrapper: VueWrapper) => {
 };
 
 const whenReplacingBarAtIndex = async (wrapper: VueWrapper, index: number, optionName: '1M' | '2M') => {
-  // In a VTU test environment without a full Vuetify setup, v-menu might not render the teleported content or options inside the DOM as expected.
-  // Moreover, triggering click on the activator causes a "visualViewport is not defined" error in JSDOM.
-  // Instead of querying teleported nodes, we emit the event directly to test the behavior of the component's API.
-  wrapper.vm.$emit('replace-bar', index, OutputBar.atomic(optionName));
+  const bars = wrapper.findAll(selector('led-bar'));
+  await Optional.ofNullable(bars[index]).orElseThrow().trigger('click');
+
+  const option = document.querySelector(`[data-selector="bar-option-${optionName}"]`);
+  if (!option) throw new Error(`Option ${optionName} not found in DOM`);
+
+  option.dispatchEvent(new Event('click'));
 };
 
 const thenItDisplaysOutputIndex = (wrapper: VueWrapper, index: number) => {

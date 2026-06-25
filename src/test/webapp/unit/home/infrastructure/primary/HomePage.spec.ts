@@ -5,6 +5,14 @@ import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 
 describe('When visiting the homepage', () => {
+  it('Should provide catalog bars to ControllersGrid', () => {
+    const wrapper = givenHomepage();
+    const grid = wrapper.findComponent({ name: 'ControllersGrid' });
+    expect(grid.props('catalogBars')).toBeDefined();
+    expect(grid.props('catalogBars').length).toBeGreaterThan(0);
+    expect(grid.props('catalogBars')[0].name).toBe('2M+1M+2M');
+  });
+
   it('Should allow the user to set the number of LED controllers', async () => {
     const wrapper = givenHomepage();
 

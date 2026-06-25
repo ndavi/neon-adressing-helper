@@ -5,36 +5,48 @@ import { describe, expect, it } from 'vitest';
 
 describe('BarCatalog', () => {
   it('Should start empty', () => {
-    const catalog = BarCatalog.empty();
-    expect(catalog.bars).toHaveLength(0);
+    const catalog = givenEmptyCatalog();
+    thenCatalogShouldBeEmpty(catalog);
   });
 
   it('Should add a composite bar', () => {
-    const catalog = BarCatalog.empty();
+    const catalog = givenEmptyCatalog();
     const bar = givenCompositeBar2M1M2M();
 
-    const updated = catalog.add(bar);
+    const updated = whenAddingBar(catalog, bar);
 
-    expect(updated.bars).toHaveLength(1);
-    expect(updated.bars[0]?.name).toBe('2M+1M+2M');
+    thenCatalogShouldHaveSize(updated, 1);
+    thenCatalogShouldContainBarName(updated, 0, '2M+1M+2M');
   });
 
   it('Should remove a composite bar by index', () => {
-    const catalog = BarCatalog.empty().add(givenCompositeBar2M1M2M()).add(givenCompositeBar1M1M());
+    const catalog = givenCatalogWithTwoBars();
 
-    const updated = catalog.remove(0);
+    const updated = whenRemovingBar(catalog, 0);
 
-    expect(updated.bars).toHaveLength(1);
-    expect(updated.bars[0]?.name).toBe('1M+1M');
+    thenCatalogShouldHaveSize(updated, 1);
+    thenCatalogShouldContainBarName(updated, 0, '1M+1M');
   });
 
   it('Should reject a duplicate composite bar', () => {
-    const catalog = BarCatalog.empty().add(givenCompositeBar2M1M2M());
+    const catalog = givenCatalogWithOneBar();
+    const duplicateBar = givenCompositeBar2M1M2M();
 
-    expect(() => catalog.add(givenCompositeBar2M1M2M())).toThrow();
+    thenAddingDuplicateShouldThrow(catalog, duplicateBar);
   });
 });
 
+const givenEmptyCatalog = (): BarCatalog => BarCatalog.empty();
+const givenCatalogWithOneBar = (): BarCatalog => BarCatalog.empty().add(givenCompositeBar2M1M2M());
+const givenCatalogWithTwoBars = (): BarCatalog => BarCatalog.empty().add(givenCompositeBar2M1M2M()).add(givenCompositeBar1M1M());
 const givenCompositeBar2M1M2M = (): CompositeBar => CompositeBar.of({ segments: [Bar.new('2M'), Bar.new('1M'), Bar.new('2M')] });
-
 const givenCompositeBar1M1M = (): CompositeBar => CompositeBar.of({ segments: [Bar.new('1M'), Bar.new('1M')] });
+
+const whenAddingBar = (catalog: BarCatalog, bar: CompositeBar): BarCatalog => catalog.add(bar);
+const whenRemovingBar = (catalog: BarCatalog, index: number): BarCatalog => catalog.remove(index);
+
+const thenCatalogShouldBeEmpty = (catalog: BarCatalog) => expect(catalog.bars).toHaveLength(0);
+const thenCatalogShouldHaveSize = (catalog: BarCatalog, size: number) => expect(catalog.bars).toHaveLength(size);
+const thenCatalogShouldContainBarName = (catalog: BarCatalog, index: number, expectedName: string) =>
+  expect(catalog.bars[index]?.name).toBe(expectedName);
+const thenAddingDuplicateShouldThrow = (catalog: BarCatalog, bar: CompositeBar) => expect(() => catalog.add(bar)).toThrow();

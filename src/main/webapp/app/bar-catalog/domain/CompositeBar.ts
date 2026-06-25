@@ -38,6 +38,6 @@ export class CompositeBar {
     if (this.props.segments.length !== other.props.segments.length) {
       return false;
     }
-    return this.props.segments.every((segment, index) => segment.type === other.props.segments[index]?.type);
+    return this.props.segments.every((segment, index) => segment.type === other.props.segments[index]!.type);
   }
 }

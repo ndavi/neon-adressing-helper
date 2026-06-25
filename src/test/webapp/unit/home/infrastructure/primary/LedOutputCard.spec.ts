@@ -5,10 +5,9 @@ import { OutputBar } from '@/home/domain/OutputBar';
 import LedOutputCard from '@/home/infrastructure/primary/LedOutputCard.vue';
 import { selector } from '@test/DataSelector.ts';
 import { type VueWrapper, mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-globalThis.visualViewport = { width: 1024, height: 768, addEventListener: () => {}, removeEventListener: () => {} } as any;
+vi.stubGlobal('visualViewport', { width: 1024, height: 768, addEventListener: () => {}, removeEventListener: () => {} });
 
 describe('LedOutputCard', () => {
   it('Should display output index and bar count', () => {

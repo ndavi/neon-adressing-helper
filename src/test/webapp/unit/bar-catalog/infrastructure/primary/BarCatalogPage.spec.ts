@@ -60,6 +60,27 @@ describe('BarCatalogPage', () => {
     thenBuilderNameContains(wrapper, '2M+1M');
   });
 
+  it('Should disable save button when having less than 2 segments', async () => {
+    const wrapper = givenBarCatalogPage();
+    thenSaveButtonIsDisabled(wrapper);
+    await whenAdding2MSegment(wrapper);
+    thenSaveButtonIsDisabled(wrapper);
+  });
+
+  it('Should display alert when trying to save duplicate composite bar', async () => {
+    const alertMock = givenMockedAlert();
+    LocalStorageBarCatalogRepository.prototype.load = vi
+      .fn()
+      .mockReturnValue(BarCatalog.of([CompositeBar.of({ segments: [Bar.new('2M'), Bar.new('1M')] })]));
+
+    const wrapper = givenBarCatalogPage();
+    await whenAdding2MSegment(wrapper);
+    await whenAdding1MSegment(wrapper);
+    await whenSavingCompositeBar(wrapper);
+
+    thenAlertIsCalledWith(alertMock, 'A composite bar with segments 2M+1M already exists');
+  });
+
   it('Should delete a catalog bar', async () => {
     LocalStorageBarCatalogRepository.prototype.load = vi
       .fn()
@@ -77,6 +98,10 @@ const givenBarCatalogPage = (): VueWrapper => {
       plugins: [router],
     },
   });
+};
+
+const givenMockedAlert = () => {
+  return vi.spyOn(window, 'alert').mockImplementation(() => {});
 };
 
 const whenAdding2MSegment = async (wrapper: VueWrapper) => {
@@ -113,4 +138,12 @@ const thenCompositeBarIsSaved = () => {
 
 const thenCatalogBarIsDeleted = () => {
   expect(LocalStorageBarCatalogRepository.prototype.save).toHaveBeenCalled();
+};
+
+const thenSaveButtonIsDisabled = (wrapper: VueWrapper) => {
+  expect(wrapper.find('[data-selector="save-composite-bar"]').attributes('disabled')).toBeDefined();
+};
+
+const thenAlertIsCalledWith = (alertMock: any, message: string) => {
+  expect(alertMock).toHaveBeenCalledWith(message);
 };

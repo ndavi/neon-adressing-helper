@@ -15,14 +15,14 @@ describe('LedOutput Domain', () => {
 
   it('Should have one bar initially', () => {
     const output = givenLedOutput();
-    expect(output.bars).toHaveLength(1);
+    thenOutputHasBars(output, 1);
     thenBarHasName(barAt(output, 0), '2M');
   });
 
   it('Should add a 2M bar', () => {
     const output = givenLedOutput();
     const newOutput = whenAddingBar(output);
-    expect(newOutput.bars).toHaveLength(2);
+    thenOutputHasBars(newOutput, 2);
     thenBarHasName(barAt(newOutput, 1), '2M');
   });
 
@@ -35,7 +35,7 @@ describe('LedOutput Domain', () => {
   it('Should remove the last added bar', () => {
     const output = givenLedOutputWithTwoBars();
     const updatedOutput = whenRemovingBar(output);
-    expect(updatedOutput.bars).toHaveLength(1);
+    thenOutputHasBars(updatedOutput, 1);
   });
 
   it('Should not allow removing the last bar', () => {
@@ -46,7 +46,7 @@ describe('LedOutput Domain', () => {
   it('Should duplicate itself with all bars', () => {
     const ledOutput = givenLedOutputWithTwoBars();
     const duplicated = whenDuplicating(ledOutput);
-    expect(duplicated.bars).toHaveLength(2);
+    thenOutputHasBars(duplicated, 2);
   });
 
   it('Should return correct total channel count for multiple bars', () => {
@@ -69,6 +69,10 @@ const whenDuplicating = (output: LedOutput): LedOutput => output.duplicate();
 
 const thenBarHasName = (bar: OutputBar, expectedName: string) => {
   expect(bar.name).toBe(expectedName);
+};
+
+const thenOutputHasBars = (output: LedOutput, expectedCount: number) => {
+  expect(output.bars).toHaveLength(expectedCount);
 };
 
 const thenBarIsReplaced = (output: LedOutput, index: number, expectedName: string) => {

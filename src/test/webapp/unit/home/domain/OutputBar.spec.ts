@@ -39,6 +39,14 @@ const thenCreatingCompositeBarFails = (segments: readonly Bar[], expectedErrorMe
   expect(() => OutputBar.composite(segments)).toThrow(expectedErrorMessage);
 };
 
+const thenBarHasName = (bar: OutputBar, expectedName: string) => {
+  expect(bar.name).toBe(expectedName);
+};
+
+const thenBarsAreSameInstance = (actual: OutputBar, expected: OutputBar) => {
+  expect(actual).toBe(expected);
+};
+
 describe('OutputBar', () => {
   it('Should represent a 2-meter physical light segment with correct specifications', () => {
     const bar = whenCreatingAtomicBar('2M');
@@ -85,18 +93,18 @@ describe('OutputBar', () => {
   it('Should toggle a 2M atomic bar to a 1M atomic bar', () => {
     const bar = whenCreatingAtomicBar('2M');
     const toggledBar = whenTogglingBar(bar);
-    expect(toggledBar.name).toBe('1M');
+    thenBarHasName(toggledBar, '1M');
   });
 
   it('Should toggle a 1M atomic bar to a 2M atomic bar', () => {
     const bar = whenCreatingAtomicBar('1M');
     const toggledBar = whenTogglingBar(bar);
-    expect(toggledBar.name).toBe('2M');
+    thenBarHasName(toggledBar, '2M');
   });
 
   it('Should not modify a composite bar when toggled', () => {
     const bar = whenCreatingCompositeBar(givenSegments('2M', '1M'));
     const toggledBar = whenTogglingBar(bar);
-    expect(toggledBar).toBe(bar);
+    thenBarsAreSameInstance(toggledBar, bar);
   });
 });

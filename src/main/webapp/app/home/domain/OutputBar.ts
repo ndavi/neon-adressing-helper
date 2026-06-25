@@ -1,3 +1,4 @@
+import { Optional } from '@/common/domain/Optional';
 import { Bar, type BarType } from './LedOutput';
 
 interface OutputBarProps {
@@ -40,7 +41,8 @@ export class OutputBar {
 
   toggle(): OutputBar {
     if (this.props.segments.length === 1) {
-      const type = this.props.segments[0]?.type === '2M' ? '1M' : '2M';
+      const segment = Optional.ofNullable(this.props.segments[0]).orElseThrow();
+      const type = segment.type === '2M' ? '1M' : '2M';
       return OutputBar.atomic(type);
     }
     return this;

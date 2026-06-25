@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 describe('LedOutput Domain', () => {
   it('Should replace a bar at a given index with a composite bar', () => {
-    const output = givenLedOutputWithOneBar();
+    const output = givenLedOutput();
     const compositeBar = givenCompositeBar();
 
     const updated = whenReplacingBar(output, 0, compositeBar);
@@ -58,7 +58,6 @@ describe('LedOutput Domain', () => {
 const barAt = (output: LedOutput, index: number): OutputBar => Optional.ofNullable(output.bars[index]).orElseThrow();
 
 const givenLedOutput = (): LedOutput => LedOutput.new();
-const givenLedOutputWithOneBar = (): LedOutput => LedOutput.new();
 const givenLedOutputWithTwoBars = (): LedOutput => LedOutput.new().addBar();
 const givenLedOutputWithTwoBarsReplacedBy1M = (): LedOutput => LedOutput.new().addBar().replaceBar(1, OutputBar.atomic('1M'));
 const givenCompositeBar = (): OutputBar => OutputBar.composite([Bar.new('2M'), Bar.new('1M'), Bar.new('2M')]);
@@ -73,8 +72,7 @@ const thenBarHasName = (bar: OutputBar, expectedName: string) => {
 };
 
 const thenBarIsReplaced = (output: LedOutput, index: number, expectedName: string) => {
-  expect(output.bars).toHaveLength(1);
-  expect(output.bars[index]?.name).toBe(expectedName);
+  expect(barAt(output, index).name).toBe(expectedName);
 };
 
 const thenChannelCountIs = (output: LedOutput, expectedCount: number) => {

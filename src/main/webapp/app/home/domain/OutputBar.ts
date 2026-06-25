@@ -38,6 +38,14 @@ export class OutputBar {
     return this.sumSegmentProperty(s => s.length);
   }
 
+  toggle(): OutputBar {
+    if (this.props.segments.length === 1) {
+      const type = this.props.segments[0]?.type === '2M' ? '1M' : '2M';
+      return OutputBar.atomic(type);
+    }
+    return this;
+  }
+
   private sumSegmentProperty(getter: (bar: Bar) => number): number {
     return this.props.segments.reduce((sum, s) => sum + getter(s), 0);
   }

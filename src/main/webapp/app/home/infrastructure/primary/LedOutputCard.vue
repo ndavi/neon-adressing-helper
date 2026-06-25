@@ -69,14 +69,20 @@ const emit = defineEmits<{
 
 const getBarStyle = (bar: OutputBar): CSSProperties => {
   return {
-    width: bar.name === '2M' ? '48px' : bar.name === '1M' ? '24px' : '48px', // Simple default for composites
+    width: getBarWidth(bar),
     height: '24px',
   };
+};
+
+const getBarWidth = (bar: OutputBar): string => {
+  if (bar.name === '2M') return '48px';
+  if (bar.name === '1M') return '24px';
+  return '48px';
 };
 
 const getBarClass = (bar: OutputBar): string => {
   if (bar.name === '2M') return 'bg-cyan-lighten-3';
   if (bar.name === '1M') return 'bg-purple-lighten-3';
-  return 'bg-green-lighten-3'; // Composite bars
+  return 'bg-green-lighten-3';
 };
 </script>

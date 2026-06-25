@@ -12,7 +12,10 @@ export class OutputBar {
   }
 
   static composite(segments: readonly Bar[]): OutputBar {
-    return new OutputBar({ segments });
+    if (segments.length === 0) {
+      throw new Error('A composite OutputBar must have at least one segment');
+    }
+    return new OutputBar({ segments: [...segments] });
   }
 
   get segments(): readonly Bar[] {
@@ -24,14 +27,18 @@ export class OutputBar {
   }
 
   get channelCount(): number {
-    return this.props.segments.reduce((sum, s) => sum + s.channelCount, 0);
+    return this.sumSegmentProperty(s => s.channelCount);
   }
 
   get pixelCount(): number {
-    return this.props.segments.reduce((sum, s) => sum + s.pixelCount, 0);
+    return this.sumSegmentProperty(s => s.pixelCount);
   }
 
   get length(): number {
-    return this.props.segments.reduce((sum, s) => sum + s.length, 0);
+    return this.sumSegmentProperty(s => s.length);
+  }
+
+  private sumSegmentProperty(getter: (bar: Bar) => number): number {
+    return this.props.segments.reduce((sum, s) => sum + getter(s), 0);
   }
 }

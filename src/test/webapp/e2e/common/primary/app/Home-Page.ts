@@ -95,6 +95,22 @@ export class HomePage {
     return downloadPromise;
   }
 
+  async clickBarAtIndex(controllerIndex: number, outputIndex: number, barIndex: number) {
+    const output = this.controllerCards.nth(controllerIndex).locator(selector('led-output-card')).nth(outputIndex);
+    await output.locator(selector('led-bar')).nth(barIndex).click();
+  }
+
+  async selectBarFromMenu(barName: string) {
+    await this.page
+      .locator(selector('bar-type-menu'))
+      .locator(`${selector(`bar-option-${barName}`)}`)
+      .click();
+  }
+
+  async goToCatalog() {
+    await this.page.locator(selector('catalog-button')).click();
+  }
+
   async takeScreenshot(name: string) {
     await this.page.screenshot({ path: `target/playwright-screenshots/${name}.png`, fullPage: true });
   }

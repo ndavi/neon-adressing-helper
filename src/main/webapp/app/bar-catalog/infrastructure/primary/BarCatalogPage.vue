@@ -1,7 +1,7 @@
 <template>
   <div class="pa-4">
     <div class="d-flex align-center mb-6">
-      <v-btn icon="mdi-arrow-left" variant="text" :to="{ name: 'Home' }" class="mr-4"></v-btn>
+      <v-btn icon="mdi-arrow-left" variant="text" :to="{ name: 'Home' }" class="mr-4" data-selector="back-button"></v-btn>
       <h1 class="text-h4">Barres custom</h1>
     </div>
 

@@ -20,10 +20,7 @@ describe('When visiting the homepage', () => {
 
   it('Should provide catalog bars to ControllersGrid', () => {
     const wrapper = givenHomepage();
-    const grid = wrapper.findComponent({ name: 'ControllersGrid' });
-    expect(grid.props('catalogBars')).toBeDefined();
-    expect(grid.props('catalogBars').length).toBeGreaterThan(0);
-    expect(grid.props('catalogBars')[0].name).toBe('2M+1M+2M');
+    thenCatalogBarsAreProvidedToGrid(wrapper);
   });
 
   it('Should allow the user to set the number of LED controllers', async () => {
@@ -157,6 +154,13 @@ const thenNumberOfControllersIs = (wrapper: VueWrapper, expectedCount: number) =
     throw new Error('Element is not an HTMLInputElement');
   }
   expect(Number(element.value)).toBe(expectedCount);
+};
+
+const thenCatalogBarsAreProvidedToGrid = (wrapper: VueWrapper) => {
+  const grid = wrapper.findComponent({ name: 'ControllersGrid' });
+  expect(grid.props('catalogBars')).toBeDefined();
+  expect(grid.props('catalogBars').length).toBeGreaterThan(0);
+  expect(grid.props('catalogBars')[0].name).toBe('2M+1M+2M');
 };
 
 const thenControllerCardsAreDisplayed = (wrapper: VueWrapper, expectedCount: number) => {

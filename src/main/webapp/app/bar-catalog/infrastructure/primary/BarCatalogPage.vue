@@ -5,7 +5,6 @@
       <h1 class="text-h4">Barres custom</h1>
     </div>
 
-    <!-- Constructeur visuel -->
     <v-card class="mb-6">
       <v-card-title>Créer une barre composée</v-card-title>
       <v-card-text>
@@ -54,7 +53,6 @@
       </v-card-text>
     </v-card>
 
-    <!-- Liste des barres -->
     <v-card>
       <v-card-title>Catalogue des barres</v-card-title>
       <v-card-text>

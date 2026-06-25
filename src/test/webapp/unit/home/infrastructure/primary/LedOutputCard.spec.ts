@@ -64,6 +64,12 @@ describe('LedOutputCard', () => {
     const wrapper1M = givenALedOutputCard(output1M);
     thenBarSegmentAtIndexHasClass(wrapper1M, 0, 0, 'bg-purple-lighten-3');
   });
+
+  it('Should display correct title for bar', () => {
+    const output = givenAnOutputWithOneBarOfType('2M');
+    const wrapper = givenALedOutputCard(output);
+    thenBarAtIndexHasTitle(wrapper, 0, 'Barre 1 (2M)');
+  });
 });
 
 const givenAnEmptyOutput = () => LedOutput.new();
@@ -147,6 +153,11 @@ const thenBarSegmentAtIndexHasClass = (wrapper: VueWrapper, barIndex: number, se
   const bar = barAt(bars, barIndex);
   const segments = bar.findAll('.bar-segment');
   expect(Optional.ofNullable(segments[segmentIndex]).orElseThrow().classes()).toContain(className);
+};
+
+const thenBarAtIndexHasTitle = (wrapper: VueWrapper, index: number, expectedTitle: string) => {
+  const bars = wrapper.findAll(selector('led-bar'));
+  expect(barAt(bars, index).attributes('title')).toBe(expectedTitle);
 };
 
 const barAt = (bars: ReturnType<VueWrapper['findAll']>, index: number) => Optional.ofNullable(bars[index]).orElseThrow();

@@ -35,7 +35,12 @@
     <div class="d-flex flex-wrap gap-1 px-2 pb-2">
       <v-menu v-for="(bar, i) in output.bars" :key="i">
         <template #activator="{ props: menuProps }">
-          <div v-bind="menuProps" class="bar-container mr-1 mb-1 rounded cursor-pointer" data-selector="led-bar" :title="bar.name">
+          <div
+            v-bind="menuProps"
+            class="bar-container mr-1 mb-1 rounded cursor-pointer"
+            data-selector="led-bar"
+            :title="`Barre ${i + 1} (${bar.name})`"
+          >
             <div
               v-for="(segment, si) in bar.segments"
               :key="si"

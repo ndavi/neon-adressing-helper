@@ -14,10 +14,6 @@ const whenCreatingCompositeBar = (segments: readonly Bar[]): OutputBar => {
   return OutputBar.composite(segments);
 };
 
-const whenTogglingBar = (bar: OutputBar): OutputBar => {
-  return bar.toggle();
-};
-
 const thenBarMatchesExpectations = (
   bar: OutputBar,
   expected: {
@@ -37,14 +33,6 @@ const thenBarMatchesExpectations = (
 
 const thenCreatingCompositeBarFails = (segments: readonly Bar[], expectedErrorMessage: string) => {
   expect(() => OutputBar.composite(segments)).toThrow(expectedErrorMessage);
-};
-
-const thenBarHasName = (bar: OutputBar, expectedName: string) => {
-  expect(bar.name).toBe(expectedName);
-};
-
-const thenBarsAreSameInstance = (actual: OutputBar, expected: OutputBar) => {
-  expect(actual).toBe(expected);
 };
 
 describe('OutputBar', () => {
@@ -88,23 +76,5 @@ describe('OutputBar', () => {
 
   it('Should prevent the creation of a composite bar without any physical segments', () => {
     thenCreatingCompositeBarFails([], 'A composite OutputBar must have at least one segment');
-  });
-
-  it('Should toggle a 2M atomic bar to a 1M atomic bar', () => {
-    const bar = whenCreatingAtomicBar('2M');
-    const toggledBar = whenTogglingBar(bar);
-    thenBarHasName(toggledBar, '1M');
-  });
-
-  it('Should toggle a 1M atomic bar to a 2M atomic bar', () => {
-    const bar = whenCreatingAtomicBar('1M');
-    const toggledBar = whenTogglingBar(bar);
-    thenBarHasName(toggledBar, '2M');
-  });
-
-  it('Should not modify a composite bar when toggled', () => {
-    const bar = whenCreatingCompositeBar(givenSegments('2M', '1M'));
-    const toggledBar = whenTogglingBar(bar);
-    thenBarsAreSameInstance(toggledBar, bar);
   });
 });

@@ -27,6 +27,7 @@
         <ControllerCard
           :controller="controller"
           :index="index"
+          :catalog-bars="catalogBars"
           @update:controller="emit('update:controllers', props.controllers.replace(index, $event))"
           @duplicate="duplicateController(index)"
           @delete="deleteController(index)"
@@ -38,11 +39,13 @@
 
 <script setup lang="ts">
 import type { Controllers } from '@/home/domain/Controllers';
+import type { OutputBar } from '@/home/domain/OutputBar';
 import { computed } from 'vue';
 import ControllerCard from './ControllerCard.vue';
 
 const props = defineProps<{
   controllers: Controllers;
+  catalogBars: readonly OutputBar[];
 }>();
 
 const emit = defineEmits<{

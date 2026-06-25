@@ -33,23 +33,38 @@
     </v-card-text>
 
     <div class="d-flex flex-wrap gap-1 px-2 pb-2">
-      <div
-        v-for="(bar, i) in output.bars"
-        :key="i"
-        class="mr-1 mb-1 rounded cursor-pointer"
-        data-selector="led-bar"
-        :class="getBarClass(bar)"
-        :style="getBarStyle(bar)"
-        :title="`Barre ${i + 1} (${bar.name})`"
-        @click="emit('toggle-bar', i)"
-      ></div>
+      <v-menu v-for="(bar, i) in output.bars" :key="i">
+        <template #activator="{ props: menuProps }">
+          <div v-bind="menuProps" class="bar-container mr-1 mb-1 rounded cursor-pointer" data-selector="led-bar" :title="bar.name">
+            <div
+              v-for="(segment, si) in bar.segments"
+              :key="si"
+              class="bar-segment"
+              :class="getSegmentClass(segment)"
+              :style="getSegmentStyle(segment)"
+            ></div>
+          </div>
+        </template>
+        <v-list density="compact" data-selector="bar-type-menu">
+          <v-list-item title="1M" data-selector="bar-option-1M" @click="emit('replace-bar', i, OutputBar.atomic('1M'))"></v-list-item>
+          <v-list-item title="2M" data-selector="bar-option-2M" @click="emit('replace-bar', i, OutputBar.atomic('2M'))"></v-list-item>
+          <v-divider v-if="catalogBars.length > 0"></v-divider>
+          <v-list-item
+            v-for="(catalogBar, ci) in catalogBars"
+            :key="ci"
+            :title="catalogBar.name"
+            :data-selector="`bar-option-${catalogBar.name}`"
+            @click="emit('replace-bar', i, catalogBar)"
+          ></v-list-item>
+        </v-list>
+      </v-menu>
     </div>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import type { LedOutput } from '@/home/domain/LedOutput';
-import type { OutputBar } from '@/home/domain/OutputBar';
+import type { Bar, LedOutput } from '@/home/domain/LedOutput';
+import { OutputBar } from '@/home/domain/OutputBar';
 import type { CSSProperties } from 'vue';
 
 defineProps<{
@@ -57,32 +72,40 @@ defineProps<{
   index: number;
   isDeletable: boolean;
   isDuplicatable: boolean;
+  catalogBars: readonly OutputBar[];
 }>();
 
 const emit = defineEmits<{
   'add-bar': [];
   'remove-bar': [];
-  'toggle-bar': [index: number];
+  'replace-bar': [index: number, bar: OutputBar];
   duplicate: [];
   delete: [];
 }>();
 
-const getBarStyle = (bar: OutputBar): CSSProperties => {
+const getSegmentStyle = (segment: Bar): CSSProperties => {
   return {
-    width: getBarWidth(bar),
+    width: segment.type === '2M' ? '48px' : '24px',
     height: '24px',
   };
 };
 
-const getBarWidth = (bar: OutputBar): string => {
-  if (bar.name === '2M') return '48px';
-  if (bar.name === '1M') return '24px';
-  return '48px';
-};
-
-const getBarClass = (bar: OutputBar): string => {
-  if (bar.name === '2M') return 'bg-cyan-lighten-3';
-  if (bar.name === '1M') return 'bg-purple-lighten-3';
-  return 'bg-green-lighten-3';
+const getSegmentClass = (segment: Bar): string => {
+  return segment.type === '2M' ? 'bg-cyan-lighten-3' : 'bg-purple-lighten-3';
 };
 </script>
+
+<style scoped>
+.bar-container {
+  display: flex;
+  border: 1px solid transparent;
+}
+
+.bar-container:hover {
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.bar-segment {
+  border-radius: 2px;
+}
+</style>

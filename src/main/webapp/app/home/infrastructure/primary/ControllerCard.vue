@@ -68,9 +68,10 @@
           :index="outputIndex"
           :is-deletable="controller.canRemoveOutput"
           :is-duplicatable="controller.canDuplicateOutput"
+          :catalog-bars="catalogBars"
           @add-bar="addBar(outputIndex)"
           @remove-bar="removeBar(outputIndex)"
-          @toggle-bar="toggleBar(outputIndex, $event)"
+          @replace-bar="(barIndex, newBar) => replaceBar(outputIndex, barIndex, newBar)"
           @duplicate="duplicateOutput(outputIndex)"
           @delete="deleteOutput(outputIndex)"
         />
@@ -81,11 +82,13 @@
 
 <script setup lang="ts">
 import type { Controller } from '@/home/domain/Controller';
+import type { OutputBar } from '@/home/domain/OutputBar';
 import LedOutputCard from './LedOutputCard.vue';
 
 const props = defineProps<{
   controller: Controller;
   index: number;
+  catalogBars: readonly OutputBar[];
 }>();
 
 const emit = defineEmits<{
@@ -120,13 +123,10 @@ const removeBar = (outputIndex: number) => {
   }
 };
 
-const toggleBar = (outputIndex: number, barIndex: number) => {
+const replaceBar = (outputIndex: number, barIndex: number, newBar: OutputBar) => {
   const output = props.controller.outputs[outputIndex];
   if (output) {
-    const bar = output.bars[barIndex];
-    if (bar) {
-      emit('update:controller', props.controller.replaceOutput(outputIndex, output.replaceBar(barIndex, bar.toggle())));
-    }
+    emit('update:controller', props.controller.replaceOutput(outputIndex, output.replaceBar(barIndex, newBar)));
   }
 };
 

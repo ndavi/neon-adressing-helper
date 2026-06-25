@@ -4,13 +4,14 @@
       <div v-for="(controller, index) in controllers" :key="index" class="controller-node" data-selector="controller-node">
         <div class="controller-box">
           <div v-for="(output, oIndex) in controller.outputs" :key="oIndex" class="output-node" data-selector="output-node">
-            <div
-              v-for="(bar, bIndex) in output.bars"
-              :key="bIndex"
-              class="bar-node"
-              data-selector="bar-node"
-              :class="{ 'bar-2m': bar.name === '2M', 'bar-1m': bar.name === '1M' }"
-            ></div>
+            <div v-for="(bar, bIndex) in output.bars" :key="bIndex" class="bar-group" data-selector="bar-node">
+              <div
+                v-for="(segment, sIndex) in bar.segments"
+                :key="sIndex"
+                class="bar-segment-node"
+                :class="{ 'bar-2m': segment.type === '2M', 'bar-1m': segment.type === '1M' }"
+              ></div>
+            </div>
           </div>
         </div>
         <div class="controller-label">U: {{ controller.universe }}</div>
@@ -81,7 +82,13 @@ defineProps<{
   border-radius: 4px;
 }
 
-.bar-node {
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.bar-segment-node {
   width: 10px; /* Fixed width for vertical bars */
   background-color: #4caf50;
   border-radius: 2px;

@@ -9,7 +9,7 @@
         class="main-content"
       >
         <template #left>
-          <ControllersGrid :controllers="controllers" @update:controllers="controllers = $event" />
+          <ControllersGrid :controllers="controllers" :catalog-bars="catalogBars" @update:controllers="controllers = $event" />
         </template>
         <template #right>
           <Controller2DVisualizer :controllers="controllers.values" class="fill-height bg-grey-lighten-4" />
@@ -18,7 +18,12 @@
     </template>
 
     <template v-else>
-      <ControllersGrid :controllers="controllers" class="main-content" @update:controllers="controllers = $event" />
+      <ControllersGrid
+        :controllers="controllers"
+        :catalog-bars="catalogBars"
+        class="main-content"
+        @update:controllers="controllers = $event"
+      />
     </template>
 
     <v-footer app elevation="4" class="justify-center">
@@ -40,6 +45,8 @@
 import ResizableSplitPane from '@/common/infrastructure/primary/ResizableSplitPane.vue';
 import { Controllers } from '@/home/domain/Controllers';
 import { CsvExporter } from '@/home/domain/CsvExporter';
+import { Bar } from '@/home/domain/LedOutput';
+import { OutputBar } from '@/home/domain/OutputBar';
 import { shallowRef } from 'vue';
 import { useDisplay } from 'vuetify';
 import Controller2DVisualizer from './Controller2DVisualizer.vue';
@@ -49,6 +56,8 @@ import { downloadFile } from './FileDownloader';
 const { mdAndUp } = useDisplay();
 
 const controllers = shallowRef<Controllers>(Controllers.init());
+
+const catalogBars = [OutputBar.composite([Bar.new('2M'), Bar.new('1M'), Bar.new('2M')])];
 
 const downloadExampleCsv = () => {
   downloadFile(CsvExporter.toCsv(controllers.value.values), 'neon-addressing.csv', 'text/csv;charset=utf-8;');

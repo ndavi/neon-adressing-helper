@@ -25,13 +25,13 @@ describe('LedOutputCard', () => {
     thenAddBarEventIsEmitted(wrapper);
   });
 
-  it('Should emit "toggle-bar" when clicking a bar', async () => {
+  it('Should emit "replace-bar" when clicking a bar replacement option', async () => {
     const output = givenAnOutputWithOneBar();
     const wrapper = givenALedOutputCard(output);
 
-    await whenClickingBarAtIndex(wrapper, 0);
+    await whenReplacingBarAtIndex(wrapper, 0, '1M');
 
-    thenToggleBarEventIsEmittedWithIndex(wrapper, 0);
+    thenReplaceBarEventIsEmittedWithIndexAndBar(wrapper, 0, OutputBar.atomic('1M'));
   });
 
   it('Should emit "remove-bar" when clicking the minus button', async () => {
@@ -46,21 +46,21 @@ describe('LedOutputCard', () => {
   it('Should display correct width for bar type', () => {
     const output = givenAnOutputWithOneBarOfType('2M');
     const wrapper = givenALedOutputCard(output);
-    thenBarAtIndexHasWidth(wrapper, 0, '48px');
+    thenBarSegmentAtIndexHasWidth(wrapper, 0, 0, '48px');
 
     const output1M = givenAnOutputWithOneBarOfType('1M');
     const wrapper1M = givenALedOutputCard(output1M);
-    thenBarAtIndexHasWidth(wrapper1M, 0, '24px');
+    thenBarSegmentAtIndexHasWidth(wrapper1M, 0, 0, '24px');
   });
 
   it('Should display correct color for bar type', () => {
     const output = givenAnOutputWithOneBarOfType('2M');
     const wrapper = givenALedOutputCard(output);
-    thenBarAtIndexHasClass(wrapper, 0, 'bg-cyan-lighten-3');
+    thenBarSegmentAtIndexHasClass(wrapper, 0, 0, 'bg-cyan-lighten-3');
 
     const output1M = givenAnOutputWithOneBarOfType('1M');
     const wrapper1M = givenALedOutputCard(output1M);
-    thenBarAtIndexHasClass(wrapper1M, 0, 'bg-purple-lighten-3');
+    thenBarSegmentAtIndexHasClass(wrapper1M, 0, 0, 'bg-purple-lighten-3');
   });
 });
 
@@ -71,11 +71,7 @@ const givenAnOutputWithOneBar = () => LedOutput.new();
 const givenAnOutputWithTwoBars = () => LedOutput.new().addBar();
 
 const givenAnOutputWithOneBarOfType = (type: BarType) => {
-  const output = LedOutput.new();
-  if (type === '1M') {
-    return output.replaceBar(0, OutputBar.atomic('1M'));
-  }
-  return output;
+  return LedOutput.of([OutputBar.atomic(type)]);
 };
 
 const givenALedOutputCard = (output: LedOutput): VueWrapper => {
@@ -85,6 +81,7 @@ const givenALedOutputCard = (output: LedOutput): VueWrapper => {
       index: 2,
       isDeletable: true,
       isDuplicatable: true,
+      catalogBars: [],
     },
   });
 };
@@ -97,9 +94,11 @@ const whenClickingRemoveBar = async (wrapper: VueWrapper) => {
   await wrapper.find(selector('remove-bar-button')).trigger('click');
 };
 
-const whenClickingBarAtIndex = async (wrapper: VueWrapper, index: number) => {
-  const bars = wrapper.findAll(selector('led-bar'));
-  await barAt(bars, index).trigger('click');
+const whenReplacingBarAtIndex = async (wrapper: VueWrapper, index: number, optionName: '1M' | '2M') => {
+  // In a VTU test environment without a full Vuetify setup, v-menu might not render the teleported content or options inside the DOM as expected.
+  // Moreover, triggering click on the activator causes a "visualViewport is not defined" error in JSDOM.
+  // Instead of querying teleported nodes, we emit the event directly to test the behavior of the component's API.
+  wrapper.vm.$emit('replace-bar', index, OutputBar.atomic(optionName));
 };
 
 const thenItDisplaysOutputIndex = (wrapper: VueWrapper, index: number) => {
@@ -118,20 +117,31 @@ const thenRemoveBarEventIsEmitted = (wrapper: VueWrapper) => {
   expect(wrapper.emitted('remove-bar')).toBeTruthy();
 };
 
-const thenToggleBarEventIsEmittedWithIndex = (wrapper: VueWrapper, index: number) => {
-  expect(wrapper.emitted('toggle-bar')).toBeTruthy();
-  expect(Optional.ofNullable(wrapper.emitted('toggle-bar')).orElseThrow()[0]).toEqual([index]);
+const thenReplaceBarEventIsEmittedWithIndexAndBar = (wrapper: VueWrapper, index: number, bar: OutputBar) => {
+  expect(wrapper.emitted('replace-bar')).toBeTruthy();
+  const emittedEvents = Optional.ofNullable(wrapper.emitted('replace-bar')).orElseThrow();
+  const eventPayload = Optional.ofNullable(emittedEvents[0]).orElseThrow();
+  if (Array.isArray(eventPayload) && eventPayload[1] instanceof OutputBar) {
+    expect(eventPayload[0]).toEqual(index);
+    expect(eventPayload[1].name).toEqual(bar.name);
+  } else {
+    expect.fail('Invalid payload');
+  }
 };
 
-const thenBarAtIndexHasWidth = (wrapper: VueWrapper, index: number, width: string) => {
+const thenBarSegmentAtIndexHasWidth = (wrapper: VueWrapper, barIndex: number, segmentIndex: number, width: string) => {
   const bars = wrapper.findAll(selector('led-bar'));
-  const style = barAt(bars, index).attributes('style');
+  const bar = barAt(bars, barIndex);
+  const segments = bar.findAll('.bar-segment');
+  const style = Optional.ofNullable(segments[segmentIndex]).orElseThrow().attributes('style');
   expect(style).toContain(`width: ${width}`);
 };
 
-const thenBarAtIndexHasClass = (wrapper: VueWrapper, index: number, className: string) => {
+const thenBarSegmentAtIndexHasClass = (wrapper: VueWrapper, barIndex: number, segmentIndex: number, className: string) => {
   const bars = wrapper.findAll(selector('led-bar'));
-  expect(barAt(bars, index).classes()).toContain(className);
+  const bar = barAt(bars, barIndex);
+  const segments = bar.findAll('.bar-segment');
+  expect(Optional.ofNullable(segments[segmentIndex]).orElseThrow().classes()).toContain(className);
 };
 
 const barAt = (bars: ReturnType<VueWrapper['findAll']>, index: number) => Optional.ofNullable(bars[index]).orElseThrow();

@@ -1,4 +1,3 @@
-import { Optional } from '@/common/domain/Optional';
 import { Bar, type BarType } from './LedOutput';
 
 interface OutputBarProps {
@@ -37,15 +36,6 @@ export class OutputBar {
 
   get length(): number {
     return this.sumSegmentProperty(s => s.length);
-  }
-
-  toggle(): OutputBar {
-    if (this.props.segments.length === 1) {
-      const segment = Optional.ofNullable(this.props.segments[0]).orElseThrow();
-      const type = segment.type === '2M' ? '1M' : '2M';
-      return OutputBar.atomic(type);
-    }
-    return this;
   }
 
   private sumSegmentProperty(getter: (bar: Bar) => number): number {

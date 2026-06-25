@@ -43,6 +43,13 @@ describe('LedOutput Domain', () => {
     expect(() => whenRemovingBar(output)).toThrow('An output must have at least one bar');
   });
 
+  it('Should not replace a bar if index is out of bounds', () => {
+    const output = givenLedOutput();
+    const updated = whenReplacingBar(output, 5, OutputBar.atomic('1M'));
+    thenBarHasName(barAt(updated, 0), '2M');
+    expect(updated.bars).toHaveLength(1);
+  });
+
   it('Should duplicate itself with all bars', () => {
     const ledOutput = givenLedOutputWithTwoBars();
     const duplicated = whenDuplicating(ledOutput);

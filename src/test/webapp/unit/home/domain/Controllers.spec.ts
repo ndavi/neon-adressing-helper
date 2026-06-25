@@ -11,6 +11,11 @@ describe('Controllers Domain', () => {
     expect(controllerAt(controllers, 0).universe).toBe(0);
   });
 
+  it('Should create from values', () => {
+    const controllers = Controllers.of([]);
+    expect(controllers.values).toHaveLength(0);
+  });
+
   it('Should add controllers when resizing up', () => {
     const controllers = Controllers.init();
     const c0 = controllerAt(controllers, 0).withUniverse(100);
@@ -44,6 +49,17 @@ describe('Controllers Domain', () => {
     expect(controllerAt(updated, 1)).toBe(controllerAt(controllers, 1));
   });
 
+  it('Should not replace a controller if index is out of bounds', () => {
+    const controllers = Controllers.init();
+    const originalController = controllerAt(controllers, 0);
+    const modifiedController = originalController.withUniverse(999);
+
+    const updated = controllers.replace(5, modifiedController);
+
+    expect(updated.values).toHaveLength(1);
+    expect(controllerAt(updated, 0).universe).toBe(0);
+  });
+
   it('Should throw when resizing to a negative number', () => {
     const controllers = Controllers.init();
     expect(() => controllers.resize(-1)).toThrow('Controllers count cannot be negative');
@@ -60,6 +76,18 @@ describe('Controllers Domain', () => {
     expect(duplicated.universe).toBe(40);
   });
 
+  it('Should not duplicate if index is out of bounds', () => {
+    const controllers = Controllers.init();
+    const result = controllers.duplicate(5);
+    expect(result.values).toHaveLength(1);
+  });
+
+  it('Should not duplicate if sparse array makes controller undefined', () => {
+    const controllers = Controllers.of(new Array(2));
+    const result = controllers.duplicate(0);
+    expect(result.values).toHaveLength(2);
+  });
+
   it('Should remove a controller', () => {
     const controllers = Controllers.init().resize(3);
 
@@ -69,6 +97,12 @@ describe('Controllers Domain', () => {
 
     expect(controllerAt(updated, 0).universe).toBe(0);
     expect(controllerAt(updated, 1).universe).toBe(40);
+  });
+
+  it('Should not remove if index is out of bounds', () => {
+    const controllers = Controllers.init();
+    const result = controllers.remove(5);
+    expect(result.values).toHaveLength(1);
   });
 
   it('Should return the total number of universes', () => {

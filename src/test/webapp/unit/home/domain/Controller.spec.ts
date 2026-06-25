@@ -27,6 +27,12 @@ describe('Controller', () => {
     expect(resized.outputs).toHaveLength(2);
   });
 
+  it('should resize outputs down', () => {
+    const controller = Controller.new().resizeOutputs(3);
+    const resized = controller.resizeOutputs(1);
+    expect(resized.outputs).toHaveLength(1);
+  });
+
   it('should replace an output', () => {
     const controller = Controller.new();
     const newOutput = LedOutput.new().addBar();
@@ -77,6 +83,12 @@ describe('Controller', () => {
     expect(duplicatedOutput.bars).toHaveLength(2);
   });
 
+  it('should not duplicate output if index is out of bounds', () => {
+    const controller = Controller.new();
+    const updated = controller.duplicateOutput(5);
+    expect(updated.outputs).toHaveLength(1);
+  });
+
   it('should not duplicate output if limit of 8 is reached', () => {
     const controller = Controller.new().resizeOutputs(8);
     const updated = controller.duplicateOutput(0);
@@ -118,6 +130,11 @@ describe('Controller', () => {
   });
 
   describe('Universe Count', () => {
+    it('should return 0 universe when total channels is 0', () => {
+      const controller = Controller.of({ universe: Universe.of(0), outputs: [] });
+      expect(controller.universeCount).toBe(0);
+    });
+
     it('should return 1 universe when there is only one bar', () => {
       const controller = Controller.new();
       expect(controller.universeCount).toBe(1);

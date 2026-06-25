@@ -1,59 +1,82 @@
 import { Optional } from '@/common/domain/Optional';
-import type { Bar } from '@/home/domain/LedOutput';
-import { LedOutput } from '@/home/domain/LedOutput';
+import { Bar, LedOutput } from '@/home/domain/LedOutput';
+import { OutputBar } from '@/home/domain/OutputBar';
 import { describe, expect, it } from 'vitest';
 
 describe('LedOutput Domain', () => {
+  it('Should replace a bar at a given index with a composite bar', () => {
+    const output = givenLedOutputWithOneBar();
+    const compositeBar = givenCompositeBar();
+
+    const updated = whenReplacingBar(output, 0, compositeBar);
+
+    thenBarIsReplaced(updated, 0, '2M+1M+2M');
+  });
+
   it('Should have one bar initially', () => {
-    const output = LedOutput.new();
+    const output = givenLedOutput();
     expect(output.bars).toHaveLength(1);
-    thenBarIsType(barAt(output, 0), '2M');
+    thenBarHasName(barAt(output, 0), '2M');
   });
 
   it('Should add a 2M bar', () => {
-    const output = LedOutput.new();
-    const newOutput = output.addBar();
+    const output = givenLedOutput();
+    const newOutput = whenAddingBar(output);
     expect(newOutput.bars).toHaveLength(2);
-    thenBarIsType(barAt(newOutput, 1), '2M');
+    thenBarHasName(barAt(newOutput, 1), '2M');
   });
 
-  it('Should switch from 2M to 1M on click', () => {
-    const output = LedOutput.new();
-    const updatedOutput = output.toggleBar(0);
-    thenBarIsType(barAt(updatedOutput, 0), '1M');
-  });
-
-  it('Should switch back from 1M to 2M on click', () => {
-    const output = LedOutput.new().toggleBar(0);
-    const updatedOutput = output.toggleBar(0);
-    thenBarIsType(barAt(updatedOutput, 0), '2M');
+  it('Should replace a 2M bar with a 1M bar', () => {
+    const output = givenLedOutput();
+    const updatedOutput = whenReplacingBar(output, 0, OutputBar.atomic('1M'));
+    thenBarHasName(barAt(updatedOutput, 0), '1M');
   });
 
   it('Should remove the last added bar', () => {
-    const output = LedOutput.new().addBar();
-    const updatedOutput = output.removeBar();
+    const output = givenLedOutputWithTwoBars();
+    const updatedOutput = whenRemovingBar(output);
     expect(updatedOutput.bars).toHaveLength(1);
   });
 
-  it('Should not remove the last bar', () => {
-    const output = LedOutput.new();
-    expect(() => output.removeBar()).toThrow('An output must have at least one bar');
+  it('Should not allow removing the last bar', () => {
+    const output = givenLedOutput();
+    expect(() => whenRemovingBar(output)).toThrow('An output must have at least one bar');
   });
 
   it('Should duplicate itself with all bars', () => {
-    const ledOutput = LedOutput.new().addBar();
-    const duplicated = ledOutput.duplicate();
+    const ledOutput = givenLedOutputWithTwoBars();
+    const duplicated = whenDuplicating(ledOutput);
     expect(duplicated.bars).toHaveLength(2);
   });
 
   it('Should return correct total channel count for multiple bars', () => {
-    const ledOutput = LedOutput.new().addBar().toggleBar(1);
-    expect(ledOutput.channelCount).toBe(357 + 177);
+    const ledOutput = givenLedOutputWithTwoBarsReplacedBy1M();
+    thenChannelCountIs(ledOutput, 357 + 177);
   });
 });
 
-const barAt = (output: LedOutput, index: number): Bar => Optional.ofNullable(output.bars[index]).orElseThrow();
+const barAt = (output: LedOutput, index: number): OutputBar => Optional.ofNullable(output.bars[index]).orElseThrow();
 
-const thenBarIsType = (bar: Bar, expectedType: '2M' | '1M') => {
-  expect(bar.type).toBe(expectedType);
+const givenLedOutput = (): LedOutput => LedOutput.new();
+const givenLedOutputWithOneBar = (): LedOutput => LedOutput.new();
+const givenLedOutputWithTwoBars = (): LedOutput => LedOutput.new().addBar();
+const givenLedOutputWithTwoBarsReplacedBy1M = (): LedOutput => LedOutput.new().addBar().replaceBar(1, OutputBar.atomic('1M'));
+const givenCompositeBar = (): OutputBar => OutputBar.composite([Bar.new('2M'), Bar.new('1M'), Bar.new('2M')]);
+
+const whenAddingBar = (output: LedOutput): LedOutput => output.addBar();
+const whenRemovingBar = (output: LedOutput): LedOutput => output.removeBar();
+const whenReplacingBar = (output: LedOutput, index: number, newBar: OutputBar): LedOutput => output.replaceBar(index, newBar);
+const whenDuplicating = (output: LedOutput): LedOutput => output.duplicate();
+
+const thenBarHasName = (bar: OutputBar, expectedName: string) => {
+  expect(bar.name).toBe(expectedName);
+};
+
+const thenBarIsReplaced = (output: LedOutput, index: number, expectedName: string) => {
+  expect(output.bars).toHaveLength(1);
+  expect(output.bars[index]?.name).toBe(expectedName);
+};
+
+const thenChannelCountIs = (output: LedOutput, expectedCount: number) => {
+  expect(output.channelCount).toBe(expectedCount);
 };

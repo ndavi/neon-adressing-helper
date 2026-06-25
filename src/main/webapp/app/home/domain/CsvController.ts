@@ -56,7 +56,7 @@ export class CsvController {
 
     output.bars.forEach(bar => {
       lines.push({
-        fixtureDefinitionName: `BARRE NEON - ${bar.type}`,
+        fixtureDefinitionName: `BARRE NEON - ${bar.name}`,
         startUniverse: this.toUniverse(currentGlobalChannel),
         startChannel: this.toChannel(currentGlobalChannel),
         startX: currentX,

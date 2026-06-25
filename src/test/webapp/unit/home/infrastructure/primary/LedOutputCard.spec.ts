@@ -1,6 +1,7 @@
 import { Optional } from '@/common/domain/Optional';
 import type { BarType } from '@/home/domain/LedOutput';
 import { LedOutput } from '@/home/domain/LedOutput';
+import { OutputBar } from '@/home/domain/OutputBar';
 import LedOutputCard from '@/home/infrastructure/primary/LedOutputCard.vue';
 import { selector } from '@test/DataSelector.ts';
 import { type VueWrapper, mount } from '@vue/test-utils';
@@ -72,7 +73,7 @@ const givenAnOutputWithTwoBars = () => LedOutput.new().addBar();
 const givenAnOutputWithOneBarOfType = (type: BarType) => {
   const output = LedOutput.new();
   if (type === '1M') {
-    return output.toggleBar(0);
+    return output.replaceBar(0, OutputBar.atomic('1M'));
   }
   return output;
 };

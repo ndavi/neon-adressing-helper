@@ -1,4 +1,4 @@
-import { Optional } from '@/common/domain/Optional';
+import { OutputBar } from './OutputBar';
 
 export type BarType = '2M' | '1M';
 
@@ -39,21 +39,21 @@ export class Bar {
 }
 
 interface LedOutputProps {
-  bars: readonly Bar[];
+  bars: readonly OutputBar[];
 }
 
 export class LedOutput {
   private constructor(private readonly props: LedOutputProps) {}
 
   static new(): LedOutput {
-    return new LedOutput({ bars: [Bar.new()] });
+    return new LedOutput({ bars: [OutputBar.atomic('2M')] });
   }
 
-  static of(bars: Bar[]): LedOutput {
+  static of(bars: OutputBar[]): LedOutput {
     return new LedOutput({ bars });
   }
 
-  get bars(): readonly Bar[] {
+  get bars(): readonly OutputBar[] {
     return this.props.bars;
   }
 
@@ -66,7 +66,7 @@ export class LedOutput {
   }
 
   addBar(): LedOutput {
-    return new LedOutput({ bars: [...this.props.bars, Bar.new()] });
+    return new LedOutput({ bars: [...this.props.bars, OutputBar.atomic('2M')] });
   }
 
   removeBar(): LedOutput {
@@ -77,11 +77,11 @@ export class LedOutput {
     return new LedOutput({ bars: newBars });
   }
 
-  toggleBar(index: number): LedOutput {
+  replaceBar(index: number, newBar: OutputBar): LedOutput {
     const newBars = [...this.props.bars];
-    Optional.ofNullable(newBars[index]).ifPresent((bar: Bar) => {
-      newBars[index] = bar.toggle();
-    });
+    if (this.hasBarAtIndex(index)) {
+      newBars[index] = newBar;
+    }
     return new LedOutput({ bars: newBars });
   }
 

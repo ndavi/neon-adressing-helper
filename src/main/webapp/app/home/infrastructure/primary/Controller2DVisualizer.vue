@@ -9,7 +9,7 @@
               :key="bIndex"
               class="bar-node"
               data-selector="bar-node"
-              :class="{ 'bar-2m': bar.type === '2M', 'bar-1m': bar.type === '1M' }"
+              :class="{ 'bar-2m': bar.name === '2M', 'bar-1m': bar.name === '1M' }"
             ></div>
           </div>
         </div>

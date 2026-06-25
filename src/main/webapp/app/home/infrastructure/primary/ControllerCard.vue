@@ -81,6 +81,7 @@
 
 <script setup lang="ts">
 import type { Controller } from '@/home/domain/Controller';
+import { OutputBar } from '@/home/domain/OutputBar';
 import LedOutputCard from './LedOutputCard.vue';
 
 const props = defineProps<{
@@ -123,7 +124,11 @@ const removeBar = (outputIndex: number) => {
 const toggleBar = (outputIndex: number, barIndex: number) => {
   const output = props.controller.outputs[outputIndex];
   if (output) {
-    emit('update:controller', props.controller.replaceOutput(outputIndex, output.toggleBar(barIndex)));
+    const bar = output.bars[barIndex];
+    if (bar && bar.segments.length === 1) {
+      const type = bar.segments[0]?.type === '2M' ? '1M' : '2M';
+      emit('update:controller', props.controller.replaceOutput(outputIndex, output.replaceBar(barIndex, OutputBar.atomic(type))));
+    }
   }
 };
 

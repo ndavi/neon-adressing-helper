@@ -40,7 +40,7 @@
         data-selector="led-bar"
         :class="getBarClass(bar)"
         :style="getBarStyle(bar)"
-        :title="`Barre ${i + 1} (${bar.type})`"
+        :title="`Barre ${i + 1} (${bar.name})`"
         @click="emit('toggle-bar', i)"
       ></div>
     </div>
@@ -48,7 +48,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Bar, LedOutput } from '@/home/domain/LedOutput';
+import type { LedOutput } from '@/home/domain/LedOutput';
+import type { OutputBar } from '@/home/domain/OutputBar';
 import type { CSSProperties } from 'vue';
 
 defineProps<{
@@ -66,14 +67,16 @@ const emit = defineEmits<{
   delete: [];
 }>();
 
-const getBarStyle = (bar: Bar): CSSProperties => {
+const getBarStyle = (bar: OutputBar): CSSProperties => {
   return {
-    width: bar.type === '2M' ? '48px' : '24px',
+    width: bar.name === '2M' ? '48px' : bar.name === '1M' ? '24px' : '48px', // Simple default for composites
     height: '24px',
   };
 };
 
-const getBarClass = (bar: Bar): string => {
-  return bar.type === '2M' ? 'bg-cyan-lighten-3' : 'bg-purple-lighten-3';
+const getBarClass = (bar: OutputBar): string => {
+  if (bar.name === '2M') return 'bg-cyan-lighten-3';
+  if (bar.name === '1M') return 'bg-purple-lighten-3';
+  return 'bg-green-lighten-3'; // Composite bars
 };
 </script>
